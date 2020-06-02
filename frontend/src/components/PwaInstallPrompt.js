@@ -1,10 +1,13 @@
-import "./App.css";
-
-import { Container, Button, Modal, Icon, Header } from "semantic-ui-react";
+/*
+IMPORTANT!!
+This file is conditionally a js file rather than a tsx file.
+Because the beforeinstallprompt is used here which is not officially supported for all browsers
+So typescript can't get it's properties
+ */
+import {Button, Header, Icon, Modal} from "semantic-ui-react";
 import React from "react";
-import SearchHadith from "./pages/SearchHadith";
 
-class App extends React.Component {
+class PwaInstallPrompt extends React.Component {
   state = {
     installButton: false,
   };
@@ -49,22 +52,19 @@ class App extends React.Component {
     });
   };
 
-  handleClose = () => this.setState({ installButton: false });
+  handleClose = () => this.setState({installButton: false});
 
   render() {
     return (
-      <Container>
+      <>
         {this.state.installButton && (
-          // <Button fluid onClick={this.installApp}>
-          //   Install as an app
-          // </Button>
           <Modal
             defaultOpen={this.state.installButton}
             open={this.state.installButton}
             basic
             size="small"
           >
-            <Header icon="archive" content="Install as App" />
+            <Header icon="archive" content="Install as App"/>
             <Modal.Content>
               <p>
                 You can install this website as app in your mobile, do you want
@@ -73,18 +73,17 @@ class App extends React.Component {
             </Modal.Content>
             <Modal.Actions>
               <Button onClick={this.handleClose} basic color="red" inverted>
-                <Icon name="remove" /> No
+                <Icon name="remove"/> No
               </Button>
               <Button onClick={this.installApp} color="green" inverted>
-                <Icon name="checkmark" /> Yes
+                <Icon name="checkmark"/> Yes
               </Button>
             </Modal.Actions>
           </Modal>
         )}
-        <SearchHadith />
-      </Container>
+      </>
     );
   }
 }
 
-export default App;
+export default PwaInstallPrompt;

@@ -151,9 +151,9 @@ class SearchHadith extends Component {
         return (
             <Grid stackable>
                 <Grid.Row centered>
-                    <br/>
-                    <br/>
                     <div>
+                        <br/>
+                        <br/>
                         <p style={{opacity: ".6"}}> Developed with <span role="img">❤️</span>️by <a
                             rel="noopener noreferrer" target="_blank"
                             href="https://github.com/Ananto30">Ananto</a>

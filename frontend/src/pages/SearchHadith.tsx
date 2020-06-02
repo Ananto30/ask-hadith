@@ -1,44 +1,26 @@
 import React, {Component} from "react";
 
-import {Button, Dimmer, Grid, Icon, Input, Item, Label, LabelProps, Loader,} from "semantic-ui-react";
+import {Button, Dimmer, Grid, Icon, Input, Item, Label, LabelProps, Loader, Popup,} from "semantic-ui-react";
 
 import client from "../client";
+import {Hadith} from "../interfaces/Hadith";
+import {ReadList} from "../interfaces/ReadList";
+import {SearchHadithState} from "../interfaces/SearchHadithState";
+import {HadithComponent} from "../components/Hadith";
 
-type Hadith = {
-    _id: string,
-    chapter: string,
-    hadith: string,
-    narrator: string,
-    content: string,
-    hadith_number: string
-}
-
-type ReadList = {
-    [hadithAndId: string]: boolean
-}
-
-type SearchHadithState = {
-    hadiths: Hadith[],
-    books: Hadith[],
-    filteredHadiths: Hadith[],
-    prevHadiths: Hadith[],
-    isLoading: boolean,
-    activeItem: string,
-    isAll: boolean,
-    readList: ReadList
-
-}
 
 class SearchHadith extends Component {
     state: SearchHadithState = {
         hadiths: [],
         books: [],
+        filteredHadiths: [],
+        filteredByBook: [],
         isLoading: false,
         activeItem: "",
-        filteredHadiths: [],
         isAll: true,
+        isRead: false,
+        isUnread: false,
         readList: {},
-        prevHadiths: [],
     };
 
     async componentDidMount() {
@@ -54,8 +36,11 @@ class SearchHadith extends Component {
             this.setState({
                 hadiths: res.data,
                 filteredHadiths: res.data,
+                filteredByBook: res.data,
                 isLoading: false,
                 isAll: true,
+                isUnread: false,
+                isRead: false,
             });
             var resArr: Hadith[] = [];
             res.data.filter(function (item: Hadith) {
@@ -77,12 +62,16 @@ class SearchHadith extends Component {
         }
     };
 
-    handleFilterBooks = async (e: React.MouseEvent<HTMLElement>, data: LabelProps) => {
+    handleFilterBooks = async (e: React.MouseEvent<HTMLElement>, {name}: LabelProps) => {
         let self = this;
-        const {name} = data
         let newArray = this.state.hadiths.filter(function (el) {
             if (self.state.isAll) {
                 return el.hadith === name;
+            } else if (self.state.isRead) {
+                return (
+                    (`${el.hadith}#${el._id}` in self.state.readList) &&
+                    el.hadith === name
+                );
             } else {
                 return (
                     !(`${el.hadith}#${el._id}` in self.state.readList) &&
@@ -90,21 +79,32 @@ class SearchHadith extends Component {
                 );
             }
         });
-        this.setState({activeItem: name, filteredHadiths: newArray});
+        this.setState({activeItem: name, filteredHadiths: newArray, filteredByBook: newArray});
+    };
+
+    handleFilterUnread = (e: React.MouseEvent<HTMLButtonElement>) => {
+        let self = this;
+        let newArray = this.state.filteredByBook.filter(function (el) {
+            return !(`${el.hadith}#${el._id}` in self.state.readList);
+        });
+        this.setState({filteredHadiths: newArray, isAll: false, isRead: false, isUnread: true});
     };
 
     handleFilterRead = (e: React.MouseEvent<HTMLButtonElement>) => {
         let self = this;
-        let newArray = this.state.filteredHadiths.filter(function (el) {
-            return !(`${el.hadith}#${el._id}` in self.state.readList);
+        let newArray = this.state.filteredByBook.filter(function (el) {
+            return (`${el.hadith}#${el._id}` in self.state.readList);
         });
-        this.setState({filteredHadiths: newArray, isAll: false});
+        this.setState({filteredHadiths: newArray, isAll: false, isUnread: false, isRead: true});
     };
 
     handleFilterAll = (e: React.MouseEvent<HTMLButtonElement>) => {
         this.setState({
             filteredHadiths: this.state.hadiths,
+            filteredByBook: this.state.hadiths,
             isAll: true,
+            isUnread: false,
+            isRead: false,
             activeItem: "",
         });
     };
@@ -144,14 +144,22 @@ class SearchHadith extends Component {
             isLoading,
             activeItem,
             isAll,
-            readList,
+            isUnread,
+            isRead,
+            readList
         } = this.state;
         return (
             <Grid stackable>
                 <Grid.Row centered>
                     <br/>
                     <br/>
-                    <h2>Ask Hadith</h2>
+                    <div>
+                        <p style={{opacity: ".6"}}> Developed with <span role="img">❤️</span>️by <a
+                            rel="noopener noreferrer" target="_blank"
+                            href="https://github.com/Ananto30">Ananto</a>
+                        </p>
+                        <h2>Ask Hadith</h2>
+                    </div>
                 </Grid.Row>
                 <Grid.Row centered>
                     <Grid.Column width={8}>
@@ -165,17 +173,27 @@ class SearchHadith extends Component {
                     </Grid.Column>
                 </Grid.Row>
                 <Grid.Row centered>
-                    {filteredHadiths.length > 0 && (
-                        <Button.Group size="tiny">
-                            <Button active={isAll} onClick={this.handleFilterAll}>
-                                All
-                            </Button>
-                            <Button.Or/>
-                            <Button active={!isAll} onClick={this.handleFilterRead}>
-                                Unread
-                            </Button>
-                        </Button.Group>
-                    )}
+                    {/*{filteredHadiths.length > 0 && (*/}
+                    <Button.Group size="tiny">
+                        <Button active={isAll} onClick={this.handleFilterAll}>
+                            All
+                        </Button>
+                        <Button.Or/>
+                        <Button active={isUnread} onClick={this.handleFilterUnread}>
+                            Unread
+                        </Button>
+                        <Button.Or/>
+                        <Button active={isRead} onClick={this.handleFilterRead}>
+                            Read
+                        </Button>
+
+                    </Button.Group>
+
+                    <Popup
+                        content='Please note that read hadiths are saved in local cache, so if you delete your cache this history will be gone.'
+                        trigger={<Icon style={{paddingTop: "5px", paddingLeft: "10px"}} name='info circle'/>}
+                        position='right center'/>
+                    {/*)}*/}
                 </Grid.Row>
                 <Grid.Column width={16}>
                     <Label.Group circular>
@@ -199,29 +217,8 @@ class SearchHadith extends Component {
                         ) : (
                             <>
                                 {filteredHadiths.map((hadith, index) => (
-                                    <Item key={index}>
-                                        <Item.Content>
-                                            <Item.Header as="a">{hadith.chapter}</Item.Header>
-                                            <Item.Meta>{hadith.hadith}</Item.Meta>
-                                            <Item.Description>{hadith.narrator}</Item.Description>
-                                            <Item.Description>{hadith.content}</Item.Description>
-                                            <Item.Extra>
-                                                {hadith.hadith_number}
-
-                                                <Button
-                                                    size="mini"
-                                                    floated="right"
-                                                    value={`${hadith.hadith}#${hadith._id}`}
-                                                    onClick={this.handleRead}
-                                                >
-                                                    {`${hadith.hadith}#${hadith._id}` in readList
-                                                        ? "Unread"
-                                                        : "Read"}
-                                                </Button>
-                                            </Item.Extra>
-                                            <Item.Extra></Item.Extra>
-                                        </Item.Content>
-                                    </Item>
+                                    <HadithComponent key={index} hadith={hadith} onClick={this.handleRead}
+                                                     readList={readList}/>
                                 ))}
                             </>
                         )}

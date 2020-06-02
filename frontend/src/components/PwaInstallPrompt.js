@@ -1,3 +1,9 @@
+/*
+IMPORTANT!!
+This file is conditionally a js file rather than a tsx file.
+Because the beforeinstallprompt is used here which is not officially supported for all browsers
+So typescript can't get it's properties
+ */
 import {Button, Header, Icon, Modal} from "semantic-ui-react";
 import React from "react";
 

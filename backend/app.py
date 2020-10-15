@@ -2,11 +2,10 @@ import functools
 import json
 import os
 import random
-from pprint import pprint
 
 from bson import ObjectId
-from flask import Flask, jsonify, render_template, request, send_from_directory
-from flask_cors import CORS, cross_origin
+from flask import Flask, request, send_from_directory, jsonify
+from flask_cors import CORS
 from flask_sslify import SSLify
 from pymongo import MongoClient
 
@@ -18,16 +17,26 @@ class JSONEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 
-app = Flask(__name__, static_folder='../frontend/build', static_url_path='/')
+app = Flask(__name__, static_folder="../frontend/build", static_url_path="/")
 sslify = SSLify(app)
 
 cors = CORS(app, resources={r"/*": {"origins": "*"}})
-app.config['CORS_HEADERS'] = 'Content-Type'
+app.config["CORS_HEADERS"] = "Content-Type"
 
 client = MongoClient(os.getenv("MONGO_URL"))
 db = client.news
-all_collections = ['bukhari_sunnah', 'muslim_sunnah', 'abudawud_sunnah', 'tirmidhi_sunnah', 'nasai_sunnah',
-                   'ibnmajah_sunnah']
+all_collections = [
+    "bukhari_sunnah",
+    "muslim_sunnah",
+    "abudawud_sunnah",
+    "tirmidhi_sunnah",
+    "nasai_sunnah",
+    "ibnmajah_sunnah",
+]
+
+map_query_to_collections = {
+    "bukhari": "bukhari_sunnah",
+}
 
 
 @functools.lru_cache(maxsize=512)
@@ -35,40 +44,53 @@ def search_hadith(search_string, limit=50):
     dbs = all_collections
     total = []
     for d in dbs:
-        search = db[d].find({'$text': {'$search': search_string}}, {"score": {"$meta": "textScore"}})
-        search.sort([('score', {'$meta': 'textScore'})]).limit(limit)
+        search = db[d].find(
+            {"$text": {"$search": search_string}}, {"score": {"$meta": "textScore"}}
+        )
+        search.sort([("score", {"$meta": "textScore"})]).limit(limit)
         search = list(search)
         total = total + search
-    newlist = sorted(total, key=lambda k: k['score'], reverse=True)
+    newlist = sorted(total, key=lambda k: k["score"], reverse=True)
     return newlist
 
 
 def random_hadith(limit=3, dbs=[]):
     total = []
     for d in dbs:
-        search = db[d].aggregate([{"$match": {"content": {"$ne": " "}}}, {'$sample': {'size': limit}}])
+        search = db[d].aggregate(
+            [{"$match": {"content": {"$ne": " "}}}, {"$sample": {"size": limit}}]
+        )
         search = list(search)
         total = total + search
     newlist = sorted(total, key=lambda k: random.random())
     return newlist
 
 
-@app.route('/api/search', methods=['GET'])
+@app.route("/api/search", methods=["GET"])
 def search_api():
-    sr = request.args.get('search')
+    sr = request.args.get("search")
     s = search_hadith(sr)
     json_res = JSONEncoder().encode(s)
     return json_res
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
+@app.route("/api/<hadith>/<number>", methods=["GET"])
+def hadith_api(hadith, number):
+    if hadith in map_query_to_collections:
+        number = f"Sahih al-Bukhari {number}"
+        s = db[map_query_to_collections[hadith]].find_one({"hadith_number": number})
+        json_res = JSONEncoder().encode(s)
+        return json_res
+
+
+@app.route("/", defaults={"path": ""})
+@app.route("/<path:path>")
 def serve(path):
-    if path != "" and os.path.exists(app.static_folder + '/' + path):
+    if path != "" and os.path.exists(app.static_folder + "/" + path):
         return send_from_directory(app.static_folder, path)
     else:
-        return send_from_directory(app.static_folder, 'index.html')
+        return send_from_directory(app.static_folder, "index.html")
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000, debug=True)

@@ -5,6 +5,7 @@ import random
 
 from bson import ObjectId
 from flask import Flask, request, send_from_directory, jsonify
+from flask.templating import render_template
 from flask_cors import CORS
 from flask_sslify import SSLify
 from pymongo import MongoClient
@@ -75,12 +76,21 @@ def search_api():
 
 
 @app.route("/api/<hadith>/<number>", methods=["GET"])
-def hadith_api(hadith, number):
+def individual_hadith_api(hadith, number):
     if hadith in map_query_to_collections:
         number = f"Sahih al-Bukhari {number}"
         s = db[map_query_to_collections[hadith]].find_one({"hadith_number": number})
         json_res = JSONEncoder().encode(s)
         return json_res
+
+
+@app.route("/<hadith>/<number>", methods=["GET"])
+def individual_hadith(hadith, number):
+    if hadith in map_query_to_collections:
+        number = f"Sahih al-Bukhari {number}"
+        print(hadith)
+        s = db[map_query_to_collections[hadith]].find_one({"hadith_number": number})
+        return render_template("single_hadith.html", hadith=s)
 
 
 @app.route("/", defaults={"path": ""})

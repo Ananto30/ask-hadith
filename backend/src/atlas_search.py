@@ -1,10 +1,11 @@
+import functools
 import os
 from pprint import pprint
 from typing import List
 
 from pymongo import MongoClient
 
-from model import Hadith
+from src.model import Hadith
 
 
 class AtlasSearch:
@@ -16,6 +17,7 @@ class AtlasSearch:
         self.db = client[AtlasSearch.DB_NAME]
         self.cursor = self.db[AtlasSearch.COLLECTION_NAME]
 
+    @functools.lru_cache(maxsize=512)
     def search_hadith(self, term: str) -> List[Hadith]:
         pipeline = [
             {
@@ -31,7 +33,13 @@ class AtlasSearch:
                             }
                         ],
                         "should": [
-                            {"phrase": {"query": term, "path": "body_en", "slop": 2,}}
+                            {
+                                "phrase": {
+                                    "query": term,
+                                    "path": "body_en",
+                                    "slop": 2,
+                                }
+                            }
                         ],
                     },
                     "highlight": {"path": ["body_en", "chapter_en"]},
@@ -54,6 +62,21 @@ class AtlasSearch:
             },
         ]
         return list(self.cursor.aggregate(pipeline))
+
+    @functools.lru_cache(maxsize=128)
+    def get_hadiths_by_book(self, collection_id, book_no) -> List[Hadith]:
+        return self.cursor.find({"collection_id": collection_id, "book_no": book_no})
+
+    @functools.lru_cache(maxsize=512)
+    def get_hadith_by_book_ref_no(self, collection_id, book_no, book_ref_no) -> Hadith:
+        return self.cursor.find_one(
+            {
+                "collection_id": collection_id,
+                "book_no": book_no,
+                "book_ref_no": book_ref_no,
+            },
+            {"_id": False},
+        )
 
 
 def test_search():

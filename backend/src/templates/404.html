@@ -4,14 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>{{ hadith.hadith_number }}</title>
-    <meta name="description" content="{{ hadith.chapter }}" />
-    <meta
-      property="og:title"
-      content="{{ hadith.hadith_number }} - {{ hadith.chapter }}"
-    />
-    <meta property="og:description" content="{{ hadith.content }}" />
-
+    <title>Not found</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap"
       rel="stylesheet"
@@ -22,18 +15,20 @@
         margin: 0 auto;
         max-width: 800px;
         line-height: 2;
-        padding: 4em;
+        padding: 3em 1em;
         text-align: center;
       }
       h3,
-      h4 {
+      h4,
+      h5 {
         margin: 0em;
       }
     </style>
   </head>
   <body>
-    <h3>{{ hadith.chapter }}</h3>
-    <h4>{{ hadith.hadith_number }}</h4>
-    <p>{{ hadith.narrator }} {{ hadith.content }}</p>
+    <div>
+      <h3>404 Not Found!</h3>
+      <h4><a href="/">Home</a></h4>
+    </div>
   </body>
 </html>

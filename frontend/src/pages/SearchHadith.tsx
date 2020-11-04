@@ -12,9 +12,9 @@ import { HadithComponent } from "../components/Hadith";
 class SearchHadith extends Component {
     state: SearchHadithState = {
         hadiths: [],
-        books: [],
+        collections: [],
         filteredHadiths: [],
-        filteredByBook: [],
+        filteredByCollection: [],
         isLoading: false,
         activeItem: "",
         isAll: true,
@@ -36,7 +36,7 @@ class SearchHadith extends Component {
             this.setState({
                 hadiths: res.data,
                 filteredHadiths: res.data,
-                filteredByBook: res.data,
+                filteredByCollection: res.data,
                 isLoading: false,
                 isAll: true,
                 isUnread: false,
@@ -44,13 +44,13 @@ class SearchHadith extends Component {
             });
             var resArr: Hadith[] = [];
             res.data.filter(function (item: Hadith) {
-                var i = resArr.findIndex((x) => x.hadith === item.hadith);
+                var i = resArr.findIndex((x) => x.collection === item.collection);
                 if (i <= -1) {
                     resArr.push(item);
                 }
                 return null;
             });
-            this.setState({ books: resArr });
+            this.setState({ collections: resArr });
         } catch (error) {
             console.log(error);
         }
@@ -66,16 +66,16 @@ class SearchHadith extends Component {
         let self = this;
         let newArray = this.state.hadiths.filter(function (el) {
             if (self.state.isAll) {
-                return el.hadith === name;
+                return el.collection === name;
             } else if (self.state.isRead) {
                 return (
-                    (`${el.hadith}#${el._id}` in self.state.readList) &&
-                    el.hadith === name
+                    (getReadHadithUniqueId(el) in self.state.readList) &&
+                    el.collection === name
                 );
             } else {
                 return (
-                    !(`${el.hadith}#${el._id}` in self.state.readList) &&
-                    el.hadith === name
+                    !(getReadHadithUniqueId(el) in self.state.readList) &&
+                    el.collection === name
                 );
             }
         });
@@ -84,16 +84,16 @@ class SearchHadith extends Component {
 
     handleFilterUnread = (e: React.MouseEvent<HTMLButtonElement>) => {
         let self = this;
-        let newArray = this.state.filteredByBook.filter(function (el) {
-            return !(`${el.hadith}#${el._id}` in self.state.readList);
+        let newArray = this.state.filteredByCollection.filter(function (el) {
+            return !(getReadHadithUniqueId(el) in self.state.readList);
         });
         this.setState({ filteredHadiths: newArray, isAll: false, isRead: false, isUnread: true });
     };
 
     handleFilterRead = (e: React.MouseEvent<HTMLButtonElement>) => {
         let self = this;
-        let newArray = this.state.filteredByBook.filter(function (el) {
-            return (`${el.hadith}#${el._id}` in self.state.readList);
+        let newArray = this.state.filteredByCollection.filter(function (el) {
+            return (getReadHadithUniqueId(el) in self.state.readList);
         });
         this.setState({ filteredHadiths: newArray, isAll: false, isUnread: false, isRead: true });
     };
@@ -140,7 +140,7 @@ class SearchHadith extends Component {
     render() {
         const {
             filteredHadiths,
-            books,
+            collections,
             isLoading,
             activeItem,
             isAll,
@@ -177,7 +177,7 @@ class SearchHadith extends Component {
                     {/*)}*/}
                 </Grid.Row>
                 <Grid.Column width={16}>
-                    {this.hadithLabels(books, activeItem)}
+                    {this.hadithLabels(collections, activeItem)}
                     {this.searchResult(isLoading, filteredHadiths, readList)}
                 </Grid.Column>
                 <Grid.Row centered>
@@ -201,7 +201,7 @@ class SearchHadith extends Component {
             </Button>
             <Button.Or />
             <Button active={isRead} onClick={this.handleFilterRead}>
-                               Read
+                Read
             </Button>
         </Button.Group>;
     }
@@ -212,11 +212,11 @@ class SearchHadith extends Component {
                 <Label
                     key={index}
                     as="a"
-                    active={activeItem === hadith.hadith}
-                    name={hadith.hadith}
+                    active={activeItem === hadith.collection}
+                    name={hadith.collection}
                     onClick={this.handleFilterBooks}
                 >
-                    {hadith.hadith}
+                    {hadith.collection}
                 </Label>
             ))}
         </Label.Group>;
@@ -239,5 +239,10 @@ class SearchHadith extends Component {
         </Item.Group>;
     }
 }
+
+function getReadHadithUniqueId(el: Hadith) {
+    return `${el.collection}#${el.book_no}#${el.book_ref_no}`;
+}
+
 
 export default SearchHadith;

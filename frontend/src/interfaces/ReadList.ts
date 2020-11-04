@@ -1,3 +1,3 @@
 export interface ReadList {
-    [hadithAndId: string]: boolean
+    [readHadithUniqueId: string]: boolean
 }

@@ -9,7 +9,6 @@ from flask_sslify import SSLify
 
 from src.atlas_search import AtlasSearch
 from src.mongo_client import MongoHadithClient
-from pprint import pprint
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -41,7 +40,6 @@ def search_api():
 def search_api_v2():
     sr = request.args.get("search")
     result = atlas_client.search_hadith(sr)
-    pprint(result)
     return jsonify(result)
 
 

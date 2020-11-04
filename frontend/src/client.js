@@ -9,7 +9,7 @@ const api = axios.create({
 });
 
 const Hadith = {
-  search: (key) => api.get(`/search?search=${key}`),
+  search: (key) => api.get(`/v2/search?search=${key}`),
 };
 
 export default {

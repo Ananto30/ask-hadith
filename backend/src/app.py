@@ -2,13 +2,14 @@ import json
 import os
 
 from bson import ObjectId
-from flask import Flask, request, send_from_directory
+from flask import Flask, request, send_from_directory, jsonify
 from flask.templating import render_template
 from flask_cors import CORS
 from flask_sslify import SSLify
 
 from src.atlas_search import AtlasSearch
 from src.mongo_client import MongoHadithClient
+from pprint import pprint
 
 
 class JSONEncoder(json.JSONEncoder):
@@ -34,6 +35,14 @@ def search_api():
     s = mongo_client.search_hadith(sr)
     json_res = JSONEncoder().encode(s)
     return json_res
+
+
+@app.route("/api/v2/search", methods=["GET"])
+def search_api_v2():
+    sr = request.args.get("search")
+    result = atlas_client.search_hadith(sr)
+    pprint(result)
+    return jsonify(result)
 
 
 @app.route("/api/<collection_id>/<book>/<book_ref_no>", methods=["GET"])

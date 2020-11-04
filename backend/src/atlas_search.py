@@ -45,8 +45,10 @@ class AtlasSearch:
                     "highlight": {"path": ["body_en", "chapter_en"]},
                 }
             },
+            {"$limit": 50},
             {
                 "$project": {
+                    "_id": 0,
                     "collection_id": 1,
                     "collection": 1,
                     "hadith_no": 1,
@@ -56,6 +58,8 @@ class AtlasSearch:
                     "chapter_en": 1,
                     "narrator_en": 1,
                     "body_en": 1,
+                    "book_ref_no": 1,
+                    "hadith_grade": 1,
                     "score": {"$meta": "searchScore"},
                     "highlights": {"$meta": "searchHighlights"},
                 }

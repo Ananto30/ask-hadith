@@ -1,19 +1,17 @@
-import React, {useState} from "react";
-import {Icon, Input} from "semantic-ui-react";
-import {Hadith} from "../interfaces/Hadith";
+import React from "react";
+import { Icon, Input } from "semantic-ui-react";
+import { Hadith } from "../interfaces/Hadith";
 import client from "../client";
 
 interface SearchProps {
     hadiths: Hadith[],
-    books: Hadith[],
+    collections: Hadith[],
     filteredHadiths: Hadith[],
     isAll: boolean,
     isLoading: boolean
 }
 
-const Search = ({isLoading, hadiths, books, filteredHadiths, isAll}: SearchProps) => {
-    const [loading, setLoading] = useState(isLoading);
-
+const Search = ({ isLoading, hadiths, collections, filteredHadiths, isAll }: SearchProps) => {
 
     // TODO: There can be a search button to use handleSearch
     const handleSearch = async (e: KeyboardEvent) => {
@@ -28,17 +26,15 @@ const Search = ({isLoading, hadiths, books, filteredHadiths, isAll}: SearchProps
             isLoading = false;
             isAll = true;
 
-            console.log("mama")
-
             let resArr: Hadith[] = [];
             res.data.filter(function (item: Hadith) {
-                var i = resArr.findIndex((x) => x.hadith === item.hadith);
+                var i = resArr.findIndex((x) => x.collection === item.collection);
                 if (i <= -1) {
                     resArr.push(item);
                 }
                 return null;
             });
-            books = resArr;
+            collections = resArr;
         } catch (error) {
             console.log(error);
         }
@@ -53,7 +49,7 @@ const Search = ({isLoading, hadiths, books, filteredHadiths, isAll}: SearchProps
     return (
         <Input
             fluid
-            icon={<Icon name="search"/>}
+            icon={<Icon name="search" />}
             loading={isLoading}
             placeholder="Search..."
             onKeyDown={handleEnter}

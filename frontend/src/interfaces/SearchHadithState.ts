@@ -3,14 +3,13 @@ import {ReadList} from "./ReadList";
 
 export interface SearchHadithState {
     hadiths: Hadith[],
-    books: Hadith[],
+    collections: Hadith[],
     filteredHadiths: Hadith[],
-    filteredByBook: Hadith[],
+    filteredByCollection: Hadith[],
     isLoading: boolean,
     activeItem: string,
     isAll: boolean,
     isRead: boolean,
     isUnread: boolean,
     readList: ReadList
-
 }

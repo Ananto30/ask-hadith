@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Button, Dimmer, Grid, Icon, Input, Item, Label, LabelProps, Loader, Popup, } from "semantic-ui-react";
+import { Button, Grid, Icon, Input, Item, Label, LabelProps, Popup, } from "semantic-ui-react";
 
 import client from "../client";
 import { Hadith } from "../interfaces/Hadith";

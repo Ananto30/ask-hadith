@@ -12,6 +12,8 @@ const Hadith = {
   search: (key) => api.get(`/v2/search?search=${key}`),
 };
 
-export default {
+const clients = {
   Hadith,
 };
+
+export default clients;

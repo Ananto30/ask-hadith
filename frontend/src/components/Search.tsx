@@ -2,6 +2,7 @@ import React from "react";
 import { Icon, Input } from "semantic-ui-react";
 import { Hadith } from "../interfaces/Hadith";
 import client from "../client";
+import { AxiosResponse } from "axios";
 
 interface SearchProps {
     hadiths: Hadith[],
@@ -19,7 +20,7 @@ const Search = ({ isLoading, hadiths, collections, filteredHadiths, isAll }: Sea
 
         try {
             const searchElement = e.target as HTMLInputElement
-            let res = await client.Hadith.search(searchElement.value);
+            let res: AxiosResponse<Hadith[]> = await client.Hadith.search(searchElement.value);
 
             hadiths = res.data;
             filteredHadiths = res.data;

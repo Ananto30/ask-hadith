@@ -7,6 +7,7 @@ import { Hadith } from "../interfaces/Hadith";
 import { ReadList } from "../interfaces/ReadList";
 import { SearchHadithState } from "../interfaces/SearchHadithState";
 import { HadithComponent } from "../components/Hadith";
+import { AxiosResponse } from "axios";
 
 
 class SearchHadith extends Component {
@@ -32,7 +33,7 @@ class SearchHadith extends Component {
         this.setState({ isLoading: true });
         try {
             const searchElement = e.target as HTMLInputElement
-            let res = await client.Hadith.search(searchElement.value);
+            let res: AxiosResponse<Hadith[]> = await client.Hadith.search(searchElement.value);
             this.setState({
                 hadiths: res.data,
                 filteredHadiths: res.data,
@@ -186,6 +187,13 @@ class SearchHadith extends Component {
                         href="https://github.com/Ananto30">Ananto</a>
                     </p>
                 </Grid.Row>
+                <Grid.Row centered>
+                    <p>
+                        <a href="https://www.patreon.com/ananto" target="_blank" rel="noopener noreferrer">
+                            Support 🙏
+                        </a>
+                    </p>
+                </Grid.Row>
             </Grid>
         );
     }
@@ -224,18 +232,14 @@ class SearchHadith extends Component {
 
     private searchResult(isLoading: boolean, filteredHadiths: Hadith[], readList: ReadList) {
         return <Item.Group divided>
-            {isLoading ? (
-                <Dimmer active inverted>
-                    <Loader inverted content="Loading" />
-                </Dimmer>
-            ) : (
-                    <>
-                        {filteredHadiths.map((hadith, index) => (
-                            <HadithComponent key={index} hadith={hadith} onClick={this.handleRead}
-                                readList={readList} />
-                        ))}
-                    </>
-                )}
+            {isLoading ? "" : (
+                <>
+                    {filteredHadiths.map((hadith, index) => (
+                        <HadithComponent key={index} hadith={hadith} onClick={this.handleRead}
+                            readList={readList} />
+                    ))}
+                </>
+            )}
         </Item.Group>;
     }
 }

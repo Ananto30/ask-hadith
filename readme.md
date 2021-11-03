@@ -24,3 +24,7 @@ You can also filter hadith based on different collections (Bukhari, Muslim etc).
 ### [VISIT APP](https://askhadith.herokuapp.com/)
 
 ***Please report any issues found in the app.*
+
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ananto30)
+

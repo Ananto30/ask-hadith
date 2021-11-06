@@ -36,7 +36,7 @@
 </script>
 
 <div in:fade class="max-w-4xl border-b">
-	<div class="px-2 py-8 md:px-4">
+	<div class="px-4 py-8">
 		<h2 class="font-semibold ">
 			{hadith.collection}
 			<span class="text-gray-600 font-base"

@@ -2,9 +2,9 @@
 	export let hadiths;
 	export let filteredHadiths;
 
-	let hadithCollections = [];
+	let hadithCollections = ['All'];
 
-	let collectionFilter = '';
+	let collectionFilter = 'All';
 
 	$: if (hadiths) {
 		filteredHadiths = hadiths;
@@ -12,7 +12,7 @@
 
 	$: if (collectionFilter) {
 		filteredHadiths = [];
-		if (collectionFilter === 'all') {
+		if (collectionFilter === 'All') {
 			filteredHadiths = hadiths;
 		} else {
 			filteredHadiths = hadiths.filter((hadith) => {
@@ -53,20 +53,16 @@
 	</button>
 </div> -->
 <div class="flex flex-wrap items-center justify-center gap-2 px-2 mx-auto">
-	{#each hadithCollections as col}
-		<button
-			class="{collectionFilter === col
-				? 'bg-black text-white '
-				: ''} px-2 py-1 my-auto text-xs font-medium border border-gray-400 hover:bg-black hover:text-white h-7 transition duration-200 ease-in-out"
-			on:click={() => {
-				if (collectionFilter === col) {
-					collectionFilter = 'all';
-				} else {
-					collectionFilter = col;
-				}
-			}}
-		>
-			{col}
-		</button>
-	{/each}
+	{#if hadithCollections.length > 1}
+		{#each hadithCollections as col}
+			<button
+				class="{collectionFilter === col
+					? 'bg-black text-white '
+					: ''} px-2 py-1 my-auto text-xs font-medium border border-gray-400 hover:bg-black hover:text-white h-7 transition duration-200 ease-in-out"
+				on:click={() => (collectionFilter = col)}
+			>
+				{col}
+			</button>
+		{/each}
+	{/if}
 </div>

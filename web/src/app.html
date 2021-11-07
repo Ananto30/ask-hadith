@@ -20,4 +20,16 @@
 	<body>
 		<div id="svelte">%svelte.body%</div>
 	</body>
+
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-139880119-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag() {
+			dataLayer.push(arguments);
+		}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-139880119-1');
+	</script>
 </html>

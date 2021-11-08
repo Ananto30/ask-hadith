@@ -1,5 +1,5 @@
 <script>
-	import '../styles/tailwind-output.css';
+	import { fade } from 'svelte/transition';
 
 	import SearchBox from '$lib/SearchBox.svelte';
 	import Hadith from '$lib/Hadith.svelte';
@@ -30,8 +30,8 @@
 	<title>Ask Hadith</title>
 </svelte:head>
 
-<div class="max-w-4xl mx-auto">
-	<div class="flex pt-10 pb-8 mx-auto md:pt-16">
+<div in:fade class="max-w-4xl mx-auto">
+	<div class="flex pt-10 pb-8 mx-auto md:pt-12">
 		<SearchBox bind:hadiths bind:searching />
 	</div>
 	{#if searching}

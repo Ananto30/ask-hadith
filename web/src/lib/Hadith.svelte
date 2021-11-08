@@ -1,13 +1,17 @@
 <script>
+	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 
 	export let hadith;
 	let copied = false;
+	let bookmarked = false;
 
 	const copyText = () => {
-		let text =
-			hadith.narrator_en +
-			'\n' +
+		let text = '';
+		if (hadith.hadith_no) {
+			text += hadith.narrator_en + '\n';
+		}
+		text +=
 			hadith.body_en +
 			'\n' +
 			'\n' +
@@ -33,23 +37,101 @@
 			copied = false;
 		}, 3000);
 	};
+
+	const bookmarkHadith = () => {
+		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths'));
+		if (!hadiths) {
+			hadiths = [];
+		}
+		hadiths.push(hadith);
+		localStorage.setItem('bookmarkedHadiths', JSON.stringify(hadiths));
+		bookmarked = true;
+	};
+
+	const unBookmarkHadith = () => {
+		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths'));
+		if (!hadiths) {
+			hadiths = [];
+		}
+		for (let i = 0; i < hadiths.length; i++) {
+			if (
+				hadiths[i].book_no === hadith.book_no &&
+				hadiths[i].book_ref_no === hadith.book_ref_no &&
+				hadiths[i].collection_id === hadith.collection_id
+			) {
+				hadiths.splice(i, 1);
+				break;
+			}
+		}
+		localStorage.setItem('bookmarkedHadiths', JSON.stringify(hadiths));
+		bookmarked = false;
+	};
+
+	const isBookmarked = () => {
+		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths'));
+		if (!hadiths) {
+			hadiths = [];
+		}
+		for (let i = 0; i < hadiths.length; i++) {
+			if (
+				hadiths[i].book_no === hadith.book_no &&
+				hadiths[i].book_ref_no === hadith.book_ref_no &&
+				hadiths[i].collection_id === hadith.collection_id
+			) {
+				return true;
+			}
+		}
+		return false;
+	};
+
+	onMount(() => {
+		bookmarked = isBookmarked();
+	});
 </script>
 
 <div in:fade class="max-w-4xl border-b">
 	<div class="px-4 py-8">
-		<h2 class="font-semibold ">
-			{hadith.collection}
-			<span class="text-gray-600 font-base"
-				>(Book: {hadith.book_no}, Hadith: {hadith.book_ref_no})
+		<div class="font-semibold flex flex-row items-center">
+			<h2>{hadith.collection}</h2>
+			<span class="flex text-gray-600 ml-1">
+				(Book: {hadith.book_no}, Hadith: {hadith.book_ref_no})
 				{#if hadith.hadith_no}
 					Hadith No: {hadith.hadith_no}
-				{/if}</span
+				{/if}
+			</span>
+			<button
+				class="flex ml-2 w-5 h-5"
+				on:click={() => {
+					if (bookmarked) unBookmarkHadith();
+					else bookmarkHadith();
+				}}
 			>
-		</h2>
+				<svg
+					class="w-5 h-5"
+					xmlns="http://www.w3.org/2000/svg"
+					width="192"
+					height="192"
+					fill="#000000"
+					viewBox="0 0 256 256"
+				>
+					<rect width="256" height="256" fill="none" />
+					<path
+						d="M192,224l-64.0074-40L64,224V48a8,8,0,0,1,8-8H184a8,8,0,0,1,8,8Z"
+						fill={bookmarked ? '#000000' : 'none'}
+						stroke="#000000"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="12"
+					/>
+				</svg>
+			</button>
+		</div>
 		<div class="flex flex-col gap-2 py-2">
-			<p class="text-sm font-medium text-gray-500">
-				{hadith.narrator_en}
-			</p>
+			{#if hadith.narrator_en}
+				<p class="text-sm font-medium text-gray-500">
+					{hadith.narrator_en}
+				</p>
+			{/if}
 			<p class="leading-relaxed antialised">
 				{#each hadith.body_en.split(' ') as word}
 					{#if hadith.highlight_hits.includes(word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ''))}

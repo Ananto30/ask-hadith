@@ -49,10 +49,10 @@
 					</svg>Bookmarks
 				</a>
 			</li>
-			<li>
+			<!-- <li>
 				<div class="flex flex-col">
 					<a class="hover:underline flex flex-row items-center gap-1 text-gray-300" href="">
-						<!-- <svg
+						<svg
 							class="w-4 h-4 text-gray-300"
 							xmlns="http://www.w3.org/2000/svg"
 							width="192"
@@ -134,12 +134,12 @@
 								stroke-linejoin="round"
 								stroke-width="16"
 							/></svg
-						> -->
+						>
 						Hadith Books
 					</a>
 					<p class="text-xs text-gray-300">coming soon*</p>
 				</div>
-			</li>
+			</li> -->
 		</ul>
 	</div>
 </nav>

@@ -611,6 +611,12 @@ video {
 	margin-left: 0.25rem;
 	margin-right: 0.25rem;
 }
+.ml-1{
+	margin-left: 0.25rem;
+}
+.ml-2{
+	margin-left: 0.5rem;
+}
 .mt-2{
 	margin-top: 0.5rem;
 }
@@ -623,20 +629,14 @@ video {
 .mt-12{
 	margin-top: 3rem;
 }
-.mb-24{
-	margin-bottom: 6rem;
-}
-.ml-2{
-	margin-left: 0.5rem;
-}
-.ml-1{
-	margin-left: 0.25rem;
-}
 .mb-28{
 	margin-bottom: 7rem;
 }
 .flex{
 	display: flex;
+}
+.h-5{
+	height: 1.25rem;
 }
 .h-7{
 	height: 1.75rem;
@@ -644,11 +644,8 @@ video {
 .h-4{
 	height: 1rem;
 }
-.h-6{
-	height: 1.5rem;
-}
-.h-5{
-	height: 1.25rem;
+.w-5{
+	width: 1.25rem;
 }
 .w-full{
 	width: 100%;
@@ -656,23 +653,8 @@ video {
 .w-4{
 	width: 1rem;
 }
-.w-20{
-	width: 5rem;
-}
-.w-8{
-	width: 2rem;
-}
-.w-6{
-	width: 1.5rem;
-}
-.w-5{
-	width: 1.25rem;
-}
 .max-w-4xl{
 	max-width: 56rem;
-}
-.max-w-5xl{
-	max-width: 64rem;
 }
 .max-w-6xl{
 	max-width: 72rem;
@@ -716,9 +698,6 @@ video {
 }
 .gap-2{
 	gap: 0.5rem;
-}
-.gap-6{
-	gap: 1.5rem;
 }
 .gap-4{
 	gap: 1rem;
@@ -779,9 +758,6 @@ video {
 .text-center{
 	text-align: center;
 }
-.align-middle{
-	vertical-align: middle;
-}
 .text-sm{
 	font-size: 0.875rem;
 	line-height: 1.25rem;
@@ -793,10 +769,6 @@ video {
 .text-xl{
 	font-size: 1.25rem;
 	line-height: 1.75rem;
-}
-.text-base{
-	font-size: 1rem;
-	line-height: 1.5rem;
 }
 .font-semibold{
 	font-weight: 600;
@@ -825,13 +797,13 @@ video {
 	--tw-text-opacity: 1;
 	color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
-.text-gray-300{
-	--tw-text-opacity: 1;
-	color: rgba(209, 213, 219, var(--tw-text-opacity));
-}
 .text-gray-700{
 	--tw-text-opacity: 1;
 	color: rgba(55, 65, 81, var(--tw-text-opacity));
+}
+.text-gray-300{
+	--tw-text-opacity: 1;
+	color: rgba(209, 213, 219, var(--tw-text-opacity));
 }
 .filter{
 	filter: var(--tw-filter);
@@ -896,14 +868,6 @@ html {
 	background-color: rgba(0, 0, 0, var(--tw-bg-opacity));
 }
 
-.hover\:to-blue-400:hover{
-	--tw-gradient-to: #60a5fa;
-}
-
-.hover\:fill-current:hover{
-	fill: currentColor;
-}
-
 .hover\:text-white:hover{
 	--tw-text-opacity: 1;
 	color: rgba(255, 255, 255, var(--tw-text-opacity));
@@ -927,10 +891,6 @@ html {
 	.md\:py-4{
 		padding-top: 1rem;
 		padding-bottom: 1rem;
-	}
-
-	.md\:pt-16{
-		padding-top: 4rem;
 	}
 
 	.md\:pt-12{

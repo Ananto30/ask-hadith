@@ -91,16 +91,18 @@
 
 <div in:fade class="max-w-4xl border-b">
 	<div class="px-4 py-8">
-		<div class="font-semibold flex flex-row items-center">
-			<h2>{hadith.collection}</h2>
-			<span class="flex text-gray-600 ml-1">
-				(Book: {hadith.book_no}, Hadith: {hadith.book_ref_no})
-				{#if hadith.hadith_no}
-					Hadith No: {hadith.hadith_no}
-				{/if}
-			</span>
+		<div class="flex flex-row items-center font-semibold">
+			<div class="w-full ">
+				<h2>{hadith.collection}</h2>
+				<span class="flex text-sm text-gray-600">
+					Book: {hadith.book_no}, Hadith: {hadith.book_ref_no}
+					{#if hadith.hadith_no}
+						(Hadith No: {hadith.hadith_no})
+					{/if}
+				</span>
+			</div>
 			<button
-				class="flex ml-2 w-5 h-5"
+				class="flex w-5 h-5 ml-2"
 				on:click={() => {
 					if (bookmarked) unBookmarkHadith();
 					else bookmarkHadith();

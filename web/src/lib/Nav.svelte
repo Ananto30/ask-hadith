@@ -1,11 +1,11 @@
 <script>
 </script>
 
-<nav>
+<nav class="sticky top-0 z-10 p-2 bg-white md:p-4">
 	<div class="max-w-6xl mx-auto">
-		<ul class="flex flex-row gap-4 justify-end p-2 font-medium text-sm text-gray-700">
+		<ul class="flex flex-row justify-end gap-4 p-2 text-sm font-medium text-gray-600">
 			<li>
-				<a class="hover:underline flex flex-row items-center gap-1" href="/">
+				<a class="flex flex-row items-center gap-1 hover:underline" href="/">
 					<svg
 						class="w-4 h-4 text-gray-600"
 						fill="currentColor"
@@ -20,7 +20,7 @@
 				</a>
 			</li>
 			<li>
-				<a class="hover:underline flex flex-row items-center gap-1" href="/bookmarks"
+				<a class="flex flex-row items-center gap-1 hover:underline" href="/bookmarks"
 					><svg
 						class="w-4 h-4"
 						xmlns="http://www.w3.org/2000/svg"
@@ -51,7 +51,7 @@
 			</li>
 			<!-- <li>
 				<div class="flex flex-col">
-					<a class="hover:underline flex flex-row items-center gap-1 text-gray-300" href="">
+					<a class="flex flex-row items-center gap-1 text-gray-300 hover:underline" href="">
 						<svg
 							class="w-4 h-4 text-gray-300"
 							xmlns="http://www.w3.org/2000/svg"

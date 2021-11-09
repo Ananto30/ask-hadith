@@ -31,11 +31,13 @@
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">
-	<div class="flex pt-10 pb-8 mx-auto md:pt-12">
-		<SearchBox bind:hadiths bind:searching />
+	<div class="top-0 z-10 my-12 md:sticky md:p-4">
+		<div class="flex mx-auto">
+			<SearchBox bind:hadiths bind:searching />
+		</div>
 	</div>
 	{#if searching}
-		<p class="flex items-center justify-center mt-8 mb-20 animate-pulse">Searching...</p>
+		<p class="flex items-center justify-center mt-10 mb-20 animate-pulse">Searching...</p>
 	{:else}
 		<div class="md:py-4">
 			<HadithFilters bind:hadiths bind:filteredHadiths />
@@ -48,23 +50,4 @@
 			</div>
 		</div>
 	{/if}
-	<div class="mt-8">
-		<p class="text-xs font-medium text-center text-gray-500">
-			Built with ❤️ by <a href="https://github.com/ananto30" class="text-gray-500 hover:underline"
-				>Ananto</a
-			>
-		</p>
-		<p class="text-xs text-center text-gray-500">
-			<a href="https://www.patreon.com/ananto" class="font-medium text-gray-500 hover:underline"
-				>Support this project</a
-			>
-		</p>
-		<p class="text-xs text-center text-gray-500">
-			© 2021
-			<span class="mx-1">|</span>
-			<a href="https://github.com/Ananto30/ask-hadith" class="text-gray-500 hover:underline"
-				>Ask Hadith</a
-			>
-		</p>
-	</div>
 </div>

@@ -19,6 +19,8 @@
 
 	const handleKeyup = (e) => {
 		if (e.keyCode == 13) {
+			const current = document.activeElement;
+			current.blur();
 			e.preventDefault();
 			searchHadiths();
 		}

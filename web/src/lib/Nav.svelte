@@ -1,4 +1,27 @@
 <script>
+	import { onMount } from 'svelte';
+
+	let deferredPrompt;
+	let alreadyInstalled = true;
+
+	const install = async () => {
+		if (deferredPrompt !== null) {
+			deferredPrompt.prompt();
+			const { outcome } = await deferredPrompt.userChoice;
+			if (outcome === 'accepted') {
+				deferredPrompt = null;
+			}
+		}
+	};
+
+	onMount(() => {
+		window.addEventListener('beforeinstallprompt', (e) => {
+			deferredPrompt = e;
+		});
+		if (!window.matchMedia('(display-mode: standalone)').matches) {
+			alreadyInstalled = false;
+		}
+	});
 </script>
 
 <nav class="sticky top-0 z-10 p-2 bg-white md:p-4">
@@ -7,8 +30,8 @@
 			<li>
 				<a class="flex flex-row items-center gap-1 hover:underline" href="/">
 					<svg
-						class="w-4 h-4 text-gray-600"
-						fill="currentColor"
+						class="w-4 h-4"
+						fill="currentcolor"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 24 24"
 					>
@@ -26,22 +49,19 @@
 						xmlns="http://www.w3.org/2000/svg"
 						width="192"
 						height="192"
-						fill="#000000"
+						fill="none"
 						viewBox="0 0 256 256"
 					>
-						<rect width="256" height="256" fill="none" />
 						<path
 							d="M168,224l-56.0074-40L56,224V72a8,8,0,0,1,8-8h96a8,8,0,0,1,8,8Z"
-							fill="none"
-							stroke="#000000"
+							stroke="currentcolor"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 							stroke-width="16"
 						/>
 						<path
 							d="M88,64V40a8,8,0,0,1,8-8h96a8,8,0,0,1,8,8V192l-32-22.85412"
-							fill="none"
-							stroke="#000000"
+							stroke="currentcolor"
 							stroke-linecap="round"
 							stroke-linejoin="round"
 							stroke-width="16"
@@ -49,6 +69,45 @@
 					</svg>Bookmarks
 				</a>
 			</li>
+			{#if !alreadyInstalled}
+				<li>
+					<button
+						class="flex flex-row gap-1 items-center font-medium hover:underline"
+						on:click={install}
+						><svg
+							class="w-4 h-4"
+							xmlns="http://www.w3.org/2000/svg"
+							width="192"
+							height="192"
+							fill="none"
+							viewBox="0 0 256 256"
+							><rect width="256" height="256" fill="none" /><polyline
+								points="86 110.011 128 152 170 110.011"
+								stroke="currentcolor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="16"
+							/><line
+								x1="128"
+								y1="40"
+								x2="128"
+								y2="151.97057"
+								stroke="currentcolor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="16"
+							/><path
+								d="M216,152v56a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V152"
+								stroke="currentcolor"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								stroke-width="16"
+							/></svg
+						>Install</button
+					>
+				</li>
+			{/if}
+
 			<!-- <li>
 				<div class="flex flex-col">
 					<a class="flex flex-row items-center gap-1 text-gray-300 hover:underline" href="">

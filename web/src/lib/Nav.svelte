@@ -57,14 +57,14 @@
 							stroke="currentcolor"
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							stroke-width="16"
+							stroke-width="20"
 						/>
 						<path
 							d="M88,64V40a8,8,0,0,1,8-8h96a8,8,0,0,1,8,8V192l-32-22.85412"
 							stroke="currentcolor"
 							stroke-linecap="round"
 							stroke-linejoin="round"
-							stroke-width="16"
+							stroke-width="20"
 						/>
 					</svg>Bookmarks
 				</a>
@@ -86,7 +86,7 @@
 								stroke="currentcolor"
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								stroke-width="16"
+								stroke-width="20"
 							/><line
 								x1="128"
 								y1="40"
@@ -95,13 +95,13 @@
 								stroke="currentcolor"
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								stroke-width="16"
+								stroke-width="20"
 							/><path
 								d="M216,152v56a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V152"
 								stroke="currentcolor"
 								stroke-linecap="round"
 								stroke-linejoin="round"
-								stroke-width="16"
+								stroke-width="20"
 							/></svg
 						>Install</button
 					>

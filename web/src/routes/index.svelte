@@ -1,5 +1,6 @@
 <script>
 	import { fade } from 'svelte/transition';
+	import { onMount } from 'svelte';
 
 	import SearchBox from '$lib/SearchBox.svelte';
 	import Hadith from '$lib/Hadith.svelte';
@@ -8,6 +9,20 @@
 	let hadiths = [];
 	let filteredHadiths = [];
 	let searching = false;
+	let searchKey = '';
+
+	const loadFromQueryParam = async () => {
+		let searchKeyParam = new URLSearchParams(window.location.search);
+		if (searchKeyParam.has('search')) {
+			searchKey = searchKeyParam.get('search');
+			searching = true;
+			const response = await fetch(
+				`https://askhadith.herokuapp.com/api/v2/search?search=${searchKey}`
+			);
+			hadiths = await response.json();
+			searching = false;
+		}
+	};
 
 	// for each hadith extract body_en.texts.type==hit from highlights and save in hadith.highlight_hits
 	$: for (let i = 0; i < hadiths.length; i++) {
@@ -24,6 +39,10 @@
 		}
 		hadith.highlight_hits = highlight_hits;
 	}
+
+	onMount(() => {
+		loadFromQueryParam();
+	});
 </script>
 
 <svelte:head>
@@ -33,7 +52,7 @@
 <div in:fade class="max-w-4xl mx-auto">
 	<div class="top-0 z-10 my-12 md:sticky md:p-4">
 		<div class="flex mx-auto">
-			<SearchBox bind:hadiths bind:searching />
+			<SearchBox bind:hadiths bind:searching bind:searchKey />
 		</div>
 	</div>
 	{#if searching}
@@ -45,7 +64,7 @@
 		<div class="flex flex-col">
 			<div class="mx-auto">
 				{#each filteredHadiths as hadith}
-					<Hadith bind:hadith />
+					<Hadith bind:hadith bind:searchKey />
 				{/each}
 			</div>
 		</div>

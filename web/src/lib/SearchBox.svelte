@@ -1,8 +1,7 @@
 <script>
 	export let hadiths;
 	export let searching;
-
-	let searchKey = '';
+	export let searchKey;
 
 	const searchHadiths = async () => {
 		if (searchKey.length < 2) {

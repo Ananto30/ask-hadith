@@ -3,6 +3,8 @@
 	import { fade } from 'svelte/transition';
 
 	export let hadith;
+	export let searchKey;
+
 	let copied = false;
 	let bookmarked = false;
 
@@ -31,6 +33,7 @@
 		if (hadith.hadith_grade) {
 			text += 'Grade:' + hadith.hadith_grade + '\n';
 		}
+		text += 'See more at https://askhadith.com?search=' + encodeURIComponent(searchKey);
 		navigator.clipboard.writeText(text);
 		copied = true;
 		setTimeout(() => {

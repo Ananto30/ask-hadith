@@ -1,6 +1,14 @@
 <script context="module">
 	export async function load({ page, fetch, session, stuff }) {
 		const searchKey = page.query.get('search');
+		if (!searchKey) {
+			return {
+				props: {
+					hadiths: [],
+					filteredHadiths: []
+				}
+			};
+		}
 		const res = await fetch(`https://askhadith.herokuapp.com/api/v2/search?search=${searchKey}`);
 
 		if (res.ok) {

@@ -13,6 +13,7 @@
 			`https://askhadith.herokuapp.com/api/v2/search?search=${searchKey}`
 		);
 		hadiths = await response.json();
+		window.history.pushState({}, '', `?search=${searchKey}`);
 		searching = false;
 	};
 

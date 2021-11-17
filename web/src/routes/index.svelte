@@ -1,3 +1,20 @@
+<script context="module">
+	export async function load({ page, fetch, session, stuff }) {
+		const searchKey = page.query.get('search');
+		const res = await fetch(`https://askhadith.herokuapp.com/api/v2/search?search=${searchKey}`);
+
+		if (res.ok) {
+			const data = await res.json();
+			return {
+				props: {
+					hadiths: data,
+					filteredHadiths: data
+				}
+			};
+		}
+	}
+</script>
+
 <script>
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
@@ -6,21 +23,15 @@
 	import Hadith from '$lib/Hadith.svelte';
 	import HadithFilters from '$lib/HadithFilters.svelte';
 
-	let hadiths = [];
-	let filteredHadiths = [];
+	export let hadiths;
+	export let filteredHadiths;
 	let searching = false;
 	let searchKey = '';
 
-	const loadFromQueryParam = async () => {
-		let searchKeyParam = new URLSearchParams(window.location.search);
+	const setSearchKeyIfPresentInQueryParam = () => {
+		const searchKeyParam = new URLSearchParams(window.location.search);
 		if (searchKeyParam.has('search')) {
 			searchKey = searchKeyParam.get('search');
-			searching = true;
-			const response = await fetch(
-				`https://askhadith.herokuapp.com/api/v2/search?search=${searchKey}`
-			);
-			hadiths = await response.json();
-			searching = false;
 		}
 	};
 
@@ -41,7 +52,7 @@
 	}
 
 	onMount(() => {
-		loadFromQueryParam();
+		setSearchKeyIfPresentInQueryParam();
 	});
 </script>
 

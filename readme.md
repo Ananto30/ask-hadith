@@ -15,15 +15,22 @@
 </p>
 
 
-This a [PWA](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps). So you can install in devices, both in mobile and PC.
-
-You can also filter hadith based on different collections (Bukhari, Muslim etc). And also `read` mark hadiths for another level of filter, which you have read already. 
-
-*Please note that these saved hadiths are cached in your local storage, so if you delete your cache it will be gone.*
-
-### [VISIT APP](https://askhadith.herokuapp.com/)
-
-***Please report any issues found in the app.*
+## Development
+- Web (Svelte app)
+```
+cd web
+npm install
+npm run dev
+```
+- Server (Python)
+```
+cd server
+python3 -m venv venv
+source venv/bin/activate
+pip install requirements.txt
+export FLASK_APP=src.app
+flask run
+```
 
 
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ananto30)

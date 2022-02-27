@@ -1,5 +1,5 @@
 appdirs==1.4.4
-astroid==2.9.3
+astroid==2.10.0
 autopep8==1.6.0
 black==22.1.0
 click==8.0.4

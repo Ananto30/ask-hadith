@@ -3,7 +3,7 @@ astroid==2.10.0
 autopep8==1.6.0
 black==22.1.0
 click==8.0.4
-dnspython==2.2.0
+dnspython==2.2.1
 Flask==2.0.3
 Flask-Cors==3.0.10
 Flask-SSLify==0.1.5

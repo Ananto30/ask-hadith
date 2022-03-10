@@ -25,4 +25,4 @@ toml==0.10.2
 typed-ast==1.5.2
 typing-extensions==4.1.1
 Werkzeug==2.0.3
-wrapt==1.13.3
+wrapt==1.14.0

@@ -2,7 +2,7 @@ appdirs==1.4.4
 astroid==2.11.2
 autopep8==1.6.0
 black==22.1.0
-click==8.0.4
+click==8.1.0
 dnspython==2.2.1
 Flask==2.0.3
 Flask-Cors==3.0.10
@@ -24,5 +24,5 @@ six==1.16.0
 toml==0.10.2
 typed-ast==1.5.2
 typing-extensions==4.1.1
-Werkzeug==2.0.3
+Werkzeug==2.1.0
 wrapt==1.14.0

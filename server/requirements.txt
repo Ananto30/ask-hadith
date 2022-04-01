@@ -2,7 +2,7 @@ appdirs==1.4.4
 astroid==2.11.2
 autopep8==1.6.0
 black==22.3.0
-click==8.1.1
+click==8.1.2
 dnspython==2.2.1
 Flask==2.1.1
 Flask-Cors==3.0.10

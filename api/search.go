@@ -8,6 +8,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/hashicorp/golang-lru"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -17,16 +18,33 @@ const PAGE_SIZE = 50
 
 var mongoClient *mongo.Client
 
+var cache *lru.Cache
+
 func SearchHadith(w http.ResponseWriter, r *http.Request) {
+	var err error
+
+	if cache == nil {
+		cache, err = lru.New(512)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
 	query := r.URL.Query().Get("search")
 	if query == "" {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	news, err := searchHadith(query)
-	if err != nil {
-		log.Fatal(err)
+	var news *[]bson.M
+
+	if val, ok := cache.Get(query); ok {
+		news = val.(*[]bson.M)
+	} else {
+		news, err = searchHadith(query)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")

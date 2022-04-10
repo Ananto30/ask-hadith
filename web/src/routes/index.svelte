@@ -9,7 +9,7 @@
 				}
 			};
 		}
-		const res = await fetch(`https://askhadith.herokuapp.com/api/v2/search?search=${searchKey}`);
+		const res = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
 
 		if (res.ok) {
 			const data = await res.json();

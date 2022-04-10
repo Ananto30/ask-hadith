@@ -9,10 +9,9 @@
 		}
 		hadiths = [];
 		searching = true;
-		const response = await fetch(
-			`https://askhadith.herokuapp.com/api/v2/search?search=${searchKey}`
-		);
+		const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
 		hadiths = await response.json();
+		console.log(hadiths);
 		window.history.pushState({}, '', `?search=${searchKey}`);
 		searching = false;
 	};

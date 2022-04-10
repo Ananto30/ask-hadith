@@ -8,7 +8,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/hashicorp/golang-lru"
+	lru "github.com/hashicorp/golang-lru"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -80,6 +80,9 @@ func searchHadith(query string) (*[]bson.M, error) {
 						},
 					},
 				},
+				"highlight": bson.M{
+					"path": bson.A{"body_en", "chapter_en"},
+				},
 			},
 		},
 		{
@@ -134,4 +137,27 @@ func getMongoClient() *mongo.Client {
 	}
 	mongoClient = client
 	return mongoClient
+}
+
+type SearchResult struct {
+	CollectionId string  `bson:"collection_id" json:"collection_id"`
+	Collection   string  `bson:"collection" json:"collection"`
+	HadithNo     string  `bson:"hadith_no" json:"hadith_no"`
+	BookNo       string  `bson:"book_no" json:"book_no"`
+	BookEn       string  `bson:"book_en" json:"book_en"`
+	ChapterNo    string  `bson:"chapter_no" json:"chapter_no"`
+	ChapterEn    string  `bson:"chapter_en" json:"chapter_en"`
+	NarratorEn   string  `bson:"narrator_en" json:"narrator_en"`
+	BodyEn       string  `bson:"body_en" json:"body_en"`
+	BookRefNo    string  `bson:"book_ref_no" json:"book_ref_no"`
+	HadithGrade  string  `bson:"hadith_grade" json:"hadith_grade"`
+	Score        float64 `bson:"score" json:"score"`
+	Highlights   []struct {
+		Path  string  `bson:"path" json:"path"`
+		Score float64 `bson:"score" json:"score"`
+		Texts []struct {
+			Type  string `bson:"type" json:"type"`
+			Value string `bson:"value" json:"value"`
+		} `bson:"texts" json:"texts"`
+	} `bson:"highlights" json:"highlights"`
 }

@@ -47,6 +47,7 @@
 	$: for (let i = 0; i < hadiths.length; i++) {
 		let hadith = hadiths[i];
 		let highlight_hits = [];
+		if (hadith.highlights)
 		for (let j = 0; j < hadith.highlights.length; j++) {
 			let highlight = hadith.highlights[j];
 			for (let k = 0; k < highlight.texts.length; k++) {

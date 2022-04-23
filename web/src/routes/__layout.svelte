@@ -7,7 +7,7 @@
 
 <slot />
 
-<div class="flex flex-col gap-1 mt-8">
+<div class="flex flex-col gap-1 mt-8 mb-8">
 	<p class="text-xs font-medium text-center text-gray-500">
 		Built with ❤️ by
 		<a href="https://github.com/ananto30" class="text-gray-500 hover:underline">Ananto </a>

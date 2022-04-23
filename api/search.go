@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 
 	lru "github.com/hashicorp/golang-lru"
@@ -36,12 +38,32 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var news *[]bson.M
+	var hadiths *[]bson.M
+
+	words := strings.Fields(query)
+	if len(words) == 2 {
+		if contains([]string{"bukhari", "abudawud", "nasai", "tirmidhi", "ibnmajah", "muslim"}, words[0]) {
+			if _, err := strconv.Atoi(words[1]); err == nil {
+				hadith, err := getHadith(words[0], words[1])
+				if err != nil {
+					log.Fatal(err)
+				}
+				if hadith != nil {
+					hadiths = &[]bson.M{hadith}
+					w.Header().Set("Content-Type", "application/json")
+					w.Header().Set("Access-Control-Allow-Origin", "*")
+					w.WriteHeader(http.StatusOK)
+					json.NewEncoder(w).Encode(hadiths)
+					return
+				}
+			}
+		}
+	}
 
 	if val, ok := cache.Get(query); ok {
-		news = val.(*[]bson.M)
+		hadiths = val.(*[]bson.M)
 	} else {
-		news, err = searchHadith(query)
+		hadiths, err = searchHadith(query)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -50,7 +72,7 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(news)
+	json.NewEncoder(w).Encode(hadiths)
 }
 
 func searchHadith(query string) (*[]bson.M, error) {
@@ -61,20 +83,20 @@ func searchHadith(query string) (*[]bson.M, error) {
 		{
 			"$search": bson.M{
 				"compound": bson.M{
-					"must": bson.A{
-						bson.M{
-							"text": bson.M{
-								"query": query,
-								"path":  bson.A{"body_en", "chapter_en"},
-								"fuzzy": bson.M{"maxEdits": 1, "maxExpansions": 10},
-							},
-						},
-					},
+					// "must": bson.A{
+					// 	bson.M{
+					// 		"text": bson.M{
+					// 			"query": query,
+					// 			"path":  bson.A{"body_en", "chapter_en"},
+					// 			"fuzzy": bson.M{"maxEdits": 1, "maxExpansions": 10},
+					// 		},
+					// 	},
+					// },
 					"should": bson.A{
 						bson.M{
 							"phrase": bson.M{
 								"query": query,
-								"path":  "body_en",
+								"path":  bson.A{"body_en", "chapter_en"},
 								"slop":  2,
 							},
 						},
@@ -122,6 +144,24 @@ func searchHadith(query string) (*[]bson.M, error) {
 	return &results, nil
 }
 
+func getHadith(hadithName, hadithNo string) (bson.M, error) {
+	client := getMongoClient()
+	collection := client.Database("hadith").Collection("hadiths")
+
+	var result bson.M
+	if err := collection.FindOne(
+		context.TODO(),
+		bson.M{
+			"collection_id": hadithName,
+			"hadith_no":     hadithNo,
+		},
+	).Decode(&result); err != nil {
+		return nil, err
+	}
+
+	return result, nil
+}
+
 func getMongoClient() *mongo.Client {
 	if mongoClient != nil {
 		return mongoClient
@@ -137,6 +177,15 @@ func getMongoClient() *mongo.Client {
 	}
 	mongoClient = client
 	return mongoClient
+}
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
 
 type SearchResult struct {

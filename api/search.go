@@ -97,7 +97,7 @@ func searchHadith(query string) (*[]bson.M, error) {
 							"phrase": bson.M{
 								"query": query,
 								"path":  bson.A{"body_en", "chapter_en"},
-								"slop":  2,
+								"slop":  5,
 							},
 						},
 					},

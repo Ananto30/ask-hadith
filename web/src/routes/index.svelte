@@ -33,6 +33,7 @@
 
 	export let hadiths;
 	export let filteredHadiths;
+	let notFound = false;
 	let searching = false;
 	let searchKey = '';
 
@@ -48,15 +49,15 @@
 		let hadith = hadiths[i];
 		let highlight_hits = [];
 		if (hadith.highlights)
-		for (let j = 0; j < hadith.highlights.length; j++) {
-			let highlight = hadith.highlights[j];
-			for (let k = 0; k < highlight.texts.length; k++) {
-				let text = highlight.texts[k];
-				if (text.type === 'hit') {
-					highlight_hits.push(text.value);
+			for (let j = 0; j < hadith.highlights.length; j++) {
+				let highlight = hadith.highlights[j];
+				for (let k = 0; k < highlight.texts.length; k++) {
+					let text = highlight.texts[k];
+					if (text.type === 'hit') {
+						highlight_hits.push(text.value);
+					}
 				}
 			}
-		}
 		hadith.highlight_hits = highlight_hits;
 	}
 
@@ -72,11 +73,13 @@
 <div in:fade class="max-w-4xl mx-auto">
 	<div class="top-0 z-10 my-12 md:sticky md:p-4">
 		<div class="flex mx-auto">
-			<SearchBox bind:hadiths bind:searching bind:searchKey />
+			<SearchBox bind:hadiths bind:searching bind:searchKey bind:notFound />
 		</div>
 	</div>
 	{#if searching}
 		<p class="flex items-center justify-center mt-10 mb-20 animate-pulse">Searching...</p>
+	{:else if notFound}
+		<p class="flex items-center justify-center mt-10 mb-20">No results found</p>
 	{:else}
 		<div class="md:py-4">
 			<HadithFilters bind:hadiths bind:filteredHadiths />

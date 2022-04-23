@@ -2,6 +2,7 @@
 	export let hadiths;
 	export let searching;
 	export let searchKey;
+	export let notFound;
 
 	const searchHadiths = async () => {
 		if (searchKey.length < 2) {
@@ -9,9 +10,18 @@
 		}
 		hadiths = [];
 		searching = true;
-		const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
-		hadiths = await response.json();
-		console.log(hadiths);
+		try {
+			const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
+			hadiths = await response.json();
+			if (hadiths == null) {
+				notFound = true;
+				hadiths = [];
+			}
+		} catch (error) {
+			console.log(error);
+			notFound = true;
+			hadiths = [];
+		}
 		window.history.pushState({}, '', `?search=${searchKey}`);
 		searching = false;
 	};

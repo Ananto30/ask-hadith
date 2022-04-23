@@ -24,6 +24,7 @@
 		}
 		window.history.pushState({}, '', `?search=${searchKey}`);
 		searching = false;
+		notFound = false;
 	};
 
 	const handleKeyup = (e) => {

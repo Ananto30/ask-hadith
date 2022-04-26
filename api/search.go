@@ -44,7 +44,7 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	if len(words) == 2 {
 		if contains([]string{"bukhari", "abudawud", "nasai", "tirmidhi", "ibnmajah", "muslim"}, strings.ToLower(words[0])) {
 			if _, err := strconv.Atoi(words[1]); err == nil {
-				hadith, err := getHadith(words[0], words[1])
+				hadith, err := getHadith(strings.ToLower(words[0]), words[1])
 				if err != nil {
 					log.Fatal(err)
 				}

@@ -10,6 +10,7 @@
 		}
 		hadiths = [];
 		searching = true;
+		notFound = false;
 		try {
 			const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
 			hadiths = await response.json();
@@ -24,7 +25,6 @@
 		}
 		window.history.pushState({}, '', `?search=${searchKey}`);
 		searching = false;
-		notFound = false;
 	};
 
 	const handleKeyup = (e) => {
@@ -37,12 +37,12 @@
 	};
 </script>
 
-<div class="flex items-center justify-center mx-auto">
+<div class="flex-col items-center justify-center mx-auto">
 	<div class="flex w-full mx-4 border-b border-gray-400 md:w-80">
 		<input
 			type="text"
-			class="w-full px-4 py-2 text-sm md:w-80 focus:outline-none"
-			placeholder="Search..."
+			class="w-full px-4 py-2 text-xs md:w-80 focus:outline-none"
+			placeholder="Qadr, bukhari 1029, muslim 1763 etc..."
 			bind:value={searchKey}
 			on:keyup={handleKeyup}
 		/>
@@ -63,4 +63,9 @@
 			</svg>
 		</button>
 	</div>
+	<!-- <div class="flex-col text-xs mt-3 text-gray-400 text-center">
+		To search specific hadith use like this -
+		<br />
+		bukhari 1028, muslim 3, etc.
+	</div> -->
 </div>

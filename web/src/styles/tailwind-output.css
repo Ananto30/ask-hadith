@@ -478,6 +478,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .mb-20{
   margin-bottom: 5rem;
 }
+.mt-3{
+  margin-top: 0.75rem;
+}
 .flex{
   display: flex;
 }
@@ -649,6 +652,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   --tw-text-opacity: 1;
   color: rgb(209 213 219 / var(--tw-text-opacity));
 }
+.text-gray-400{
+  --tw-text-opacity: 1;
+  color: rgb(156 163 175 / var(--tw-text-opacity));
+}
 .blur{
   --tw-blur: blur(8px);
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
@@ -740,6 +747,10 @@ html {
 
   .md\:w-80{
     width: 20rem;
+  }
+
+  .md\:w-8{
+    width: 2rem;
   }
 
   .md\:p-4{

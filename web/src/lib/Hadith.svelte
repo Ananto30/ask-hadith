@@ -33,7 +33,9 @@
 		if (hadith.hadith_grade) {
 			text += 'Grade:' + hadith.hadith_grade + '\n';
 		}
-		text += 'See more at https://askhadith.com?search=' + encodeURIComponent(searchKey);
+		text +=
+			'https://askhadith.com?search=' +
+			encodeURIComponent(hadith.collection_id + ' ' + hadith.hadith_no);
 		navigator.clipboard.writeText(text);
 		copied = true;
 		setTimeout(() => {

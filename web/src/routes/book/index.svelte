@@ -13,7 +13,7 @@
 		}
 
 		const res = await fetch(
-			`https://ask-hadith-ananto30.vercel.app/api/book?collection_id=${collectionId}&book=${book}&ref_no=${refNumber}`
+			`https://ask-hadith.vercel.app/api/book?collection_id=${collectionId}&book=${book}&ref_no=${refNumber}`
 		);
 
 		if (res.ok) {

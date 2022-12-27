@@ -141,7 +141,7 @@
 			{/if}
 			<p class="leading-relaxed antialised">
 				{#each hadith.body_en.split(' ') as word}
-					{#if hadith.highlight_hits.includes(word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()"']/g, ''))}
+					{#if hadith.highlight_hits && hadith.highlight_hits.includes(word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()"']/g, ''))}
 						<span class="font-semibold font-merriweather antialised">{word} </span>
 					{:else}
 						<span class="font-light font-merriweather antialised">{word} </span>

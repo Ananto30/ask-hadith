@@ -8,9 +8,6 @@
   <a href="https://depfu.com/github/Ananto30/ask-hadith?project_id=13555">
      <img alt="Depfu status" src="https://badges.depfu.com/badges/362ce5396653b2bd131b26c55bb809c6/overview.svg" />
   </a>
-  <a href="https://requires.io/github/Ananto30/ask-hadith/requirements/?branch=requires-io-netlify">
-     <img src="https://requires.io/github/Ananto30/ask-hadith/requirements.svg?branch=requires-io-netlify" alt="Requirements Status" />
-  </a>
  </p>
 </p>
 

@@ -1,36 +1,44 @@
-<script>
-	export let hadiths;
-	export let searching;
-	export let searchKey;
-	export let notFound;
+<script lang="ts">
+	import type { HadithModel } from 'src/routes/models';
+	import SearchSvg from './svgs/search.svelte';
+
+	export let hadiths: HadithModel[];
+	export let filteredHadiths: HadithModel[];
+	export let searching: boolean;
+	export let searchKey: string;
+	export let notFound: boolean;
 
 	const searchHadiths = async () => {
 		if (searchKey.length < 2) {
 			return;
 		}
 		hadiths = [];
+		filteredHadiths = [];
 		searching = true;
 		notFound = false;
 		try {
 			const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
 			hadiths = await response.json();
+			filteredHadiths = hadiths;
 			if (hadiths == null) {
 				notFound = true;
 				hadiths = [];
+				filteredHadiths = [];
 			}
 		} catch (error) {
 			console.log(error);
 			notFound = true;
 			hadiths = [];
+			filteredHadiths = [];
 		}
 		window.history.pushState({}, '', `?search=${searchKey}`);
 		searching = false;
 	};
 
-	const handleKeyup = (e) => {
+	const handleKeyup = (e: { keyCode: number; preventDefault: () => void }) => {
 		if (e.keyCode == 13) {
 			const current = document.activeElement;
-			current.blur();
+			if (current instanceof HTMLElement) current.blur();
 			e.preventDefault();
 			searchHadiths();
 		}
@@ -51,16 +59,7 @@
 			on:click={searchHadiths}
 			aria-label="Search Hadiths"
 		>
-			<svg
-				class="w-4 h-4 text-gray-600"
-				fill="currentColor"
-				xmlns="http://www.w3.org/2000/svg"
-				viewBox="0 0 24 24"
-			>
-				<path
-					d="M16.32 14.9l5.39 5.4a1 1 0 0 1-1.42 1.4l-5.38-5.38a8 8 0 1 1 1.41-1.41zM10 16a6 6 0 1 0 0-12 6 6 0 0 0 0 12z"
-				/>
-			</svg>
+			<SearchSvg />
 		</button>
 	</div>
 	<!-- <div class="flex-col text-xs mt-3 text-gray-400 text-center">

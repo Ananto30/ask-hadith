@@ -1,14 +1,15 @@
-<script>
+<script lang="ts">
 	import { fade } from 'svelte/transition';
-
-	import Hadith from '$lib/Hadith.svelte';
 	import { onMount } from 'svelte';
 
-	let bookmarkedHadiths = [];
+	import Hadith from '$lib/Hadith.svelte';
+	import type { HadithModel } from '../models';
 
-	onMount(() => {
-		bookmarkedHadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths')) || [];
-	});
+	let bookmarkedHadiths: HadithModel[] = [];
+
+	onMount(
+		() => (bookmarkedHadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '') || [])
+	);
 </script>
 
 <svelte:head>
@@ -16,7 +17,10 @@
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">
-	<p class="flex items-center justify-center px-4 text-xs text-gray-500">*Please note that these bookmarks are saved in local cache, so if you clear data/cache, it will be gone!</p>
+	<p class="flex items-center justify-center px-4 text-xs text-gray-500">
+		*Please note that these bookmarks are saved in local cache, so if you clear data/cache, it will
+		be gone!
+	</p>
 	{#if bookmarkedHadiths.length == 0}
 		<p class="flex items-center justify-center py-20">No bookmarks found!</p>
 	{:else}

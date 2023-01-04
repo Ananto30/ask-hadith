@@ -1,6 +1,8 @@
-<script>
-	export let hadiths;
-	export let filteredHadiths;
+<script lang="ts">
+	import type { HadithModel } from 'src/routes/models';
+
+	export let hadiths: HadithModel[];
+	export let filteredHadiths: HadithModel[];
 
 	let hadithCollections = ['All'];
 

@@ -1,9 +1,11 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
+	import BookmarkSvg from '$lib/svgs/bookmark.svelte';
 
-	export let hadith;
-	export let searchKey;
+	import type { HadithModel } from 'src/routes/models';
+
+	export let hadith: HadithModel;
 
 	let copied = false;
 	let bookmarked = false;
@@ -43,21 +45,23 @@
 		}, 3000);
 	};
 
-	const bookmarkHadith = () => {
-		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths'));
+	const getLocalBookmarkedHadiths = (): HadithModel[] => {
+		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '');
 		if (!hadiths) {
 			hadiths = [];
 		}
+		return hadiths;
+	};
+
+	const bookmarkHadith = () => {
+		let hadiths = getLocalBookmarkedHadiths();
 		hadiths.push(hadith);
 		localStorage.setItem('bookmarkedHadiths', JSON.stringify(hadiths));
 		bookmarked = true;
 	};
 
 	const unBookmarkHadith = () => {
-		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths'));
-		if (!hadiths) {
-			hadiths = [];
-		}
+		let hadiths = getLocalBookmarkedHadiths();
 		for (let i = 0; i < hadiths.length; i++) {
 			if (
 				hadiths[i].book_no === hadith.book_no &&
@@ -72,11 +76,8 @@
 		bookmarked = false;
 	};
 
-	const isBookmarked = () => {
-		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths'));
-		if (!hadiths) {
-			hadiths = [];
-		}
+	const isBookmarked = (): boolean => {
+		let hadiths = getLocalBookmarkedHadiths();
 		for (let i = 0; i < hadiths.length; i++) {
 			if (
 				hadiths[i].book_no === hadith.book_no &&
@@ -113,24 +114,7 @@
 					else bookmarkHadith();
 				}}
 			>
-				<svg
-					class="w-5 h-5"
-					xmlns="http://www.w3.org/2000/svg"
-					width="192"
-					height="192"
-					fill="#000000"
-					viewBox="0 0 256 256"
-				>
-					<rect width="256" height="256" fill="none" />
-					<path
-						d="M192,224l-64.0074-40L64,224V48a8,8,0,0,1,8-8H184a8,8,0,0,1,8,8Z"
-						fill={bookmarked ? '#000000' : 'none'}
-						stroke="#000000"
-						stroke-linecap="round"
-						stroke-linejoin="round"
-						stroke-width="12"
-					/>
-				</svg>
+				<BookmarkSvg bind:bookmarked />
 			</button>
 		</div>
 		<div class="flex flex-col gap-2 py-2">
@@ -141,7 +125,7 @@
 			{/if}
 			<p class="leading-relaxed antialised">
 				{#each hadith.body_en.split(' ') as word}
-					{#if hadith.highlight_hits && hadith.highlight_hits.includes(word.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()"']/g, ''))}
+					{#if hadith.highlight_hits && hadith.highlight_hits.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
 						<span class="font-semibold font-merriweather antialised">{word} </span>
 					{:else}
 						<span class="font-light font-merriweather antialised">{word} </span>

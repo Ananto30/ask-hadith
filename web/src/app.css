@@ -1,3 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html {
+    overflow-y: scroll;
+}
+
+* {
+    font-family: 'Montserrat', sans-serif;
+}
+
+.font-merriweather {
+    font-family: 'Merriweather', serif;
+}
+
+/* Scroll bar beautify */
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 4px;
+    height: 16px;
+}
+
+/* Track */
+
+::-webkit-scrollbar-track {
+    background: #fff;
+}
+
+/* Handle */
+
+::-webkit-scrollbar-thumb {
+    background: #202225;
+    border-radius: 100vh;
+    /* border: 3px solid #edf2f7; */
+}
+
+/* Handle on hover */
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a0aec0;
+}

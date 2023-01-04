@@ -4,4 +4,9 @@ node_modules
 /.svelte-kit
 /package
 .env
-.netlify
+.env.*
+!.env.example
+.vercel
+.output
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*

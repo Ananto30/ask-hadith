@@ -8,7 +8,7 @@
 	let bookmarkedHadiths: HadithModel[] = [];
 
 	onMount(
-		() => (bookmarkedHadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '') || [])
+		() => (bookmarkedHadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '{}') || [])
 	);
 </script>
 

@@ -7,11 +7,11 @@
 	import DownloadSvg from './svgs/download.svelte';
 	import BooksSvg from './svgs/books.svelte';
 
-	let deferredPrompt: BeforeInstallPromptEvent | null;
-	let alreadyInstalled = true;
+	let deferredPrompt: BeforeInstallPromptEvent | null = null;
+	let showInstallButton = false;
 
 	const install = async () => {
-		if (deferredPrompt !== null) {
+		if (deferredPrompt) {
 			deferredPrompt.prompt();
 			const { outcome } = await deferredPrompt.userChoice;
 			if (outcome === 'accepted') {
@@ -20,13 +20,19 @@
 		}
 	};
 
+	const showInstall = () => {
+		return deferredPrompt != null && !alreadyInstalled();
+	};
+
+	const alreadyInstalled = () => {
+		return window.matchMedia('(display-mode: standalone)').matches;
+	};
+
 	onMount(() => {
 		window.addEventListener('beforeinstallprompt', (e) => {
 			deferredPrompt = e;
 		});
-		if (!window.matchMedia('(display-mode: standalone)').matches) {
-			alreadyInstalled = false;
-		}
+		showInstallButton = showInstall();
 	});
 </script>
 
@@ -45,7 +51,7 @@
 					Bookmarks
 				</a>
 			</li>
-			{#if !alreadyInstalled}
+			{#if showInstallButton }
 				<li>
 					<button
 						class="flex flex-row gap-1 items-center font-medium hover:underline"

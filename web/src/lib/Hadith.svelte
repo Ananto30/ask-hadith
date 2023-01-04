@@ -46,7 +46,7 @@
 	};
 
 	const getLocalBookmarkedHadiths = (): HadithModel[] => {
-		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '');
+		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '{}');
 		if (!hadiths) {
 			hadiths = [];
 		}

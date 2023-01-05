@@ -98,9 +98,9 @@
 <div in:fade class="max-w-4xl border-b">
 	<div class="px-4 py-8">
 		<div class="flex flex-row items-center font-semibold">
-			<div class="w-full ">
+			<div class="w-full text-sm">
 				<h2>{hadith.collection}</h2>
-				<span class="flex text-sm text-gray-600">
+				<span class="flex text-xs text-gray-600">
 					Book: {hadith.book_no}, Hadith: {hadith.book_ref_no}
 					{#if hadith.hadith_no}
 						(Hadith No: {hadith.hadith_no})
@@ -119,33 +119,33 @@
 		</div>
 		<div class="flex flex-col gap-2 py-2">
 			{#if hadith.narrator_en}
-				<p class="text-sm font-medium text-gray-500">
+				<p class="text-xs font-medium text-gray-500">
 					{hadith.narrator_en}
 				</p>
 			{/if}
-			<p class="leading-relaxed antialised">
+			<p class="">
 				{#each hadith.body_en.split(' ') as word}
 					{#if hadith.highlight_hits && hadith.highlight_hits.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
-						<span class="font-semibold font-merriweather antialised">{word} </span>
+						<span class="font-semibold font-merriweather">{word} </span>
 					{:else}
-						<span class="font-light font-merriweather antialised">{word} </span>
+						<span class="font-light font-merriweather">{word} </span>
 					{/if}
 				{/each}
 			</p>
 		</div>
 		<div class="flex">
-			<div class="flex flex-col w-full pt-2">
+			<div class="flex flex-col w-full pt-2 font-medium text-xs text-gray-500">
 				<!-- <span class="text-xs font-semibold text-gray-600"
 					>{hadith.collection} (Book: {hadith.book_no}, Hadith: {hadith.book_ref_no})
 					{#if hadith.hadith_no}
 						Hadith No: {hadith.hadith_no}
 					{/if}
 				</span> -->
-				<span class="text-xs font-semibold text-gray-500">Book: {hadith.book_en} </span>
+				<span>Book: {hadith.book_en} </span>
 				{#if hadith.chapter_en}
-					<span class="text-xs font-semibold text-gray-500">Chapter: {hadith.chapter_en}</span>
+					<span>Chapter: {hadith.chapter_en}</span>
 				{/if}
-				<span class="text-xs font-semibold text-gray-500">Grade: {hadith.hadith_grade}</span>
+				<span>Grade: {hadith.hadith_grade}</span>
 			</div>
 			<div class="flex justify-end mt-2">
 				<button

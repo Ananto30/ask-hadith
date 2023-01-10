@@ -6,15 +6,16 @@
 @tailwind utilities;
 
 html {
-	overflow-y: scroll;
+    overflow-y: scroll;
 }
 
 * {
-	font-family: 'Montserrat', sans-serif;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .font-merriweather {
-	font-family: 'Merriweather', serif;
+    font-family: 'Merriweather', serif;
+    font-size: 14px;
 }
 
 /* Scroll bar beautify */
@@ -22,26 +23,26 @@ html {
 /* width */
 
 ::-webkit-scrollbar {
-	width: 4px;
-	height: 16px;
+    width: 4px;
+    height: 16px;
 }
 
 /* Track */
 
 ::-webkit-scrollbar-track {
-	background: #fff;
+    background: #fff;
 }
 
 /* Handle */
 
 ::-webkit-scrollbar-thumb {
-	background: #202225;
-	border-radius: 100vh;
-	/* border: 3px solid #edf2f7; */
+    background: #202225;
+    border-radius: 100vh;
+    /* border: 3px solid #edf2f7; */
 }
 
 /* Handle on hover */
 
 ::-webkit-scrollbar-thumb:hover {
-	background: #a0aec0;
+    background: #a0aec0;
 }

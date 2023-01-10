@@ -11,6 +11,9 @@
  </p>
 </p>
 
+Uses vercel for serverless functions and MongoDB Atlas for database.
+
+Frontend is built with Svelte and TailwindCSS and deployed on Netlify.
 
 ## Development
 - Web (Svelte app)
@@ -24,7 +27,7 @@ npm run dev
 cd server
 python3 -m venv venv
 source venv/bin/activate
-pip install requirements.txt
+pip install -r requirements.txt
 export FLASK_APP=src.app
 flask run
 ```

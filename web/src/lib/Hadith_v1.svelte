@@ -1,5 +1,7 @@
-<script>
-	export let hadith;
+<script lang="ts">
+	import type { HadithModel } from 'src/routes/models';
+
+	export let hadith: HadithModel;
 </script>
 
 <div class="max-w-4xl py-4">

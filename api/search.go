@@ -44,12 +44,11 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	if len(words) == 2 {
 		if contains([]string{"bukhari", "abudawud", "nasai", "tirmidhi", "ibnmajah", "muslim"}, strings.ToLower(words[0])) {
 			if _, err := strconv.Atoi(words[1]); err == nil {
-				hadith, err := getHadith(strings.ToLower(words[0]), words[1])
+				hadiths, err := getHadith(strings.ToLower(words[0]), words[1])
 				if err != nil {
 					log.Fatal(err)
 				}
-				if hadith != nil {
-					hadiths = &[]bson.M{hadith}
+				if hadiths != nil && len(*hadiths) > 0 {
 					w.Header().Set("Content-Type", "application/json")
 					w.Header().Set("Access-Control-Allow-Origin", "*")
 					w.WriteHeader(http.StatusOK)
@@ -144,22 +143,28 @@ func searchHadith(query string) (*[]bson.M, error) {
 	return &results, nil
 }
 
-func getHadith(hadithName, hadithNo string) (bson.M, error) {
+func getHadith(hadithName, hadithNo string) (*[]bson.M, error) {
 	client := getMongoClient()
 	collection := client.Database("hadith").Collection("hadiths")
 
-	var result bson.M
-	if err := collection.FindOne(
+	cursor, err := collection.Find(
 		context.TODO(),
 		bson.M{
 			"collection_id": hadithName,
-			"hadith_no":     hadithNo,
+			"hadith_no":     "^"+hadithNo,
 		},
-	).Decode(&result); err != nil {
+	)
+	if err != nil {
 		return nil, err
 	}
 
-	return result, nil
+	var results []bson.M
+	err = cursor.All(context.TODO(), &results)
+	if err != nil {
+		return nil, err
+	}
+
+	return &results, nil
 }
 
 func getMongoClient() *mongo.Client {

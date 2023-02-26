@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -22,13 +21,17 @@ var mongoClient *mongo.Client
 
 var cache *lru.Cache
 
+var shortNames = []string{"bukhari", "abudawud", "nasai", "tirmidhi", "ibnmajah", "muslim"}
+
 func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	var err error
 
 	if cache == nil {
 		cache, err = lru.New(512)
 		if err != nil {
-			log.Fatal(err)
+			w.WriteHeader(http.StatusInternalServerError)
+			w.Write([]byte(err.Error()))
+			return
 		}
 	}
 
@@ -38,33 +41,31 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var hadiths *[]bson.M
+	var hadiths []bson.M
 
 	words := strings.Fields(query)
-	if len(words) == 2 {
-		if contains([]string{"bukhari", "abudawud", "nasai", "tirmidhi", "ibnmajah", "muslim"}, strings.ToLower(words[0])) {
-			if _, err := strconv.Atoi(words[1]); err == nil {
-				hadiths, err := getHadith(strings.ToLower(words[0]), words[1])
-				if err != nil {
-					log.Fatal(err)
-				}
-				if hadiths != nil && len(*hadiths) > 0 {
-					w.Header().Set("Content-Type", "application/json")
-					w.Header().Set("Access-Control-Allow-Origin", "*")
-					w.WriteHeader(http.StatusOK)
-					json.NewEncoder(w).Encode(hadiths)
-					return
-				}
+	if len(words) == 2 && contains(shortNames, strings.ToLower(words[0])) {
+		if _, err := strconv.Atoi(words[1]); err == nil {
+			hadithByName, err := getHadith(strings.ToLower(words[0]), words[1])
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(err.Error()))
+			}
+			if len(hadithByName) > 0 {
+				hadiths = append(hadiths, hadithByName...)
 			}
 		}
 	}
 
-	if val, ok := cache.Get(query); ok {
-		hadiths = val.(*[]bson.M)
-	} else {
-		hadiths, err = searchHadith(query)
-		if err != nil {
-			log.Fatal(err)
+	if len(hadiths) == 0 {
+		if val, ok := cache.Get(query); ok {
+			hadiths = val.([]bson.M)
+		} else {
+			hadiths, err = searchHadith(query)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				w.Write([]byte(err.Error()))
+			}
 		}
 	}
 
@@ -74,8 +75,11 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(hadiths)
 }
 
-func searchHadith(query string) (*[]bson.M, error) {
-	client := getMongoClient()
+func searchHadith(query string) ([]bson.M, error) {
+	client, err := getMongoClient()
+	if err != nil {
+		return nil, err
+	}
 	collection := client.Database("hadith").Collection("hadiths")
 
 	pipeline := []bson.M{
@@ -140,18 +144,21 @@ func searchHadith(query string) (*[]bson.M, error) {
 		return nil, err
 	}
 
-	return &results, nil
+	return results, nil
 }
 
-func getHadith(hadithName, hadithNo string) (*[]bson.M, error) {
-	client := getMongoClient()
+func getHadith(hadithName, hadithNo string) ([]bson.M, error) {
+	client, err := getMongoClient()
+	if err != nil {
+		return nil, err
+	}
 	collection := client.Database("hadith").Collection("hadiths")
 
 	cursor, err := collection.Find(
 		context.TODO(),
 		bson.M{
 			"collection_id": hadithName,
-			"hadith_no":     "^"+hadithNo,
+			"hadith_no":     "^" + hadithNo,
 		},
 	)
 	if err != nil {
@@ -164,24 +171,24 @@ func getHadith(hadithName, hadithNo string) (*[]bson.M, error) {
 		return nil, err
 	}
 
-	return &results, nil
+	return results, nil
 }
 
-func getMongoClient() *mongo.Client {
+func getMongoClient() (*mongo.Client, error) {
 	if mongoClient != nil {
-		return mongoClient
+		return mongoClient, nil
 	}
 	client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_URI")))
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 	err = client.Connect(ctx)
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	mongoClient = client
-	return mongoClient
+	return mongoClient, nil
 }
 
 func contains(s []string, e string) bool {

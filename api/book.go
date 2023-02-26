@@ -26,7 +26,11 @@ func GetHadithByBookRefNo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	client := getMongoClient()
+	client, err := getMongoClient()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+	}
 	collection := client.Database("hadith").Collection("hadiths")
 
 	var result bson.M
@@ -38,6 +42,7 @@ func GetHadithByBookRefNo(w http.ResponseWriter, r *http.Request) {
 		},
 	).Decode(&result); err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
 		return
 	}
 

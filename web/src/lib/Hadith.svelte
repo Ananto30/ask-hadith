@@ -35,9 +35,7 @@
 		if (hadith.hadith_grade) {
 			text += 'Grade:' + hadith.hadith_grade + '\n';
 		}
-		text +=
-			'https://askhadith.com?search=' +
-			encodeURIComponent(hadith.collection_id + ' ' + hadith.hadith_no);
+		text += `https://askhadith.com/book?collection_id=${hadith.collection_id}&book=${hadith.book_no}&ref_no=${hadith.book_ref_no}`;
 		navigator.clipboard.writeText(text);
 		copied = true;
 		setTimeout(() => {

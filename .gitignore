@@ -3,3 +3,6 @@ venv/
 .vscode/
 .DS_Store
 .vercel
+
+# go
+vendor

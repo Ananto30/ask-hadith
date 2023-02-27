@@ -41,7 +41,7 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var hadiths []bson.M
+	hadiths := make([]bson.M, 0)
 
 	words := strings.Fields(query)
 	if len(words) == 2 && contains(shortNames, strings.ToLower(words[0])) {
@@ -50,6 +50,7 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(err.Error()))
+				return
 			}
 			if len(hadithByName) > 0 {
 				hadiths = append(hadiths, hadithByName...)
@@ -65,6 +66,7 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				w.WriteHeader(http.StatusInternalServerError)
 				w.Write([]byte(err.Error()))
+				return
 			}
 		}
 	}

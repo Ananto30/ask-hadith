@@ -38,6 +38,7 @@ npm run dev
 npm i -g vercel
 vercel dev
 ```
+Test the api `/api/search?search=cat`
 
 ## Support 🙋
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ananto30)

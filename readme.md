@@ -11,27 +11,34 @@
  </p>
 </p>
 
-Uses vercel for serverless functions and MongoDB Atlas for database.
+## Technologies 📱
+- **Vercel**: For serverless functions (in Go) to search and get hadiths.
+- **MongoDB Atlas**: Database and search engine.
+- **Svelte**: Web app (Frontend).
+- **Netlify**: Web deployment.
+- **TailwindCSS**: Styling.
 
-Frontend is built with Svelte and TailwindCSS and deployed on Netlify.
+## Features ⭐
+- Search Hadiths by anything (full text search).
+- Search hadith by book name and number, like `bukhari 1029`. (currently has some issues)
+- Bookmark hadith (local storage).
+- Install as PWA.
+- Copy and share hadith.
 
-## Development
-- Web (Svelte app)
+## Development 🧑‍💻
+- Web (Svelte)
 ```
 cd web
 npm install
 npm run dev
 ```
-- Server (Python)
+
+- Serverless functions (Go)
 ```
-cd server
-python3 -m venv venv
-source venv/bin/activate
-pip install -r requirements.txt
-export FLASK_APP=src.app
-flask run
+npm i -g vercel
+vercel dev
 ```
 
-
+## Support 🙋
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/ananto30)
 

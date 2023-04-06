@@ -8,6 +8,9 @@
   <a href="https://depfu.com/github/Ananto30/ask-hadith?project_id=13555">
      <img alt="Depfu status" src="https://badges.depfu.com/badges/362ce5396653b2bd131b26c55bb809c6/overview.svg" />
   </a>
+  <a href="https://codeclimate.com/github/Ananto30/ask-hadith/maintainability">
+     <img src="https://api.codeclimate.com/v1/badges/9c222616b7ecc1db1e54/maintainability" />
+  </a>
  </p>
 </p>
 

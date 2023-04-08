@@ -8,8 +8,12 @@
   <a href="https://depfu.com/github/Ananto30/ask-hadith?project_id=13555">
      <img alt="Depfu status" src="https://badges.depfu.com/badges/362ce5396653b2bd131b26c55bb809c6/overview.svg" />
   </a>
+  <br>
   <a href="https://codeclimate.com/github/Ananto30/ask-hadith/maintainability">
      <img src="https://api.codeclimate.com/v1/badges/9c222616b7ecc1db1e54/maintainability" />
+  </a>
+  <a href="https://app.codacy.com/gh/Ananto30/ask-hadith/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade">
+     <img src="https://app.codacy.com/project/badge/Grade/b9167b05884743ab90703bc7ecbc740b"/>
   </a>
  </p>
 </p>

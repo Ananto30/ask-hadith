@@ -54,6 +54,20 @@ func GetHadithByBookRefNo(w http.ResponseWriter, r *http.Request) {
 }
 
 func validateGetHadithByBookRefNoQueryParams(collectionID, book, refNo string) (string, bool) {
+	if reason, ok := validateCollectionID(collectionID); !ok {
+		return reason, false
+	}
+	if reason, ok := validateBook(book); !ok {
+		return reason, false
+	}
+	if reason, ok := validateRefNo(refNo); !ok {
+		return reason, false
+	}
+
+	return "", true
+}
+
+func validateCollectionID(collectionID string) (string, bool) {
 	if collectionID == "" {
 		return "collection_id is required", false
 	}
@@ -61,6 +75,10 @@ func validateGetHadithByBookRefNoQueryParams(collectionID, book, refNo string) (
 		return fmt.Sprintf("collection_id must be one of %s", strings.Join(shortNames, ", ")), false
 	}
 
+	return "", true
+}
+
+func validateBook(book string) (string, bool) {
 	if book == "" {
 		return "book is required", false
 	}
@@ -68,6 +86,10 @@ func validateGetHadithByBookRefNoQueryParams(collectionID, book, refNo string) (
 		return "book must be a number", false
 	}
 
+	return "", true
+}
+
+func validateRefNo(refNo string) (string, bool) {
 	if refNo == "" {
 		return "ref_no is required", false
 	}

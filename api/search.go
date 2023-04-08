@@ -55,20 +55,7 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	words := strings.Fields(query)
-	if isSpecificHadith(words) {
-		hadith, err := getHadith(ctx, strings.ToLower(words[0]), words[1])
-		if err != nil {
-			sendServerErrorResp(w, err)
-			return
-		}
-
-		cache.Add(query, hadith)
-		sendHadithsResp(w, hadith)
-		return
-	}
-
-	hadiths, err := searchHadith(ctx, query)
+	hadiths, err := searchInMongo(ctx, query)
 	if err != nil {
 		sendServerErrorResp(w, err)
 		return
@@ -78,14 +65,55 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	sendHadithsResp(w, hadiths)
 }
 
-func searchHadith(ctx context.Context, query string) ([]bson.M, error) {
+func searchInMongo(ctx context.Context, query string) ([]bson.M, error) {
+	result := make([]bson.M, 0)
+
+	words := strings.Fields(query)
+	if isSpecificHadith(words) {
+		hadith, err := getHadith(ctx, strings.ToLower(words[0]), words[1])
+		if err != nil {
+			return result, err
+		}
+
+		cache.Add(query, hadith)
+		result = append(result, hadith...)
+		return result, nil
+	}
+
+	hadiths, err := compoundSearch(ctx, query)
+	if err != nil {
+		return result, err
+	}
+
+	cache.Add(query, hadiths)
+	result = append(result, hadiths...)
+	return result, nil
+}
+
+func compoundSearch(ctx context.Context, query string) ([]bson.M, error) {
 	client, err := getMongoClient()
 	if err != nil {
 		return nil, err
 	}
 	collection := client.Database("hadith").Collection("hadiths")
 
-	pipeline := []bson.M{
+	pipeline := pipelineQuery(query)
+	cursor, err := collection.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, err
+	}
+
+	var results []bson.M
+	err = cursor.All(ctx, &results)
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
+func pipelineQuery(query string) []bson.M {
+	return []bson.M{
 		{
 			"$search": bson.M{
 				"compound": bson.M{
@@ -135,19 +163,6 @@ func searchHadith(ctx context.Context, query string) ([]bson.M, error) {
 			},
 		},
 	}
-
-	cursor, err := collection.Aggregate(ctx, pipeline)
-	if err != nil {
-		return nil, err
-	}
-
-	var results []bson.M
-	err = cursor.All(ctx, &results)
-	if err != nil {
-		return nil, err
-	}
-
-	return results, nil
 }
 
 func getHadith(ctx context.Context, hadithName, hadithNo string) ([]bson.M, error) {

@@ -1,6 +1,10 @@
 <p align="center">
  <h2 align="center">Ask Hadith</h2>
- <p align="center">🔎 Hadith search engine powered by <a href="https://docs.atlas.mongodb.com/atlas-search/">Atlas Search</a></p>
+ <p align="center">
+     <a href="https://www.askhadith.com/">
+     askhadith.com
+     </a>
+ 🔎 Hadith search engine powered by <a href="https://docs.atlas.mongodb.com/atlas-search/">Atlas Search</a></p>
  <p align="center">
   <a href="https://img.shields.io/github/license/Ananto30/ask-hadith">
      <img alt="License" src="https://img.shields.io/github/license/Ananto30/ask-hadith" />

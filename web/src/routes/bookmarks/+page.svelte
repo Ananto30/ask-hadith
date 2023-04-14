@@ -1,9 +1,8 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
-
 	import Hadith from '$lib/Hadith.svelte';
-	import type { HadithModel } from '../models';
+	import type { HadithModel } from '../../models';
 
 	let bookmarkedHadiths: HadithModel[] = [];
 
@@ -27,7 +26,7 @@
 		<div class="flex flex-col">
 			<div class="mx-auto">
 				{#each bookmarkedHadiths as hadith}
-					<Hadith bind:hadith />
+					<Hadith bind:hadith bind:searchKey />
 				{/each}
 			</div>
 		</div>

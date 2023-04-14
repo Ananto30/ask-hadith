@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { HadithModel } from 'src/routes/models';
+	import type { HadithModel } from '../models';
 
 	export let hadiths: HadithModel[];
 	export let filteredHadiths: HadithModel[];

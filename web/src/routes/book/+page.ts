@@ -4,6 +4,7 @@ export async function load({ url }: RequestEvent) {
 	const collectionId = url.searchParams.get('collection_id');
 	const book = url.searchParams.get('book');
 	const refNumber = url.searchParams.get('ref_no');
+	const searchKey = url.searchParams.get('search_key');
 
 	if (!collectionId || !book || !refNumber) {
 		return {
@@ -18,7 +19,8 @@ export async function load({ url }: RequestEvent) {
 	if (res.ok) {
 		const data = await res.json();
 		return {
-			hadith: data
+			hadith: data,
+			searchKey
 		};
 	}
 }

@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { onMount } from 'svelte';
-
 	import SearchBox from '$lib/SearchBox.svelte';
 	import Hadith from '$lib/Hadith.svelte';
 	import HadithFilters from '$lib/HadithFilters.svelte';
@@ -65,7 +64,7 @@
 		<div class="flex flex-col">
 			<div class="mx-auto">
 				{#each filteredHadiths as hadith}
-					<Hadith bind:hadith />
+					<Hadith bind:hadith bind:searchKey />
 				{/each}
 			</div>
 		</div>

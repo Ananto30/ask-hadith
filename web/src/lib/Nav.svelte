@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { BeforeInstallPromptEvent } from 'src/routes/models';
 	import { onMount } from 'svelte';
+	import type { BeforeInstallPromptEvent } from '../models';
 
 	import SearchSvg from '$lib/svgs/search.svelte';
 	import BookmarksSvg from '$lib/svgs/bookmarks.svelte';
@@ -51,7 +51,7 @@
 					Bookmarks
 				</a>
 			</li>
-			{#if showInstallButton }
+			{#if showInstallButton}
 				<li>
 					<button
 						class="flex flex-row gap-1 items-center font-medium hover:underline"

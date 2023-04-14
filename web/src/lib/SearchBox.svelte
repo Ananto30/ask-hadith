@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { HadithModel } from 'src/routes/models';
 	import SearchSvg from './svgs/search.svelte';
+	import type { HadithModel } from '../models';
 
 	export let hadiths: HadithModel[];
 	export let filteredHadiths: HadithModel[];
@@ -46,10 +46,10 @@
 </script>
 
 <div class="flex-col items-center justify-center mx-auto">
-	<div class="flex w-full mx-4 border-b border-gray-400 md:w-80">
+	<div class="flex w-full border-b border-gray-500 md:w-96">
 		<input
 			type="text"
-			class="w-full px-4 py-2 text-xs md:w-80 focus:outline-none"
+			class="w-full px-4 py-2 text-sm md:w-96 focus:outline-none"
 			placeholder="Qadr, bukhari 1029, muslim 1763 etc..."
 			bind:value={searchKey}
 			on:keyup={handleKeyup}

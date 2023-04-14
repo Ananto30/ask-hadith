@@ -1,16 +1,42 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-
 	import Hadith from '$lib/Hadith.svelte';
-	import type { HadithModel } from '../models';
+	import type { HadithModel } from '../../models';
 
 	export let data;
 
 	let hadith: HadithModel = data.hadith;
+	let searchKey: string = data.searchKey;
+
+	const title = () => {
+		let text =
+			hadith.collection + ' (Book: ' + hadith.book_no + ', Hadith: ' + hadith.book_ref_no + ') ';
+		if (hadith.hadith_no) {
+			text += 'Hadith No: ' + hadith.hadith_no;
+		}
+
+		return text;
+	};
+
+	const shortDescription = () => {
+		let text = '';
+		if (hadith.hadith_no) {
+			text += ' Narrated by ' + hadith.narrator_en;
+		}
+		text += ' ' + hadith.body_en.substring(0, 100) + '...';
+
+		return text;
+	};
 </script>
 
 <svelte:head>
 	<title>Ask Hadith</title>
+
+	<meta property="og:site_name" content="Ask Hadith" />
+	<meta property="og:locale" content="en" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={title()} />
+	<meta property="og:description" content={shortDescription()} />
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">
@@ -19,8 +45,18 @@
 	{:else}
 		<div class="flex flex-col">
 			<div class="mx-auto">
-				<Hadith bind:hadith />
+				<Hadith bind:hadith bind:searchKey />
 			</div>
+		</div>
+	{/if}
+	{#if searchKey}
+		<div class="flex items-center justify-center mt-10 mb-20 font-normal underline">
+			<a
+				href="/?search={searchKey}"
+				class="text-sm text-blue-700 hover:text-blue-500 hover:underline"
+			>
+				See more hadiths about "{searchKey}"
+			</a>
 		</div>
 	{/if}
 </div>

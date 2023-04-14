@@ -2,10 +2,10 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import BookmarkSvg from '$lib/svgs/bookmark.svelte';
-
-	import type { HadithModel } from 'src/routes/models';
+	import type { HadithModel } from '../models';
 
 	export let hadith: HadithModel;
+	export let searchKey: string;
 
 	let copied = false;
 	let bookmarked = false;
@@ -35,7 +35,7 @@
 		if (hadith.hadith_grade) {
 			text += 'Grade:' + hadith.hadith_grade + '\n';
 		}
-		text += `https://askhadith.com/book?collection_id=${hadith.collection_id}&book=${hadith.book_no}&ref_no=${hadith.book_ref_no}`;
+		text += `https://askhadith.com/book?collection_id=${hadith.collection_id}&book=${hadith.book_no}&ref_no=${hadith.book_ref_no}&search_key=${searchKey}`;
 		navigator.clipboard.writeText(text);
 		copied = true;
 		setTimeout(() => {

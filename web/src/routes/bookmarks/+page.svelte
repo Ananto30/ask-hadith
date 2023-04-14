@@ -5,6 +5,7 @@
 	import type { HadithModel } from '../../models';
 
 	let bookmarkedHadiths: HadithModel[] = [];
+	let searchKey = '';
 
 	onMount(
 		() => (bookmarkedHadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '{}') || [])

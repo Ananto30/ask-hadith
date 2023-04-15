@@ -7,7 +7,6 @@
 
 	$: if ($hadithsByCollection.has($selectedCollection)) {
 		hadiths = $hadithsByCollection.get($selectedCollection) || [];
-		console.log($hadithsByCollection);
 	}
 </script>
 

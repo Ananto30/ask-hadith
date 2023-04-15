@@ -16,13 +16,9 @@
 		$hadithsByCollection = new Map();
 		$collectionsSorted = new Array();
 
-		// hadithsByCollection.set(new Map());
-		// collectionsSorted.set([]);
-
-		console.log($collectionsSorted);
 		try {
-			// const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
-			const response = await fetch(`http://localhost:3000/api/search?search=${$searchKey}`);
+			const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
+			// const response = await fetch(`http://localhost:3000/api/search?search=${$searchKey}`);
 
 			const resp = await response.json();
 			if (resp == null || resp.length == 0) {
@@ -37,12 +33,6 @@
 					...$collectionsSorted,
 					{ collection: col.collection, count: col.count }
 				];
-
-				// hadithsByCollection.update((map) => map.set(col.collection, col.hadiths));
-				// collectionsSorted.update((arr) => [
-				// 	...arr,
-				// 	{ collection: col.collection, count: col.count }
-				// ]);
 			});
 
 			$selectedCollection = resp[0].collection;
@@ -50,9 +40,6 @@
 			console.log(error);
 			notFound = true;
 		}
-
-		// console.log($hadithsByCollection);
-		console.log($collectionsSorted);
 
 		window.history.pushState({}, '', `?search=${$searchKey}`);
 		searching = false;

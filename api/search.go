@@ -238,19 +238,16 @@ func isSpecificHadith(words []string) bool {
 
 func sendResp(w http.ResponseWriter, r interface{}) {
 	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(r)
 }
 
 func sendBadRequestResp(w http.ResponseWriter, reason string) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusBadRequest)
 	w.Write([]byte(reason))
 }
 
 func sendServerErrorResp(w http.ResponseWriter, err error) {
-	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusInternalServerError)
 	w.Write([]byte(err.Error()))
 }

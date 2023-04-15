@@ -144,10 +144,21 @@
 					{/if}
 				</span> -->
 				<span>Book: {hadith.book_en} </span>
-				{#if hadith.chapter_en}
-					<span>Chapter: {hadith.chapter_en}</span>
-				{/if}
-				<span>Grade: {hadith.hadith_grade}</span>
+				<p class="">
+					{#if hadith.chapter_en}
+						Chapter:
+						{#each hadith.chapter_en.split(' ') as word}
+							{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
+								<span class="font-bold">{word} </span>
+							{:else}
+								<span class="">{word} </span>
+							{/if}
+						{/each}
+					{/if}
+				</p>
+				<p class="">
+					<span>Grade: {hadith.hadith_grade || 'Unknown'}</span>
+				</p>
 			</div>
 			<div class="flex justify-end mt-2">
 				<button

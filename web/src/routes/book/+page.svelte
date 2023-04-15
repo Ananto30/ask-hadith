@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
+	import { searchKey } from '../../store';
 	import Hadith from '$lib/Hadith.svelte';
 	import type { HadithModel } from '../../models';
 
 	export let data;
 
 	let hadith: HadithModel = data.hadith;
-	let searchKey: string = data.searchKey;
+	$searchKey = data.searchKey || '';
 
 	const title = () => {
 		let text =
@@ -21,7 +22,7 @@
 	const shortDescription = () => {
 		let text = '';
 		if (hadith.hadith_no) {
-			text += ' Narrated by ' + hadith.narrator_en;
+			text += hadith.narrator_en;
 		}
 		text += ' ' + hadith.body_en.substring(0, 100) + '...';
 
@@ -30,7 +31,8 @@
 </script>
 
 <svelte:head>
-	<title>Ask Hadith</title>
+	<title>{title()}</title>
+	<meta name="description" content={shortDescription()} />
 
 	<meta property="og:site_name" content="Ask Hadith" />
 	<meta property="og:locale" content="en" />
@@ -45,17 +47,17 @@
 	{:else}
 		<div class="flex flex-col">
 			<div class="mx-auto">
-				<Hadith bind:hadith bind:searchKey />
+				<Hadith bind:hadith />
 			</div>
 		</div>
 	{/if}
-	{#if searchKey}
+	{#if $searchKey}
 		<div class="flex items-center justify-center mt-10 mb-20 font-normal underline">
 			<a
-				href="/?search={searchKey}"
+				href="/?search={$searchKey}"
 				class="text-sm text-blue-700 hover:text-blue-500 hover:underline"
 			>
-				See more hadiths about "{searchKey}"
+				See more hadiths about "{$searchKey}"
 			</a>
 		</div>
 	{/if}

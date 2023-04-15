@@ -5,15 +5,15 @@
 	import type { HadithModel } from '../../models';
 
 	let bookmarkedHadiths: HadithModel[] = [];
-	let searchKey = '';
 
 	onMount(
-		() => (bookmarkedHadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '{}') || [])
+		() => (bookmarkedHadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '[]') || [])
 	);
 </script>
 
 <svelte:head>
-	<title>Ask Hadith</title>
+	<title>Ask Hadith: Bookmarks</title>
+	<meta name="description" content="Bookmarked Hadiths" />
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">
@@ -27,7 +27,7 @@
 		<div class="flex flex-col">
 			<div class="mx-auto">
 				{#each bookmarkedHadiths as hadith}
-					<Hadith bind:hadith bind:searchKey />
+					<Hadith bind:hadith />
 				{/each}
 			</div>
 		</div>

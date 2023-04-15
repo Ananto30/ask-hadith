@@ -12,39 +12,32 @@
 	let notFound = false;
 	let searching = false;
 
-	const setSearchKeyIfPresentInQueryParam = () => {
-		const searchKeyParam = new URLSearchParams(window.location.search);
-		if (searchKeyParam.has('search')) {
-			$searchKey = searchKeyParam.get('search') || '';
-		}
-	};
-
-	$: if (data.resp.length > 0 && $selectedCollection == '') {
+	$: if (data.resp && data.resp.length > 0 && $selectedCollection == '') {
 		data.resp.forEach((col: SearchResponse) => {
 			$hadithsByCollection.set(col.collection, col.hadiths);
 			$collectionsSorted.push({ collection: col.collection, count: col.count });
 		});
 		$selectedCollection = data.resp[0].collection;
+		$searchKey = data.searchKey || '';
 	}
 
-	const shortDescription = () =>
-		'Read ' +
-		data.resp.reduce((acc, curr) => acc + curr.count, 0) +
-		' hadiths about ' +
-		$searchKey +
-		' from ' +
-		data.resp.map((col) => col.collection).join(', ');
-
-	onMount(() => {
-		setSearchKeyIfPresentInQueryParam();
-	});
+	const shortDescription = () => {
+		return (
+			'Read ' +
+			$collectionsSorted.reduce((acc, curr) => acc + curr.count, 0) +
+			' hadiths about ' +
+			$searchKey +
+			' from ' +
+			$collectionsSorted.map((col) => col.collection).join(', ')
+		);
+	};
 </script>
 
 <svelte:head>
-	<title>Ask Hadith: {searchKey}</title>
+	<title>Ask Hadith: {$searchKey}</title>
 	<meta name="description" content={shortDescription()} />
 
-	<meta property="og:title" content="Ask Hadith: {searchKey}" />
+	<meta property="og:title" content="Ask Hadith: {$searchKey}" />
 	<meta property="og:description" content={shortDescription()} />
 </svelte:head>
 

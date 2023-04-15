@@ -4,7 +4,8 @@ export async function load({ url }: RequestEvent) {
 	const searchKey = url.searchParams.get('search');
 	if (!searchKey) {
 		return {
-			resp: []
+			resp: [],
+			searchKey
 		};
 	}
 	const res = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
@@ -13,7 +14,8 @@ export async function load({ url }: RequestEvent) {
 	if (res.ok) {
 		const data = await res.json();
 		return {
-			resp: data || []
+			resp: data || [],
+			searchKey
 		};
 	}
 }

@@ -50,8 +50,7 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if val, ok := cache.Get(query); ok {
-		hadiths := val.([]bson.M)
-		sendResp(w, hadiths)
+		sendResp(w, val)
 		return
 	}
 

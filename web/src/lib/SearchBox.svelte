@@ -1,37 +1,47 @@
 <script lang="ts">
+	import { searchKey, hadithsByCollection, selectedCollection, collectionsSorted } from '../store';
 	import SearchSvg from './svgs/search.svelte';
-	import type { HadithModel } from '../models';
+	import type { SearchResponse } from '../models';
 
-	export let hadiths: HadithModel[];
-	export let filteredHadiths: HadithModel[];
 	export let searching: boolean;
-	export let searchKey: string;
 	export let notFound: boolean;
 
 	const searchHadiths = async () => {
-		if (searchKey.length < 2) {
+		if ($searchKey.length < 2) {
 			return;
 		}
-		hadiths = [];
-		filteredHadiths = [];
 		searching = true;
 		notFound = false;
+
+		$hadithsByCollection = new Map();
+		$collectionsSorted = new Array();
+
 		try {
 			const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${searchKey}`);
-			hadiths = await response.json();
-			filteredHadiths = hadiths;
-			if (hadiths == null) {
+			// const response = await fetch(`http://localhost:3000/api/search?search=${$searchKey}`);
+
+			const resp = await response.json();
+			if (resp == null || resp.length == 0) {
 				notFound = true;
-				hadiths = [];
-				filteredHadiths = [];
+				searching = false;
+				return;
 			}
+
+			resp.forEach((col: SearchResponse) => {
+				$hadithsByCollection.set(col.collection, col.hadiths);
+				$collectionsSorted = [
+					...$collectionsSorted,
+					{ collection: col.collection, count: col.count }
+				];
+			});
+
+			$selectedCollection = resp[0].collection;
 		} catch (error) {
 			console.log(error);
 			notFound = true;
-			hadiths = [];
-			filteredHadiths = [];
 		}
-		window.history.pushState({}, '', `?search=${searchKey}`);
+
+		window.history.pushState({}, '', `?search=${$searchKey}`);
 		searching = false;
 	};
 
@@ -51,7 +61,7 @@
 			type="text"
 			class="w-full px-4 py-2 text-sm md:w-96 focus:outline-none"
 			placeholder="Qadr, bukhari 1029, muslim 1763 etc..."
-			bind:value={searchKey}
+			bind:value={$searchKey}
 			on:keyup={handleKeyup}
 		/>
 		<button

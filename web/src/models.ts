@@ -9,21 +9,20 @@ export type HadithModel = {
 	collection_id: string;
 	hadith_grade: string;
 	hadith_no: string;
-	highlights: Highlights[];
-	highlight_hits: string[];
+	highlights: string[];
 	narrator_en: string;
 	score: number;
 };
 
-export type Highlights = {
-	path: string;
-	score: number;
-	texts: Text[];
+export type CollectionCounter = {
+	collection: string;
+	count: number;
 };
 
-export type Text = {
-	type: string;
-	value: string;
+export type SearchResponse = {
+	collection: string;
+	count: number;
+	hadiths: HadithModel[];
 };
 
 /**

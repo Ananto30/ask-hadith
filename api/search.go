@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	pageSize = 50
+	pageSize = 500
 )
 
 var (
@@ -51,7 +51,7 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 
 	if val, ok := cache.Get(query); ok {
 		hadiths := val.([]bson.M)
-		sendHadithsResp(w, hadiths)
+		sendResp(w, hadiths)
 		return
 	}
 
@@ -62,14 +62,14 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cache.Add(query, hadiths)
-	sendHadithsResp(w, hadiths)
+	sendResp(w, hadiths)
 }
 
-func searchInMongo(ctx context.Context, query string) ([]bson.M, error) {
-	result := make([]bson.M, 0)
-
+func searchInMongo(ctx context.Context, query string) (interface{}, error) {
 	words := strings.Fields(query)
 	if isSpecificHadith(words) {
+		result := make([]bson.M, 0)
+
 		hadith, err := getHadith(ctx, strings.ToLower(words[0]), words[1])
 		if err != nil {
 			return result, err
@@ -80,30 +80,34 @@ func searchInMongo(ctx context.Context, query string) ([]bson.M, error) {
 		return result, nil
 	}
 
-	hadiths, err := compoundSearch(ctx, query)
+	result := make([]ResponseGroupBy, 0)
+	hadithGroups, err := compoundSearch(ctx, query)
 	if err != nil {
 		return result, err
 	}
 
-	cache.Add(query, hadiths)
-	result = append(result, hadiths...)
+	for _, group := range hadithGroups {
+		result = append(result, mongoGroupByResultToResponse(group))
+	}
+
+	cache.Add(query, result)
 	return result, nil
 }
 
-func compoundSearch(ctx context.Context, query string) ([]bson.M, error) {
+func compoundSearch(ctx context.Context, query string) ([]MongoGroupByResult, error) {
 	client, err := getMongoClient()
 	if err != nil {
 		return nil, err
 	}
 	collection := client.Database("hadith").Collection("hadiths")
 
-	pipeline := pipelineQuery(query)
+	pipeline := pipelineQueryGroupByCollection(query)
 	cursor, err := collection.Aggregate(ctx, pipeline)
 	if err != nil {
 		return nil, err
 	}
 
-	var results []bson.M
+	var results []MongoGroupByResult
 	err = cursor.All(ctx, &results)
 	if err != nil {
 		return nil, err
@@ -112,7 +116,7 @@ func compoundSearch(ctx context.Context, query string) ([]bson.M, error) {
 	return results, nil
 }
 
-func pipelineQuery(query string) []bson.M {
+func pipelineQueryGroupByCollection(query string) []bson.M {
 	return []bson.M{
 		{
 			"$search": bson.M{
@@ -142,24 +146,39 @@ func pipelineQuery(query string) []bson.M {
 			},
 		},
 		{
+			"$group": bson.M{
+				"_id": "$collection_id",
+				"collection": bson.M{
+					"$first": "$collection",
+				},
+				"count": bson.M{
+					"$sum": 1,
+				},
+				"hadiths": bson.M{
+					"$push": bson.M{
+						"collection_id": "$collection_id",
+						"collection":    "$collection",
+						"hadith_no":     "$hadith_no",
+						"book_no":       "$book_no",
+						"book_en":       "$book_en",
+						"chapter_no":    "$chapter_no",
+						"chapter_en":    "$chapter_en",
+						"narrator_en":   "$narrator_en",
+						"body_en":       "$body_en",
+						"book_ref_no":   "$book_ref_no",
+						"hadith_grade":  "$hadith_grade",
+						"score":         bson.M{"$meta": "searchScore"},
+						"highlights":    bson.M{"$meta": "searchHighlights"},
+					},
+				},
+			},
+		},
+		{
 			"$limit": pageSize,
 		},
 		{
-			"$project": bson.M{
-				"_id":           0,
-				"collection_id": 1,
-				"collection":    1,
-				"hadith_no":     1,
-				"book_no":       1,
-				"book_en":       1,
-				"chapter_no":    1,
-				"chapter_en":    1,
-				"narrator_en":   1,
-				"body_en":       1,
-				"book_ref_no":   1,
-				"hadith_grade":  1,
-				"score":         bson.M{"$meta": "searchScore"},
-				"highlights":    bson.M{"$meta": "searchHighlights"},
+			"$sort": bson.M{
+				"hadiths.score": -1,
 			},
 		},
 	}
@@ -217,11 +236,11 @@ func isSpecificHadith(words []string) bool {
 	return false
 }
 
-func sendHadithsResp(w http.ResponseWriter, hadiths []bson.M) {
+func sendResp(w http.ResponseWriter, r interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(hadiths)
+	json.NewEncoder(w).Encode(r)
 }
 
 func sendBadRequestResp(w http.ResponseWriter, reason string) {
@@ -286,9 +305,13 @@ func isNumber(s string) bool {
 	return err == nil
 }
 
-// SearchResult is the result of a search
-// represents the mongo document
-type SearchResult struct {
+type GroupByResult struct {
+	ID         string `bson:"_id" json:"_id"`
+	Count      int    `bson:"count" json:"count"`
+	Collection string `bson:"collection" json:"collection"`
+}
+
+type Hadith struct {
 	CollectionID string  `bson:"collection_id" json:"collection_id"`
 	Collection   string  `bson:"collection" json:"collection"`
 	HadithNo     string  `bson:"hadith_no" json:"hadith_no"`
@@ -301,12 +324,80 @@ type SearchResult struct {
 	BookRefNo    string  `bson:"book_ref_no" json:"book_ref_no"`
 	HadithGrade  string  `bson:"hadith_grade" json:"hadith_grade"`
 	Score        float64 `bson:"score" json:"score"`
-	Highlights   []struct {
-		Path  string  `bson:"path" json:"path"`
-		Score float64 `bson:"score" json:"score"`
-		Texts []struct {
-			Type  string `bson:"type" json:"type"`
-			Value string `bson:"value" json:"value"`
-		} `bson:"texts" json:"texts"`
-	} `bson:"highlights" json:"highlights"`
+}
+
+type MongoHadith struct {
+	*Hadith    `bson:",inline" json:",inline"`
+	Highlights []MongoHighlight `bson:"highlights" json:"highlights"`
+}
+
+type HadithResponse struct {
+	*Hadith    `bson:",inline" json:",inline"`
+	Highlights []string `json:"highlights"`
+}
+
+type MongoHighlight struct {
+	Path  string      `bson:"path" json:"path"`
+	Score float64     `bson:"score" json:"score"`
+	Texts []MongoText `bson:"texts" json:"texts"`
+}
+
+type MongoText struct {
+	Type  string `bson:"type" json:"type"`
+	Value string `bson:"value" json:"value"`
+}
+
+type MongoGroupByResult struct {
+	*GroupByResult `bson:",inline" json:",inline"`
+	Hadiths        []MongoHadith `bson:"hadiths" json:"hadiths"`
+}
+
+type ResponseGroupBy struct {
+	*GroupByResult `bson:",inline" json:",inline"`
+	Hadiths        []HadithResponse `bson:"hadiths" json:"hadiths"`
+}
+
+func mongoHighlightToSimpleHighlight(highlight MongoHighlight) string {
+	var sb strings.Builder
+
+	for _, text := range highlight.Texts {
+		if text.Type == "hit" {
+			sb.WriteString(text.Value)
+		}
+	}
+
+	return sb.String()
+}
+
+func mongoGroupByResultToResponse(group MongoGroupByResult) ResponseGroupBy {
+	var res []HadithResponse
+
+	for i := range group.Hadiths {
+		hadith := group.Hadiths[i]
+		highlights := NewSet()
+		for _, highlight := range hadith.Highlights {
+			highlights.Add(mongoHighlightToSimpleHighlight(highlight))
+		}
+		res = append(res, HadithResponse{hadith.Hadith, highlights.ToSlice()})
+	}
+
+	return ResponseGroupBy{group.GroupByResult, res}
+}
+
+type Set map[string]struct{}
+
+func NewSet() Set {
+	return make(map[string]struct{})
+}
+
+func (s Set) Add(v string) {
+	s[v] = struct{}{}
+}
+
+func (s Set) ToSlice() []string {
+	var result []string
+	for k := range s {
+		result = append(result, k)
+	}
+	return result
 }

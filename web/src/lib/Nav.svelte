@@ -5,7 +5,6 @@
 	import SearchSvg from '$lib/svgs/search.svelte';
 	import BookmarksSvg from '$lib/svgs/bookmarks.svelte';
 	import DownloadSvg from './svgs/download.svelte';
-	import BooksSvg from './svgs/books.svelte';
 
 	let deferredPrompt: BeforeInstallPromptEvent | null = null;
 	let showInstallButton = false;
@@ -37,7 +36,7 @@
 </script>
 
 <nav class="sticky top-0 z-10 p-2 bg-white md:p-4">
-	<div class="max-w-6xl mx-auto">
+	<div class="max-w-7xl mx-auto">
 		<ul class="flex flex-row justify-end gap-4 p-2 text-sm font-medium text-gray-600">
 			<li>
 				<a class="flex flex-row items-center gap-1 hover:underline" href="/">

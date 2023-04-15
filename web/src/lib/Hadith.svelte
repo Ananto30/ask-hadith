@@ -3,9 +3,9 @@
 	import { fade } from 'svelte/transition';
 	import BookmarkSvg from '$lib/svgs/bookmark.svelte';
 	import type { HadithModel } from '../models';
+	import { searchKey } from '../store';
 
 	export let hadith: HadithModel;
-	export let searchKey: string;
 
 	let copied = false;
 	let bookmarked = false;
@@ -35,7 +35,11 @@
 		if (hadith.hadith_grade) {
 			text += 'Grade:' + hadith.hadith_grade + '\n';
 		}
-		text += `https://askhadith.com/book?collection_id=${hadith.collection_id}&book=${hadith.book_no}&ref_no=${hadith.book_ref_no}&search_key=${searchKey}`;
+
+		const urlEncodedSearchKey = encodeURIComponent($searchKey);
+
+		text += `https://askhadith.com/book?collection_id=${hadith.collection_id}&book=${hadith.book_no}&ref_no=${hadith.book_ref_no}&search_key=${urlEncodedSearchKey}`;
+
 		navigator.clipboard.writeText(text);
 		copied = true;
 		setTimeout(() => {
@@ -44,8 +48,8 @@
 	};
 
 	const getLocalBookmarkedHadiths = (): HadithModel[] => {
-		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '{}');
-		if (!hadiths) {
+		let hadiths = JSON.parse(localStorage.getItem('bookmarkedHadiths') || '[]');
+		if (!hadiths || !Array.isArray(hadiths) || hadiths.length === 0) {
 			hadiths = [];
 		}
 		return hadiths;
@@ -123,7 +127,7 @@
 			{/if}
 			<p class="">
 				{#each hadith.body_en.split(' ') as word}
-					{#if hadith.highlight_hits && hadith.highlight_hits.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
+					{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
 						<span class="font-semibold font-merriweather">{word} </span>
 					{:else}
 						<span class="font-light font-merriweather">{word} </span>

@@ -353,30 +353,26 @@ type ResponseGroupBy struct {
 	Hadiths        []HadithResponse `bson:"hadiths" json:"hadiths"`
 }
 
-func mongoHighlightToSimpleHighlight(highlight MongoHighlight) string {
-	var sb strings.Builder
-
+func mongoHighlightToSimpleHighlight(highlight MongoHighlight) []string {
+	var res []string
 	for _, text := range highlight.Texts {
 		if text.Type == "hit" {
-			sb.WriteString(text.Value)
+			res = append(res, text.Value)
 		}
 	}
-
-	return sb.String()
+	return res
 }
 
 func mongoGroupByResultToResponse(group MongoGroupByResult) ResponseGroupBy {
 	var res []HadithResponse
-
 	for i := range group.Hadiths {
 		hadith := group.Hadiths[i]
 		highlights := NewSet()
 		for _, highlight := range hadith.Highlights {
-			highlights.Add(mongoHighlightToSimpleHighlight(highlight))
+			highlights.AddMulti(mongoHighlightToSimpleHighlight(highlight))
 		}
 		res = append(res, HadithResponse{hadith.Hadith, highlights.ToSlice()})
 	}
-
 	return ResponseGroupBy{group.GroupByResult, res}
 }
 
@@ -388,6 +384,12 @@ func NewSet() Set {
 
 func (s Set) Add(v string) {
 	s[v] = struct{}{}
+}
+
+func (s Set) AddMulti(v []string) {
+	for _, vv := range v {
+		s.Add(vv)
+	}
 }
 
 func (s Set) ToSlice() []string {

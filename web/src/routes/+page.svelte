@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import { onMount } from 'svelte';
 	import { searchKey, hadithsByCollection, selectedCollection, collectionsSorted } from '../store';
 	import SearchBox from '$lib/SearchBox.svelte';
 	import Hadiths from '$lib/Hadiths.svelte';

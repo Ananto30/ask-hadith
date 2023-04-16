@@ -4,7 +4,7 @@
 	import SearchBox from '$lib/SearchBox.svelte';
 	import Hadiths from '$lib/Hadiths.svelte';
 	import HadithFilters from '$lib/HadithFilters.svelte';
-	import type { SearchResponse } from '../models';
+	import type { HadithModel, SearchResponse } from '../models';
 
 	export let data: { resp: SearchResponse[] };
 
@@ -30,6 +30,21 @@
 			$collectionsSorted.map((col) => col.collection).join(', ')
 		);
 	};
+
+	let firstHadith: HadithModel;
+	$: if (
+		$hadithsByCollection.size > 0 &&
+		$selectedCollection != '' &&
+		$hadithsByCollection.has($selectedCollection)
+	) {
+		firstHadith = $hadithsByCollection.get($selectedCollection)[0];
+	}
+
+	const toUrlsafeBase64 = (hadith: HadithModel) => {
+		if (!hadith) return '';
+		const buf = Buffer.from(JSON.stringify(hadith));
+		return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+	};
 </script>
 
 <svelte:head>
@@ -38,6 +53,7 @@
 
 	<meta property="og:title" content="Ask Hadith: {$searchKey}" />
 	<meta property="og:description" content={shortDescription()} />
+	<meta property="og:image" content="/api/og?hadith={toUrlsafeBase64(firstHadith)}" />
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">

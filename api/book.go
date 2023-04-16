@@ -5,7 +5,6 @@ This file contains the handler for the /book endpoint.
 package handler
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
@@ -47,10 +46,7 @@ func GetHadithByBookRefNo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(result)
+	sendResp(w, result)
 }
 
 func validateGetHadithByBookRefNoQueryParams(collectionID, book, refNo string) (string, bool) {

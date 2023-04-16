@@ -7,6 +7,7 @@ package handler
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"os"
 	"regexp"
@@ -50,6 +51,7 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if val, ok := cache.Get(query); ok {
+		fmt.Println("cache hit")
 		sendResp(w, val)
 		return
 	}
@@ -61,14 +63,15 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 	}
 
 	cache.Add(query, hadiths)
+	fmt.Println("cache added")
 	sendResp(w, hadiths)
 }
 
-func searchInMongo(ctx context.Context, query string) (interface{}, error) {
+func searchInMongo(ctx context.Context, query string) ([]SearchResponse, error) {
+	result := make([]SearchResponse, 0)
+
 	words := strings.Fields(query)
 	if isSpecificHadith(words) {
-		result := make([]bson.M, 0)
-
 		hadith, err := getHadith(ctx, strings.ToLower(words[0]), words[1])
 		if err != nil {
 			return result, err
@@ -79,7 +82,6 @@ func searchInMongo(ctx context.Context, query string) (interface{}, error) {
 		return result, nil
 	}
 
-	result := make([]ResponseGroupBy, 0)
 	hadithGroups, err := compoundSearch(ctx, query)
 	if err != nil {
 		return result, err
@@ -183,7 +185,7 @@ func pipelineQueryGroupByCollection(query string) []bson.M {
 	}
 }
 
-func getHadith(ctx context.Context, hadithName, hadithNo string) ([]bson.M, error) {
+func getHadith(ctx context.Context, hadithName, hadithNo string) ([]SearchResponse, error) {
 	client, err := getMongoClient()
 	if err != nil {
 		return nil, err
@@ -201,13 +203,28 @@ func getHadith(ctx context.Context, hadithName, hadithNo string) ([]bson.M, erro
 		return nil, err
 	}
 
-	var results []bson.M
+	var results []MongoHadith
 	err = cursor.All(ctx, &results)
 	if err != nil {
 		return nil, err
 	}
 
-	return results, nil
+	// usually there is only one hadith
+	res := make([]SearchResponse, 0)
+	if len(results) == 0 {
+		return res, nil
+	}
+
+	first := SearchResponse{}
+	first.GroupByResult = &GroupByResult{}
+	first.ID = results[0].CollectionID
+	first.Collection = results[0].Collection
+	first.Count = 1
+	first.Hadiths = make([]HadithResponse, 0)
+	first.Hadiths = append(first.Hadiths, mongoHadithToResponse(results[0]))
+	res = append(res, first)
+
+	return res, nil
 }
 
 func validateQuery(query string) (string, bool) {
@@ -301,12 +318,6 @@ func isNumber(s string) bool {
 	return err == nil
 }
 
-type GroupByResult struct {
-	ID         string `bson:"_id" json:"_id"`
-	Count      int    `bson:"count" json:"count"`
-	Collection string `bson:"collection" json:"collection"`
-}
-
 type Hadith struct {
 	CollectionID string  `bson:"collection_id" json:"collection_id"`
 	Collection   string  `bson:"collection" json:"collection"`
@@ -343,12 +354,18 @@ type MongoText struct {
 	Value string `bson:"value" json:"value"`
 }
 
+type GroupByResult struct {
+	ID         string `bson:"_id" json:"_id"`
+	Count      int    `bson:"count" json:"count"`
+	Collection string `bson:"collection" json:"collection"`
+}
+
 type MongoGroupByResult struct {
 	*GroupByResult `bson:",inline" json:",inline"`
 	Hadiths        []MongoHadith `bson:"hadiths" json:"hadiths"`
 }
 
-type ResponseGroupBy struct {
+type SearchResponse struct {
 	*GroupByResult `bson:",inline" json:",inline"`
 	Hadiths        []HadithResponse `bson:"hadiths" json:"hadiths"`
 }
@@ -363,17 +380,21 @@ func mongoHighlightToSimpleHighlight(highlight MongoHighlight) []string {
 	return res
 }
 
-func mongoGroupByResultToResponse(group MongoGroupByResult) ResponseGroupBy {
+func mongoHadithToResponse(hadith MongoHadith) HadithResponse {
+	highlights := NewSet()
+	for _, highlight := range hadith.Highlights {
+		highlights.AddMulti(mongoHighlightToSimpleHighlight(highlight))
+	}
+	return HadithResponse{hadith.Hadith, highlights.ToSlice()}
+}
+
+func mongoGroupByResultToResponse(group MongoGroupByResult) SearchResponse {
 	var res []HadithResponse
 	for i := range group.Hadiths {
 		hadith := group.Hadiths[i]
-		highlights := NewSet()
-		for _, highlight := range hadith.Highlights {
-			highlights.AddMulti(mongoHighlightToSimpleHighlight(highlight))
-		}
-		res = append(res, HadithResponse{hadith.Hadith, highlights.ToSlice()})
+		res = append(res, mongoHadithToResponse(hadith))
 	}
-	return ResponseGroupBy{group.GroupByResult, res}
+	return SearchResponse{group.GroupByResult, res}
 }
 
 type Set map[string]struct{}

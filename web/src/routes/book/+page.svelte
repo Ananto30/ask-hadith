@@ -3,6 +3,7 @@
 	import { searchKey } from '../../store';
 	import Hadith from '$lib/Hadith.svelte';
 	import type { HadithModel } from '../../models';
+	import { ToUrlsafeBase64 } from '../../helpers';
 
 	export let data;
 
@@ -28,12 +29,6 @@
 
 		return text;
 	};
-
-	const toUrlsafeBase64 = (hadith: HadithModel) => {
-		if (!hadith) return '';
-		const buf = Buffer.from(JSON.stringify(hadith));
-		return encodeURIComponent(buf.toString('base64'));
-	};
 </script>
 
 <svelte:head>
@@ -46,7 +41,7 @@
 	<meta property="og:description" content={shortDescription()} />
 	<meta
 		property="og:image"
-		content="https://www.askhadith.com/api/og?hadith={toUrlsafeBase64(hadith)}"
+		content="https://www.askhadith.com/api/og?hadith={ToUrlsafeBase64(hadith)}"
 	/>
 </svelte:head>
 

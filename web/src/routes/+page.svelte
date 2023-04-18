@@ -2,11 +2,11 @@
 	import { fade } from 'svelte/transition';
 	import { searchKey, hadithsByCollection, selectedCollection, collectionsSorted } from '../store';
 	import SearchBox from '$lib/SearchBox.svelte';
-	import Hadiths from '$lib/Hadiths.svelte';
+	import HadithList from '$lib/HadithList.svelte';
 	import HadithFilters from '$lib/HadithFilters.svelte';
 	import type { HadithModel, SearchResponse } from '../models';
 
-	export let data: { resp: SearchResponse[] };
+	export let data: { resp: SearchResponse[]; searchKey: string };
 
 	let notFound = false;
 	let searching = false;
@@ -32,18 +32,17 @@
 	};
 
 	let firstHadith: HadithModel;
-	$: if (
-		$hadithsByCollection.size > 0 &&
-		$selectedCollection != '' &&
-		$hadithsByCollection.has($selectedCollection)
-	) {
-		firstHadith = $hadithsByCollection.get($selectedCollection)[0];
+	$: if ($hadithsByCollection.size > 0 && $selectedCollection != '') {
+		const hadiths = $hadithsByCollection.get($selectedCollection);
+		if (hadiths && hadiths.length > 0) {
+			firstHadith = hadiths[0];
+		}
 	}
 
 	const toUrlsafeBase64 = (hadith: HadithModel) => {
 		if (!hadith) return '';
 		const buf = Buffer.from(JSON.stringify(hadith));
-		return buf.toString('base64').replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+		return encodeURIComponent(buf.toString('base64'));
 	};
 </script>
 
@@ -51,9 +50,14 @@
 	<title>Ask Hadith: {$searchKey}</title>
 	<meta name="description" content={shortDescription()} />
 
-	<meta property="og:title" content="Ask Hadith: {$searchKey}" />
+	<meta property="og:site_name" content="Ask Hadith" />
+	<meta property="og:locale" content="en" />
+	<meta property="og:title" content="Ask Hadith: Search result of '{$searchKey}'" />
 	<meta property="og:description" content={shortDescription()} />
-	<meta property="og:image" content="https://www.askhadith.com/api/og?hadith={toUrlsafeBase64(firstHadith)}" />
+	<meta
+		property="og:image"
+		content="https://www.askhadith.com/api/og?hadith={toUrlsafeBase64(firstHadith)}"
+	/>
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">
@@ -68,6 +72,6 @@
 		<p class="flex items-center justify-center mt-10 mb-20 text-red-500">Nothing found! ☹️</p>
 	{:else}
 		<HadithFilters />
-		<Hadiths />
+		<HadithList />
 	{/if}
 </div>

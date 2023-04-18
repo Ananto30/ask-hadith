@@ -1,3 +1,4 @@
+// @ts-nocheck
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import NotoSans from '$lib/NotoSans-Regular.ttf';

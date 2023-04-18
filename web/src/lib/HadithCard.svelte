@@ -1,3 +1,5 @@
+<!-- Mainly used to generate an og image -->
+
 <script lang="ts">
 	import type { HadithModel } from '../models';
 

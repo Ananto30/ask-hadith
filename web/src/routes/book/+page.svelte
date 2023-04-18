@@ -28,6 +28,12 @@
 
 		return text;
 	};
+
+	const toUrlsafeBase64 = (hadith: HadithModel) => {
+		if (!hadith) return '';
+		const buf = Buffer.from(JSON.stringify(hadith));
+		return encodeURIComponent(buf.toString('base64'));
+	};
 </script>
 
 <svelte:head>
@@ -36,9 +42,12 @@
 
 	<meta property="og:site_name" content="Ask Hadith" />
 	<meta property="og:locale" content="en" />
-	<meta property="og:type" content="website" />
 	<meta property="og:title" content={title()} />
 	<meta property="og:description" content={shortDescription()} />
+	<meta
+		property="og:image"
+		content="https://www.askhadith.com/api/og?hadith={toUrlsafeBase64(hadith)}"
+	/>
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">

@@ -25,9 +25,9 @@
 		return (
 			'Read ' +
 			$collectionsSorted.reduce((acc, curr) => acc + curr.count, 0) +
-			' hadiths about ' +
+			' hadiths about "' +
 			$searchKey +
-			' from ' +
+			'" from ' +
 			$collectionsSorted.map((col) => col.collection).join(', ')
 		);
 	};
@@ -47,7 +47,7 @@
 
 	<meta property="og:site_name" content="Ask Hadith" />
 	<meta property="og:locale" content="en" />
-	<meta property="og:title" content="Ask Hadith: Search result of '{$searchKey}'" />
+	<meta property="og:title" content="Hadiths about '{$searchKey}'" />
 	<meta property="og:description" content={shortDescription()} />
 	<meta
 		property="og:image"

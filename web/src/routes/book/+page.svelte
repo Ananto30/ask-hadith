@@ -3,6 +3,7 @@
 	import { searchKey } from '../../store';
 	import Hadith from '$lib/Hadith.svelte';
 	import type { HadithModel } from '../../models';
+	import { ToUrlsafeBase64 } from '../../helpers';
 
 	export let data;
 
@@ -36,9 +37,12 @@
 
 	<meta property="og:site_name" content="Ask Hadith" />
 	<meta property="og:locale" content="en" />
-	<meta property="og:type" content="website" />
 	<meta property="og:title" content={title()} />
 	<meta property="og:description" content={shortDescription()} />
+	<meta
+		property="og:image"
+		content="https://www.askhadith.com/api/og?hadith={ToUrlsafeBase64(hadith)}"
+	/>
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">

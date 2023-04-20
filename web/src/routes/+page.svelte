@@ -17,7 +17,7 @@
 	let notFound = false;
 	let searching = false;
 
-	$: if (data && data.resp && data.resp.data && data.resp.data.length > 0 && $selectedCollection == '') {
+	$: if (data?.resp?.data?.length > 0 && $selectedCollection == '') {
 		data.resp.data.forEach((col) => {
 			$hadithsByCollection.set(col.collection, col.hadiths);
 			$collectionsSorted.push({ collection: col.collection, count: col.count });
@@ -33,7 +33,7 @@
 			$collectionsSorted.reduce((acc, curr) => acc + curr.count, 0) +
 			" hadiths about '" +
 			$searchKey +
-			"'' from " +
+			"' from " +
 			$collectionsSorted.map((col) => col.collection).join(', ')
 		);
 	};

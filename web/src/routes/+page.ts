@@ -1,10 +1,10 @@
 import type { RequestEvent } from '@sveltejs/kit/types/internal';
 
-export async function load({ url }: RequestEvent) {
+export async function load({ fetch, url }) {
 	const searchKey = url.searchParams.get('search');
 	if (!searchKey) {
 		return {
-			resp: [],
+			resp: {},
 			searchKey
 		};
 	}
@@ -14,7 +14,7 @@ export async function load({ url }: RequestEvent) {
 	if (res.ok) {
 		const data = await res.json();
 		return {
-			resp: data || [],
+			resp: data || {},
 			searchKey
 		};
 	}

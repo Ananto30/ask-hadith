@@ -32,7 +32,7 @@ func GetHadithByBookRefNo(w http.ResponseWriter, r *http.Request) {
 	}
 	collection := client.Database("hadith").Collection("hadiths")
 
-	var result bson.M
+	var resp BookResponse
 	if err := collection.FindOne(
 		ctx,
 		bson.M{
@@ -41,12 +41,14 @@ func GetHadithByBookRefNo(w http.ResponseWriter, r *http.Request) {
 			"book_ref_no":   refNo,
 		},
 	).
-		Decode(&result); err != nil {
+		Decode(&resp); err != nil {
 		sendServerErrorResp(w, err)
 		return
 	}
 
-	sendResp(w, result)
+	resp.Base64 = hadithToBase64(*resp.HadithResponse)
+
+	sendResp(w, resp)
 }
 
 func validateGetHadithByBookRefNoQueryParams(collectionID, book, refNo string) (string, bool) {
@@ -94,4 +96,9 @@ func validateRefNo(refNo string) (string, bool) {
 	}
 
 	return "", true
+}
+
+type BookResponse struct {
+	*HadithResponse `bson:",inline" json:",inline"`
+	Base64          string `json:"base64"`
 }

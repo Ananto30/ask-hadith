@@ -6,6 +6,7 @@ package handler
 
 import (
 	"context"
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -56,19 +57,21 @@ func SearchHadith(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	hadiths, err := searchInMongo(ctx, query)
+	colResps, err := searchInMongo(ctx, query)
 	if err != nil {
 		sendServerErrorResp(w, err)
 		return
 	}
+	searchResp := colRespToSearchResp(colResps)
 
-	cache.Add(query, hadiths)
+	cache.Add(query, searchResp)
 	fmt.Println("cache added")
-	sendResp(w, hadiths)
+
+	sendResp(w, searchResp)
 }
 
-func searchInMongo(ctx context.Context, query string) ([]SearchResponse, error) {
-	result := make([]SearchResponse, 0)
+func searchInMongo(ctx context.Context, query string) ([]CollectionResponse, error) {
+	result := make([]CollectionResponse, 0)
 
 	words := strings.Fields(query)
 	if isSpecificHadith(words) {
@@ -88,7 +91,7 @@ func searchInMongo(ctx context.Context, query string) ([]SearchResponse, error) 
 	}
 
 	for _, group := range hadithGroups {
-		result = append(result, mongoGroupByResultToResponse(group))
+		result = append(result, mongoResultToColResp(group))
 	}
 
 	cache.Add(query, result)
@@ -185,7 +188,7 @@ func pipelineQueryGroupByCollection(query string) []bson.M {
 	}
 }
 
-func getHadith(ctx context.Context, hadithName, hadithNo string) ([]SearchResponse, error) {
+func getHadith(ctx context.Context, hadithName, hadithNo string) ([]CollectionResponse, error) {
 	client, err := getMongoClient()
 	if err != nil {
 		return nil, err
@@ -210,18 +213,18 @@ func getHadith(ctx context.Context, hadithName, hadithNo string) ([]SearchRespon
 	}
 
 	// usually there is only one hadith
-	res := make([]SearchResponse, 0)
+	res := make([]CollectionResponse, 0)
 	if len(results) == 0 {
 		return res, nil
 	}
 
-	first := SearchResponse{}
+	first := CollectionResponse{}
 	first.GroupByResult = &GroupByResult{}
 	first.ID = results[0].CollectionID
 	first.Collection = results[0].Collection
 	first.Count = 1
 	first.Hadiths = make([]HadithResponse, 0)
-	first.Hadiths = append(first.Hadiths, mongoHadithToResponse(results[0]))
+	first.Hadiths = append(first.Hadiths, mongoHadithToResp(results[0]))
 	res = append(res, first)
 
 	return res, nil
@@ -365,9 +368,14 @@ type MongoGroupByResult struct {
 	Hadiths        []MongoHadith `bson:"hadiths" json:"hadiths"`
 }
 
-type SearchResponse struct {
+type CollectionResponse struct {
 	*GroupByResult `bson:",inline" json:",inline"`
 	Hadiths        []HadithResponse `bson:"hadiths" json:"hadiths"`
+}
+
+type SearchResponse struct {
+	Data              []CollectionResponse `json:"data"`
+	FirstHadithBase64 string               `json:"first_hadith_base64"`
 }
 
 func mongoHighlightToSimpleHighlight(highlight MongoHighlight) []string {
@@ -380,7 +388,7 @@ func mongoHighlightToSimpleHighlight(highlight MongoHighlight) []string {
 	return res
 }
 
-func mongoHadithToResponse(hadith MongoHadith) HadithResponse {
+func mongoHadithToResp(hadith MongoHadith) HadithResponse {
 	highlights := NewSet()
 	for _, highlight := range hadith.Highlights {
 		highlights.AddMulti(mongoHighlightToSimpleHighlight(highlight))
@@ -388,13 +396,29 @@ func mongoHadithToResponse(hadith MongoHadith) HadithResponse {
 	return HadithResponse{hadith.Hadith, highlights.ToSlice()}
 }
 
-func mongoGroupByResultToResponse(group MongoGroupByResult) SearchResponse {
+func mongoResultToColResp(group MongoGroupByResult) CollectionResponse {
 	var res []HadithResponse
 	for i := range group.Hadiths {
 		hadith := group.Hadiths[i]
-		res = append(res, mongoHadithToResponse(hadith))
+		res = append(res, mongoHadithToResp(hadith))
 	}
-	return SearchResponse{group.GroupByResult, res}
+	return CollectionResponse{group.GroupByResult, res}
+}
+
+func colRespToSearchResp(colResps []CollectionResponse) SearchResponse {
+	var firstHadithBase64 string
+	if len(colResps) > 0 && len(colResps[0].Hadiths) > 0 {
+		firstHadithBase64 = hadithToBase64(colResps[0].Hadiths[0])
+	}
+	return SearchResponse{colResps, firstHadithBase64}
+}
+
+func hadithToBase64(hadith HadithResponse) string {
+	bytes, err := json.Marshal(hadith)
+	if err != nil {
+		return ""
+	}
+	return base64.URLEncoding.EncodeToString(bytes)
 }
 
 type Set map[string]struct{}

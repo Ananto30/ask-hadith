@@ -3,9 +3,8 @@
 	import { searchKey } from '../../store';
 	import Hadith from '$lib/Hadith.svelte';
 	import type { HadithModel } from '../../models';
-	import { ToUrlsafeBase64 } from '../../helpers';
 
-	export let data;
+	export let data: { hadith: HadithModel; searchKey: string };
 
 	let hadith: HadithModel = data.hadith;
 	$searchKey = data.searchKey || '';
@@ -16,7 +15,6 @@
 		if (hadith.hadith_no) {
 			text += 'Hadith No: ' + hadith.hadith_no;
 		}
-
 		return text;
 	};
 
@@ -26,7 +24,6 @@
 			text += hadith.narrator_en;
 		}
 		text += ' ' + hadith.body_en.substring(0, 100) + '...';
-
 		return text;
 	};
 </script>
@@ -39,10 +36,7 @@
 	<meta property="og:locale" content="en" />
 	<meta property="og:title" content={title()} />
 	<meta property="og:description" content={shortDescription()} />
-	<meta
-		property="og:image"
-		content="https://www.askhadith.com/api/og?hadith={ToUrlsafeBase64(hadith)}"
-	/>
+	<meta property="og:image" content="https://www.askhadith.com/api/og?hadith={hadith.base64}" />
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">

@@ -1,5 +1,11 @@
 <script lang="ts">
-	import { searchKey, hadithsByCollection, selectedCollection, collectionsSorted } from '../store';
+	import {
+		searchKey,
+		hadithsByCollection,
+		selectedCollection,
+		collectionsSorted,
+		firstHadithBase64
+	} from '../store';
 	import SearchSvg from './svgs/search.svelte';
 	import type { SearchResponse } from '../models';
 
@@ -20,14 +26,16 @@
 			const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${$searchKey}`);
 			// const response = await fetch(`http://localhost:3000/api/search?search=${$searchKey}`);
 
-			const resp = await response.json();
-			if (resp == null || resp.length == 0) {
+			const resp: SearchResponse = await response.json();
+			if (resp == null || resp.data.length == 0) {
 				notFound = true;
 				searching = false;
 				return;
 			}
+			const collections = resp.data;
+			$firstHadithBase64 = resp.first_hadith_base64;
 
-			resp.forEach((col: SearchResponse) => {
+			collections.forEach((col) => {
 				$hadithsByCollection.set(col.collection, col.hadiths);
 				$collectionsSorted = [
 					...$collectionsSorted,
@@ -35,7 +43,7 @@
 				];
 			});
 
-			$selectedCollection = resp[0].collection;
+			$selectedCollection = collections[0].collection;
 		} catch (error) {
 			console.log(error);
 			notFound = true;

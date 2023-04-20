@@ -12,6 +12,7 @@ export type HadithModel = {
 	highlights: string[];
 	narrator_en: string;
 	score: number;
+	base64?: string;
 };
 
 export type CollectionCounter = {
@@ -19,10 +20,15 @@ export type CollectionCounter = {
 	count: number;
 };
 
-export type SearchResponse = {
+export type CollectionResponse = {
 	collection: string;
 	count: number;
 	hadiths: HadithModel[];
+};
+
+export type SearchResponse = {
+	data: CollectionResponse[];
+	first_hadith_base64: string;
 };
 
 /**

@@ -31,25 +31,43 @@
 		return (
 			'Read ' +
 			$collectionsSorted.reduce((acc, curr) => acc + curr.count, 0) +
-			' hadiths about "' +
+			" hadiths about '" +
 			$searchKey +
-			'" from ' +
+			"'' from " +
 			$collectionsSorted.map((col) => col.collection).join(', ')
 		);
+	};
+
+	const title = () => {
+		return "Hadiths about '" + $searchKey + "'";
 	};
 </script>
 
 <svelte:head>
-	<title>Ask Hadith: {$searchKey}</title>
+	<title>{title()}</title>
 	<meta name="description" content={shortDescription()} />
 
-	<meta property="og:site_name" content="Ask Hadith" />
-	<meta property="og:locale" content="en" />
-	<meta property="og:title" content="Hadiths about '{$searchKey}'" />
+	<!-- Facebook Meta Tags -->
+	<meta property="og:url" content="https://www.askhadith.com/?search={$searchKey}" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content={title()} />
 	<meta property="og:description" content={shortDescription()} />
 	{#if $firstHadithBase64}
 		<meta
 			property="og:image"
+			content="https://www.askhadith.com/api/og?hadith={$firstHadithBase64}"
+		/>
+	{/if}
+
+	<!-- Twitter Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta property="twitter:domain" content="askhadith.com" />
+	<meta property="twitter:url" content="https://www.askhadith.com/?search={$searchKey}" />
+	<meta name="twitter:title" content={title()} />
+	<meta name="twitter:description" content={shortDescription()} />
+	{#if $firstHadithBase64}
+		<meta
+			name="twitter:image"
 			content="https://www.askhadith.com/api/og?hadith={$firstHadithBase64}"
 		/>
 	{/if}

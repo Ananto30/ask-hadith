@@ -32,11 +32,18 @@
 	<title>{title()}</title>
 	<meta name="description" content={shortDescription()} />
 
-	<meta property="og:site_name" content="Ask Hadith" />
-	<meta property="og:locale" content="en" />
+	<!-- Facebook Meta Tags -->
+	<meta property="og:type" content="website" />
 	<meta property="og:title" content={title()} />
 	<meta property="og:description" content={shortDescription()} />
 	<meta property="og:image" content="https://www.askhadith.com/api/og?hadith={hadith.base64}" />
+
+	<!-- Twitter Meta Tags -->
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta property="twitter:domain" content="askhadith.com" />
+	<meta name="twitter:title" content={title()} />
+	<meta name="twitter:description" content={shortDescription()} />
+	<meta name="twitter:image" content="https://www.askhadith.com/api/og?hadith={hadith.base64}" />
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">

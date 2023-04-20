@@ -7,6 +7,7 @@
 		{#if $collectionsSorted.length > 0}
 			{#each $collectionsSorted as col}
 				<button
+					aria-label="Select Collection"
 					class="{$selectedCollection === col.collection
 						? 'bg-black text-white '
 						: ''} px-2 py-1 my-auto text-xs font-medium border border-gray-400 hover:bg-black hover:text-white h-7 transition duration-200 ease-in-out"

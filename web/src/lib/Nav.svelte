@@ -53,6 +53,7 @@
 			{#if showInstallButton}
 				<li>
 					<button
+						aria-label="Install App"
 						class="flex flex-row gap-1 items-center font-medium hover:underline"
 						on:click={install}
 					>

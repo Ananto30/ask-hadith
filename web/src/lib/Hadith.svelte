@@ -110,6 +110,7 @@
 				</span>
 			</div>
 			<button
+				aria-label="Bookmark Hadith"
 				class="flex w-5 h-5 ml-2"
 				on:click={() => {
 					if (bookmarked) unBookmarkHadith();
@@ -162,6 +163,7 @@
 			</div>
 			<div class="flex justify-end mt-2">
 				<button
+					aria-label="Copy Hadith"
 					class="px-2 my-auto text-xs font-medium transition duration-200 ease-in-out border border-gray-400 hover:bg-black hover:text-white h-7"
 					on:click={copyText}
 					style="font-size: .7rem;"

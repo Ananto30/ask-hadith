@@ -18,6 +18,12 @@
 	let searching = false;
 
 	$: if (data?.resp?.data?.length > 0 && $selectedCollection == '') {
+		$hadithsByCollection.clear();
+		$collectionsSorted = [];
+		$selectedCollection = '';
+		$searchKey = '';
+		$firstHadithBase64 = '';
+		
 		data.resp.data.forEach((col) => {
 			$hadithsByCollection.set(col.collection, col.hadiths);
 			$collectionsSorted.push({ collection: col.collection, count: col.count });

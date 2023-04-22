@@ -9,7 +9,7 @@
 	let hadith: HadithModel = data.hadith;
 	$searchKey = data.searchKey || '';
 
-	const title = () => {
+	const ogTitle = () => {
 		let text =
 			hadith.collection + ' (Book: ' + hadith.book_no + ', Hadith: ' + hadith.book_ref_no + ') ';
 		if (hadith.hadith_no) {
@@ -18,7 +18,7 @@
 		return text;
 	};
 
-	const shortDescription = () => {
+	const ogDescription = () => {
 		let text = '';
 		if (hadith.hadith_no) {
 			text += hadith.narrator_en;
@@ -29,20 +29,20 @@
 </script>
 
 <svelte:head>
-	<title>{title()}</title>
-	<meta name="description" content={shortDescription()} />
+	<title>{ogTitle()}</title>
+	<meta name="description" content={ogDescription()} />
 
 	<!-- Facebook Meta Tags -->
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content={title()} />
-	<meta property="og:description" content={shortDescription()} />
+	<meta property="og:title" content={ogTitle()} />
+	<meta property="og:description" content={ogDescription()} />
 	<meta property="og:image" content="https://www.askhadith.com/api/og?hadith={hadith.base64}" />
 
 	<!-- Twitter Meta Tags -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta property="twitter:domain" content="askhadith.com" />
-	<meta name="twitter:title" content={title()} />
-	<meta name="twitter:description" content={shortDescription()} />
+	<meta name="twitter:title" content={ogTitle()} />
+	<meta name="twitter:description" content={ogDescription()} />
 	<meta name="twitter:image" content="https://www.askhadith.com/api/og?hadith={hadith.base64}" />
 </svelte:head>
 

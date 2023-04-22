@@ -20,7 +20,7 @@
 		notFound = false;
 
 		$hadithsByCollection = new Map();
-		$collectionsSorted = new Array();
+		$collectionsSorted = [];
 
 		try {
 			const response = await fetch(`https://ask-hadith.vercel.app/api/search?search=${$searchKey}`);

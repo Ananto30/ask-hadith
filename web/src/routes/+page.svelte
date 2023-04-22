@@ -27,51 +27,48 @@
 		$firstHadithBase64 = data.resp.first_hadith_base64;
 	}
 
-	const shortDescription = () => {
-		return (
-			'Read ' +
-			$collectionsSorted.reduce((acc, curr) => acc + curr.count, 0) +
-			" hadiths about '" +
-			$searchKey +
-			"' from " +
-			$collectionsSorted.map((col) => col.collection).join(', ')
-		);
+	const ogDescription = () => {
+		if ($collectionsSorted?.length > 0)
+			return (
+				'Read ' +
+				$collectionsSorted.reduce((acc, curr) => acc + curr.count, 0) +
+				" hadiths about '" +
+				$searchKey +
+				"' from " +
+				$collectionsSorted.map((col) => col.collection).join(', ')
+			);
+		return "Search anything from Hadiths (includes: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami` at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah)";
 	};
 
-	const title = () => {
+	const ogTitle = () => {
 		if ($searchKey) return "Hadiths about '" + $searchKey + "'";
 		return 'AskHadith.com - Search Hadiths from Sahih Bukhari, Sahih Muslim and more';
+	};
+
+	const ogImage = () => {
+		if ($firstHadithBase64) return 'https://www.askhadith.com/api/og?hadith=' + $firstHadithBase64;
+		return 'https://www.askhadith.com/favicon.ico';
 	};
 </script>
 
 <svelte:head>
-	<title>{title()}</title>
-	<meta name="description" content={shortDescription()} />
+	<title>{ogTitle()}</title>
+	<meta name="description" content={ogDescription()} />
 
 	<!-- Facebook Meta Tags -->
 	<meta property="og:url" content="https://www.askhadith.com/?search={$searchKey}" />
 	<meta property="og:type" content="website" />
-	<meta property="og:title" content={title()} />
-	<meta property="og:description" content={shortDescription()} />
-	{#if $firstHadithBase64}
-		<meta
-			property="og:image"
-			content="https://www.askhadith.com/api/og?hadith={$firstHadithBase64}"
-		/>
-	{/if}
+	<meta property="og:title" content={ogTitle()} />
+	<meta property="og:description" content={ogDescription()} />
+	<meta property="og:image" content={ogImage()} />
 
 	<!-- Twitter Meta Tags -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta property="twitter:domain" content="askhadith.com" />
 	<meta property="twitter:url" content="https://www.askhadith.com/?search={$searchKey}" />
-	<meta name="twitter:title" content={title()} />
-	<meta name="twitter:description" content={shortDescription()} />
-	{#if $firstHadithBase64}
-		<meta
-			name="twitter:image"
-			content="https://www.askhadith.com/api/og?hadith={$firstHadithBase64}"
-		/>
-	{/if}
+	<meta name="twitter:title" content={ogTitle()} />
+	<meta name="twitter:description" content={ogDescription()} />
+	<meta name="twitter:image" content={ogImage()} />
 </svelte:head>
 
 <div in:fade class="max-w-4xl mx-auto">

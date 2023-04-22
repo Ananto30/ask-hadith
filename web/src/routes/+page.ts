@@ -1,5 +1,3 @@
-import type { RequestEvent } from '@sveltejs/kit/types/internal';
-
 export async function load({ fetch, url }) {
 	const searchKey = url.searchParams.get('search');
 	if (!searchKey) {

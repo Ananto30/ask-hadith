@@ -21,7 +21,7 @@
 		*Please note that these bookmarks are saved in local cache, so if you clear data/cache, it will
 		be gone!
 	</p>
-	{#if bookmarkedHadiths.length == 0}
+	{#if bookmarkedHadiths?.length == 0}
 		<p class="flex items-center justify-center py-20">No bookmarks found!</p>
 	{:else}
 		<div class="flex flex-col">

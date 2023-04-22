@@ -39,7 +39,8 @@
 	};
 
 	const title = () => {
-		return "Hadiths about '" + $searchKey + "'";
+		if ($searchKey) return "Hadiths about '" + $searchKey + "'";
+		return 'AskHadith.com - Search Hadiths from Sahih Bukhari, Sahih Muslim and more';
 	};
 </script>
 

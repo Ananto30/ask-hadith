@@ -199,7 +199,10 @@ func getHadith(ctx context.Context, hadithName, hadithNo string) ([]CollectionRe
 		ctx,
 		bson.M{
 			"collection_id": hadithName,
-			"hadith_no":     hadithNo,
+			"hadith_no": bson.M{
+				"$regex":   hadithNo + ".*",
+				"$options": "",
+			},
 		},
 	)
 	if err != nil {

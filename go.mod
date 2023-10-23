@@ -8,7 +8,7 @@ require github.com/montanaflynn/stats v0.7.0 // indirect
 
 require (
 	github.com/golang/snappy v0.0.4 // indirect
-	github.com/hashicorp/golang-lru v0.5.4 // direct
+	github.com/hashicorp/golang-lru v1.0.2 // direct
 	github.com/klauspost/compress v1.16.0 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect

@@ -1,5 +1,5 @@
 <svg
-	class="w-4 h-4 text-gray-300"
+	class="h-4 w-4 text-gray-300"
 	xmlns="http://www.w3.org/2000/svg"
 	width="192"
 	height="192"

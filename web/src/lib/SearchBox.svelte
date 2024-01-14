@@ -63,17 +63,17 @@
 	};
 </script>
 
-<div class="flex-col items-center justify-center mx-auto">
-	<div class="flex w-full border-b border-gray-500 md:w-96">
+<div class="mx-auto flex-col items-center justify-center">
+	<div class="flex w-full justify-center rounded-lg shadow">
 		<input
 			type="text"
-			class="w-full px-4 py-2 text-sm md:w-96 focus:outline-none"
+			class="w-full rounded-l-lg bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 dark:bg-gray-800 dark:text-gray-300 md:w-96"
 			placeholder="Qadr, bukhari 1029, muslim 1763 etc..."
 			bind:value={$searchKey}
 			on:keyup={handleKeyup}
 		/>
 		<button
-			class="flex items-center justify-center px-4"
+			class="flex items-center justify-center rounded-r-lg bg-gray-200 px-4 focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-gray-300"
 			on:click={searchHadiths}
 			aria-label="Search Hadiths"
 		>

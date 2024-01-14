@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { slide } from 'svelte/transition';
 	import { hadithsByCollection, selectedCollection } from '../store';
 	import Hadith from '$lib/Hadith.svelte';
 	import type { HadithModel } from '../models';
@@ -10,10 +11,8 @@
 	}
 </script>
 
-<div class="flex flex-col">
-	<div class="mx-auto">
-		{#each hadiths as hadith}
-			<Hadith bind:hadith />
-		{/each}
-	</div>
+<div in:slide class="flex flex-col gap-4 md:gap-8">
+	{#each hadiths as hadith}
+		<Hadith bind:hadith />
+	{/each}
 </div>

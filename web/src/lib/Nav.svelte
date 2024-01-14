@@ -35,9 +35,13 @@
 	});
 </script>
 
-<nav class="sticky top-0 z-10 p-2 bg-white md:p-4">
-	<div class="max-w-7xl mx-auto">
-		<ul class="flex flex-row justify-end gap-4 p-2 text-sm font-medium text-gray-600">
+<nav
+	class="sticky top-0 z-10 border-b border-gray-200 bg-white p-2 shadow dark:border-gray-700 dark:bg-storm-800 md:p-4"
+>
+	<div class="mx-auto max-w-7xl">
+		<ul
+			class="flex flex-row justify-end gap-4 p-2 text-sm font-medium text-gray-600 dark:text-gray-300"
+		>
 			<li>
 				<a class="flex flex-row items-center gap-1 hover:underline" href="/">
 					<SearchSvg />
@@ -54,7 +58,7 @@
 				<li>
 					<button
 						aria-label="Install App"
-						class="flex flex-row gap-1 items-center font-medium hover:underline"
+						class="flex flex-row items-center gap-1 font-medium hover:underline"
 						on:click={install}
 					>
 						<DownloadSvg />

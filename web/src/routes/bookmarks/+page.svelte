@@ -16,7 +16,7 @@
 	<meta name="description" content="Bookmarked Hadiths" />
 </svelte:head>
 
-<div in:fade class="max-w-4xl mx-auto">
+<div in:fade class="mx-auto max-w-4xl">
 	<p class="flex items-center justify-center px-4 text-xs text-gray-500">
 		*Please note that these bookmarks are saved in local cache, so if you clear data/cache, it will
 		be gone!

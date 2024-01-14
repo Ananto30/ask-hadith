@@ -46,9 +46,9 @@
 	<meta name="twitter:image" content="https://www.askhadith.com/api/og?hadith={hadith.base64}" />
 </svelte:head>
 
-<div in:fade class="max-w-4xl mx-auto">
+<div in:fade class="mx-auto max-w-4xl">
 	{#if !hadith}
-		<p class="flex items-center justify-center py-20">Nothing found!</p>
+		<p class="flex items-center justify-center py-20 dark:text-white">Nothing found!</p>
 	{:else}
 		<div class="flex flex-col">
 			<div class="mx-auto">
@@ -57,10 +57,10 @@
 		</div>
 	{/if}
 	{#if $searchKey}
-		<div class="flex items-center justify-center mt-10 mb-20 font-normal underline">
+		<div class="mb-20 mt-10 flex items-center justify-center font-normal underline">
 			<a
 				href="/?search={$searchKey}"
-				class="text-sm text-blue-700 hover:text-blue-500 hover:underline"
+				class="text-sm text-blue-700 hover:text-blue-500 hover:underline dark:text-blue-300 dark:hover:text-blue-200"
 			>
 				See more hadiths about "{$searchKey}"
 			</a>

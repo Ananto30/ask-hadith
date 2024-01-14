@@ -23,7 +23,7 @@
 		$selectedCollection = '';
 		$searchKey = '';
 		$firstHadithBase64 = '';
-		
+
 		data.resp.data.forEach((col) => {
 			$hadithsByCollection.set(col.collection, col.hadiths);
 			$collectionsSorted.push({ collection: col.collection, count: col.count });
@@ -77,16 +77,16 @@
 	<meta name="twitter:image" content={ogImage()} />
 </svelte:head>
 
-<div in:fade class="max-w-4xl mx-auto">
-	<div class="top-0 z-10 my-12 md:sticky md:p-4">
-		<div class="flex mx-auto">
+<div in:fade class="mx-auto max-w-4xl dark:text-white">
+	<div class="top-0 z-10 mt-4 md:sticky md:mt-8 md:p-4">
+		<div class="mx-auto flex">
 			<SearchBox bind:searching bind:notFound />
 		</div>
 	</div>
 	{#if searching}
-		<p class="flex items-center justify-center mt-10 mb-20 animate-pulse">Searching...</p>
+		<p class="mb-20 mt-10 flex animate-pulse items-center justify-center">Searching...</p>
 	{:else if notFound}
-		<p class="flex items-center justify-center mt-10 mb-20 text-red-500">Nothing found! ☹️</p>
+		<p class="mb-20 mt-10 flex items-center justify-center text-red-500">Nothing found! ☹️</p>
 	{:else}
 		<HadithFilters />
 		<HadithList />

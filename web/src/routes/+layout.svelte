@@ -3,7 +3,7 @@
 	import Nav from '$lib/Nav.svelte';
 </script>
 
-<div class="min-h-screen bg-gray-50 dark:bg-storm-800">
+<div class="min-h-screen bg-slate-50 dark:bg-storm-800">
 	<Nav />
 
 	<slot />
@@ -14,16 +14,19 @@
 			Built with ❤️ by
 			<a
 				href="https://github.com/ananto30"
-				class="text-gray-500 hover:underline dark:text-gray-300 dark:hover:text-gray-200">Azizul</a
+				class="text-gray-500 hover:underline dark:text-gray-300 dark:hover:text-gray-200"
 			>
+				Azizul
+			</a>
 		</p>
 		<p class="text-center text-xs text-gray-500 dark:text-gray-300">
-			© 2023
+			© 2024
 			<span class="mx-1">|</span>
 			<a
 				href="https://github.com/Ananto30/ask-hadith"
 				class="text-gray-500 hover:underline dark:text-gray-300 dark:hover:text-gray-200"
-				>Ask Hadith
+			>
+				Ask Hadith
 			</a>
 		</p>
 	</div>

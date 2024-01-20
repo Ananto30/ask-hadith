@@ -160,7 +160,7 @@
 		<div class="mt-2 flex justify-end">
 			<button
 				aria-label="Copy Hadith"
-				class="my-auto h-7 rounded-lg border border-gray-400 px-2 text-xs font-semibold transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-storm-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+				class="my-auto h-7 rounded-lg border border-gray-300 px-2 text-xs font-semibold text-gray-600 transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-storm-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
 				on:click={copyText}
 			>
 				{copied ? 'Copied' : 'Copy'}

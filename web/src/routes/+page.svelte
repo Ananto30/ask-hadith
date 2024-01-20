@@ -78,7 +78,7 @@
 </svelte:head>
 
 <div in:fade class="mx-auto max-w-4xl dark:text-white">
-	<div class="top-0 z-10 mt-4 md:sticky md:mt-8 md:p-4">
+	<div class="top-0 z-10 mt-4 md:sticky md:mt-8 md:p-2">
 		<div class="mx-auto flex">
 			<SearchBox bind:searching bind:notFound />
 		</div>

@@ -57,7 +57,7 @@
 		</div>
 	{/if}
 	{#if $searchKey}
-		<div class="mb-20 mt-10 flex items-center justify-center font-normal underline">
+		<div class="mb-20 mt-10 flex items-center justify-center underline">
 			<a
 				href="/?search={$searchKey}"
 				class="text-sm text-blue-700 hover:text-blue-500 hover:underline dark:text-blue-300 dark:hover:text-blue-200"

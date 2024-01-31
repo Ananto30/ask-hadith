@@ -5,6 +5,7 @@
 @layer base {
 	html {
 		@apply antialiased;
+		font-size: 14px;
 	}
 }
 

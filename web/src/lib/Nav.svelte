@@ -35,9 +35,7 @@
 	});
 </script>
 
-<nav
-	class="sticky top-0 z-10 border-b border-gray-200 bg-white p-4 shadow-sm dark:border-gray-700 dark:bg-storm-800"
->
+<nav class="top-0 z-10 p-4 dark:border-gray-700 dark:bg-gray-900">
 	<div class="mx-auto max-w-7xl">
 		<ul class="flex flex-row justify-end gap-4 text-sm text-gray-600 dark:text-gray-300">
 			<li>

@@ -99,7 +99,7 @@
 
 <div
 	transition:slide
-	class="max-w-4xl space-y-2 bg-white p-4 shadow dark:bg-storm-600 md:rounded-lg md:p-6"
+	class="max-w-3xl space-y-2 bg-white p-4 shadow dark:bg-gray-800 md:rounded-lg md:p-6"
 >
 	<div class="flex flex-row items-center">
 		<div class="w-full dark:text-gray-300">
@@ -131,7 +131,7 @@
 		<p class="font-serif dark:text-gray-300">
 			{#each hadith.body_en.split(' ') as word}
 				{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
-					<span class="font-bold text-emerald-600">{word} </span>
+					<span class="font-bold text-green-500">{word} </span>
 				{:else}
 					<span class="">{word} </span>
 				{/if}
@@ -146,7 +146,7 @@
 					Chapter:
 					{#each hadith.chapter_en.split(' ') as word}
 						{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
-							<span class="font-bold text-emerald-600">{word} </span>
+							<span class="font-bold text-green-500">{word} </span>
 						{:else}
 							<span class="">{word} </span>
 						{/if}
@@ -160,7 +160,7 @@
 		<div class="mt-2 flex justify-end">
 			<button
 				aria-label="Copy Hadith"
-				class="my-auto h-7 rounded-lg border border-gray-300 px-2 text-xs text-gray-600 transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-storm-700 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
+				class="my-auto h-7 rounded-lg border border-gray-300 px-2 text-xs text-gray-600 transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
 				on:click={copyText}
 			>
 				{copied ? 'Copied' : 'Copy'}

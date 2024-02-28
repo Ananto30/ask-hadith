@@ -8,6 +8,7 @@
 	} from '../store';
 	import SearchSvg from './svgs/search.svelte';
 	import type { SearchResponse } from '../models';
+	import { slide } from 'svelte/transition';
 
 	export let searching: boolean;
 	export let notFound: boolean;
@@ -61,28 +62,55 @@
 			searchHadiths();
 		}
 	};
+	let showInstructions = false;
 </script>
 
 <div class="mx-auto flex-col items-center justify-center">
 	<div class="flex w-full justify-center rounded-lg shadow">
 		<input
 			type="text"
-			class="w-full rounded-l-lg bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 dark:bg-gray-800 dark:text-gray-300 md:w-96"
+			class="w-full rounded-l-lg rounded-r-none border border-gray-50 bg-white p-3 text-sm focus:border-gray-600 focus:outline-none dark:border-gray-800 dark:bg-gray-800 dark:text-gray-300 md:w-96"
 			placeholder="Qadr, bukhari 1029, muslim 1763 etc..."
 			bind:value={$searchKey}
 			on:keyup={handleKeyup}
 		/>
 		<button
-			class="flex items-center justify-center rounded-r-lg bg-gray-200 px-4 focus:outline-none focus:ring-2 dark:bg-gray-700 dark:text-gray-300"
+			class="flex items-center justify-center rounded-r-lg border bg-gray-200 px-4 focus:border-gray-600 focus:outline-none dark:border-gray-800 dark:bg-gray-700 dark:text-gray-300"
 			on:click={searchHadiths}
 			aria-label="Search Hadiths"
 		>
 			<SearchSvg />
 		</button>
 	</div>
-	<!-- <div class="flex-col text-xs mt-3 text-gray-400 text-center">
-		To search specific hadith use like this -
-		<br />
-		bukhari 1028, muslim 3, etc.
-	</div> -->
+
+	<div
+		class="mx-auto mt-4 flex max-w-sm flex-col items-center justify-center text-xs text-gray-600 dark:text-gray-400"
+	>
+		<button
+			class="mb-2 flex items-center rounded font-bold"
+			on:click={() => (showInstructions = !showInstructions)}
+		>
+			{showInstructions ? 'Hide Instructions' : 'Show Instructions'}
+			<svg
+				class="ml-1 h-4 w-4"
+				fill="none"
+				stroke="currentColor"
+				viewBox="0 0 24 24"
+				xmlns="http://www.w3.org/2000/svg"
+			>
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"
+				></path>
+			</svg>
+		</button>
+		{#if showInstructions}
+			<ul transition:slide class="flex list-disc flex-col gap-2">
+				<li>Search is based on exact match of words.</li>
+				<li>
+					Search for multiple words like - cat water - will show if these words are present in
+					hadith.
+				</li>
+				<li>To search specific hadith use like this - bukhari 1028, muslim 3, etc.</li>
+			</ul>
+		{/if}
+	</div>
 </div>

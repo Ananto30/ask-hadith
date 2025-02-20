@@ -1,0 +1,52 @@
+name: Test
+
+on:
+  push:
+    branches:
+      - netlify
+  pull_request:
+    branches:
+      - netlify
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    # services:
+    #   mongo:
+    #     image: mongo:latest
+    #     ports:
+    #       - 27017:27017
+    #     options: >-
+    #       --health-cmd="mongo --eval 'db.runCommand({ ping: 1 })'"
+    #       --health-interval=10s
+    #       --health-timeout=5s
+    #       --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.17
+
+      - name: Install Go dependencies
+        run: go mod download
+
+      - name: Run Go tests
+        run: go test ./api
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install Node.js dependencies
+        run: npm install
+        working-directory: web
+
+      - name: Run end-to-end tests
+        run: npm run test:e2e
+        working-directory: web

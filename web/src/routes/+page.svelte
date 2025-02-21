@@ -84,9 +84,9 @@
 		</div>
 	</div>
 	{#if searching}
-		<p class="mb-20 mt-10 flex animate-pulse items-center justify-center">Searching...</p>
+		<p class="mt-10 mb-20 flex animate-pulse items-center justify-center">Searching...</p>
 	{:else if notFound}
-		<p class="mb-20 mt-10 flex items-center justify-center text-red-500">Nothing found! ☹️</p>
+		<p class="mt-10 mb-20 flex items-center justify-center text-red-500">Nothing found! ☹️</p>
 	{:else}
 		<HadithFilters />
 		<HadithList />

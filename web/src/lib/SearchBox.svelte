@@ -69,7 +69,7 @@
 	<div class="flex w-full justify-center rounded-lg shadow">
 		<input
 			type="text"
-			class="w-full rounded-l-lg rounded-r-none border border-gray-50 bg-white p-3 text-sm focus:border-gray-600 focus:outline-none dark:border-gray-800 dark:bg-gray-800 dark:text-gray-300 md:w-96"
+			class="w-full rounded-l-lg rounded-r-none border border-gray-50 bg-white p-3 text-sm focus:border-gray-600 focus:outline-none md:w-96 dark:border-gray-800 dark:bg-gray-800 dark:text-gray-300"
 			placeholder="Qadr, bukhari 1029, muslim 1763 etc..."
 			bind:value={$searchKey}
 			on:keyup={handleKeyup}

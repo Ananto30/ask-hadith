@@ -9,7 +9,7 @@
 	<slot />
 
 	<!-- to make it fixed bottom "fixed inset-x-0 bottom-0 " -->
-	<div class="bottom-0 right-0 flex flex-col gap-1 pb-8 pt-8 dark:text-gray-300 xl:fixed xl:mr-8">
+	<div class="right-0 bottom-0 flex flex-col gap-1 pt-8 pb-8 xl:fixed xl:mr-8 dark:text-gray-300">
 		<p class="text-center text-xs font-medium text-gray-500">
 			Built with ❤️ by
 			<a

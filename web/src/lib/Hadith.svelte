@@ -99,7 +99,7 @@
 
 <div
 	transition:slide
-	class="max-w-3xl space-y-2 bg-white p-4 shadow dark:bg-gray-800 md:rounded-lg md:p-6"
+	class="max-w-3xl space-y-2 bg-white p-4 shadow md:rounded-lg md:p-6 dark:bg-gray-800"
 >
 	<div class="flex flex-row items-center">
 		<div class="w-full dark:text-gray-300">
@@ -131,9 +131,9 @@
 		<p class="font-serif dark:text-gray-300">
 			{#each hadith.body_en.split(' ') as word}
 				{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
-					<span class="font-bold text-green-500">{word} </span>
+					<span class="font-bold text-green-500">{word + ' '}</span>
 				{:else}
-					<span class="">{word} </span>
+					<span class="">{word + ' '}</span>
 				{/if}
 			{/each}
 		</p>
@@ -146,9 +146,9 @@
 					Chapter:
 					{#each hadith.chapter_en.split(' ') as word}
 						{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
-							<span class="font-bold text-green-500">{word} </span>
+							<span class="font-bold text-green-500">{word + ' '}</span>
 						{:else}
-							<span class="">{word} </span>
+							<span class="">{word + ' '}</span>
 						{/if}
 					{/each}
 				{/if}

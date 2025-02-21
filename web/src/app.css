@@ -1,17 +1,17 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-	html {
-		@apply antialiased;
-		font-size: 14px;
-	}
-}
+@import 'tailwindcss';
 
 html {
 	overflow-y: scroll;
 	scroll-behavior: smooth;
+	font-family: 'Merriweather Sans', sans-serif;
+}
+
+.font-sans {
+	font-family: 'Merriweather Sans', sans-serif;
+}
+
+.font-serif {
+	font-family: 'Merriweather', serif;
 }
 
 /* Scroll bar beautify */

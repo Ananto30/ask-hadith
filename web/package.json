@@ -17,7 +17,7 @@
 		"@playwright/test": "^1.50.1",
 		"@resvg/resvg-js": "^2.6.0",
 		"@sveltejs/adapter-auto": "^2.1.1",
-		"@sveltejs/kit": "^1.30.4",
+		"@sveltejs/kit": "^2.8.3",
 		"@types/cookie": "^0.5.4",
 		"@typescript-eslint/eslint-plugin": "^6.10.0",
 		"@typescript-eslint/parser": "^6.10.0",

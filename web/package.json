@@ -14,7 +14,7 @@
 	"devDependencies": {
 		"@fontsource/fira-mono": "^5.0.8",
 		"@neoconfetti/svelte": "^1.0.0",
-		"@playwright/test": "^1.50.1",
+		"@playwright/test": "^1.56.1",
 		"@resvg/resvg-js": "^2.6.0",
 		"@sveltejs/adapter-auto": "^2.1.1",
 		"@sveltejs/kit": "^1.30.4",

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fade, slide } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 	import BookmarkSvg from '$lib/svgs/bookmark.svelte';
 	import type { HadithModel } from '../models';
 	import { searchKey } from '../store';
@@ -99,7 +99,7 @@
 
 <div
 	transition:slide
-	class="max-w-3xl space-y-2 bg-white p-4 shadow dark:bg-gray-800 md:rounded-lg md:p-6"
+	class="max-w-3xl space-y-2 bg-white p-4 shadow md:rounded-lg md:p-6 dark:bg-gray-800"
 >
 	<div class="flex flex-row items-center">
 		<div class="w-full dark:text-gray-300">

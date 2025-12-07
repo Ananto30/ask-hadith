@@ -39,7 +39,7 @@ export const GET: RequestHandler = async ({ url }) => {
 	const image = resvg.render();
 	const png = image.asPng();
 
-	return new Response(png as unknown as BodyInit, {
+	return new Response(Uint8Array.from(png), {
 		headers: {
 			'content-type': 'image/png'
 		}

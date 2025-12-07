@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { fade, slide } from 'svelte/transition';
+	import { slide } from 'svelte/transition';
 	import BookmarkSvg from '$lib/svgs/bookmark.svelte';
 	import type { HadithModel } from '../models';
 	import { searchKey } from '../store';

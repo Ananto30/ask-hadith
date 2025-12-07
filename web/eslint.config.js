@@ -34,6 +34,10 @@ export default [
 			parserOptions: {
 				parser: tsParser
 			}
+		},
+		rules: {
+			'svelte/require-each-key': 'warn',
+			'svelte/no-navigation-without-resolve': 'warn'
 		}
 	},
 	prettier,

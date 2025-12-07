@@ -28,8 +28,8 @@
 	};
 
 	onMount(() => {
-		window.addEventListener('beforeinstallprompt', (e) => {
-			deferredPrompt = e;
+		window.addEventListener('beforeinstallprompt', (e: Event) => {
+			deferredPrompt = e as BeforeInstallPromptEvent;
 		});
 		showInstallButton = showInstall();
 	});

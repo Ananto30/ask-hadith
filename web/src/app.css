@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
 @layer base {
 	html {
@@ -69,7 +67,7 @@
 	}
 
 	button {
-		@apply transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+		@apply transition-colors duration-200 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none;
 	}
 
 	/* Text selections */

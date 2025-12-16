@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fade, slide } from 'svelte/transition';
-	import BookmarkSvg from '$lib/svgs/bookmark.svelte';
 	import type { HadithModel } from '../models';
 	import { searchKey } from '../store';
 
@@ -97,74 +96,127 @@
 	});
 </script>
 
-<div
+<article
 	transition:slide
-	class="max-w-3xl space-y-2 bg-white p-4 shadow dark:bg-gray-800 md:rounded-lg md:p-6"
+	class="space-y-6 rounded-xl border border-neutral-200 bg-white p-4 text-neutral-900 shadow-sm hover:shadow-md dark:border-neutral-800 dark:bg-neutral-800/50 dark:text-neutral-50 md:p-6"
 >
-	<div class="flex flex-row items-center">
-		<div class="w-full dark:text-gray-300">
-			<h2 class="leading-tight">{hadith.collection}</h2>
-			<span class="flex text-xs text-gray-600 dark:text-gray-400">
-				Book: {hadith.book_no}, Hadith: {hadith.book_ref_no}
+	<!-- Card Header -->
+	<div class="flex flex-col">
+		<div class="flex items-center justify-between">
+			<div class="flex items-center gap-3">
+				<div class="text-md font-semibold dark:text-neutral-300">
+					{hadith.collection}
+				</div>
 				{#if hadith.hadith_no}
-					(Hadith No: {hadith.hadith_no})
+					<div
+						class="rounded-md border border-neutral-200 px-2 py-0.5 text-xs font-medium text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
+					>
+						{hadith.hadith_no}
+					</div>
 				{/if}
-			</span>
+			</div>
+			<div class="flex items-center">
+				<button
+					aria-label={copied ? 'Copied to clipboard' : 'Copy hadith'}
+					class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md text-neutral-400 transition-all hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300"
+					on:click={copyText}
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="18"
+						height="18"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-copy-icon lucide-copy"
+						><rect width="14" height="14" x="8" y="8" rx="2" ry="2" /><path
+							d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+						/></svg
+					>
+				</button>
+				<button
+					aria-label={bookmarked ? 'Remove bookmark' : 'Add bookmark'}
+					class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-md text-neutral-400 transition-all hover:text-neutral-600 dark:text-neutral-500 dark:hover:text-neutral-300"
+					on:click={() => {
+						if (bookmarked) unBookmarkHadith();
+						else bookmarkHadith();
+					}}
+				>
+					<svg
+						xmlns="http://www.w3.org/2000/svg"
+						width="18"
+						height="18"
+						viewBox="0 0 24 24"
+						fill={bookmarked ? 'currentColor' : 'none'}
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						class="lucide lucide-bookmark-icon lucide-bookmark"
+						><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" /></svg
+					>
+				</button>
+			</div>
 		</div>
-		<button
-			aria-label="Bookmark Hadith"
-			class="ml-2 flex h-5 w-5"
-			on:click={() => {
-				if (bookmarked) unBookmarkHadith();
-				else bookmarkHadith();
-			}}
-		>
-			<BookmarkSvg bind:bookmarked />
-		</button>
+		<div class="text-sm text-neutral-500 dark:text-neutral-400" title={hadith.book_en}>
+			<span class="font-medium">{hadith.book_en}</span>
+			{#if hadith.book_no || hadith.book_ref_no}
+				|
+				<span class="font-semibold"> B:{hadith.book_no} - H:{hadith.book_ref_no}</span>
+			{/if}
+		</div>
 	</div>
-	<div class="text-md flex flex-col gap-2 py-2">
+
+	<!-- Card Content -->
+	<div class="space-y-2">
+		<!-- Narrator -->
 		{#if hadith.narrator_en}
-			<p class="text-sm text-gray-500 dark:text-gray-400">
+			<div class="text-sm italic text-neutral-500 dark:text-neutral-500">
 				{hadith.narrator_en}
-			</p>
+			</div>
 		{/if}
-		<p class="font-serif dark:text-gray-300">
+
+		<!-- Main Hadith Text -->
+		<div class="text-sm leading-relaxed text-neutral-800 dark:text-neutral-200">
 			{#each hadith.body_en.split(' ') as word}
 				{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
-					<span class="font-bold text-green-500">{word} </span>
+					<span
+						class="text-foreground rounded-sm bg-yellow-100 px-1 font-semibold dark:bg-yellow-900/30 dark:text-yellow-200"
+						>{word}</span
+					>
 				{:else}
-					<span class="">{word} </span>
+					<span>{word}</span>
 				{/if}
+				{' '}
 			{/each}
-		</p>
-	</div>
-	<div class="flex space-x-2">
-		<div class="flex w-full flex-col pt-2 text-xs text-gray-500 dark:text-gray-400">
-			<span>Book: {hadith.book_en} </span>
-			<p class="">
-				{#if hadith.chapter_en}
-					Chapter:
-					{#each hadith.chapter_en.split(' ') as word}
-						{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
-							<span class="font-bold text-green-500">{word} </span>
-						{:else}
-							<span class="">{word} </span>
-						{/if}
-					{/each}
-				{/if}
-			</p>
-			<p class="">
-				<span>Grade: {hadith.hadith_grade || 'Unknown'}</span>
-			</p>
-		</div>
-		<div class="mt-2 flex justify-end">
-			<button
-				aria-label="Copy Hadith"
-				class="my-auto h-7 rounded-lg border border-gray-300 px-2 text-xs text-gray-600 transition duration-200 ease-in-out hover:bg-gray-800 hover:text-white dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200"
-				on:click={copyText}
-			>
-				{copied ? 'Copied' : 'Copy'}
-			</button>
 		</div>
 	</div>
-</div>
+
+	<!-- Metadata -->
+	<div class="space-y-2 text-sm text-neutral-600 dark:text-neutral-400">
+		{#if hadith.chapter_en}
+			<div><strong>Chapter:</strong> {hadith.chapter_en}</div>
+		{/if}
+		{#if hadith.hadith_grade}
+			<div>
+				<!-- <strong>Grade:</strong> -->
+				<span
+					class="inline-flex items-center rounded-md border border-neutral-200 px-2 py-1 text-xs text-neutral-600 dark:border-neutral-700 dark:text-neutral-400"
+					>{hadith.hadith_grade}</span
+				>
+			</div>
+		{/if}
+	</div>
+
+	{#if copied}
+		<div
+			transition:fade
+			class="fixed left-1/2 top-14 z-50 -translate-x-1/2 rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-lg"
+		>
+			Hadith copied!
+		</div>
+	{/if}
+</article>

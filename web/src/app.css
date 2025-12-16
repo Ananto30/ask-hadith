@@ -5,7 +5,76 @@
 @layer base {
 	html {
 		@apply antialiased;
-		font-size: 14px;
+		font-size: 16px;
+		font-feature-settings:
+			'rlig' 1,
+			'calt' 1;
+	}
+
+	body {
+		@apply bg-white text-neutral-900 dark:bg-neutral-900 dark:text-neutral-50;
+		font-family:
+			'Geist',
+			system-ui,
+			-apple-system,
+			sans-serif;
+	}
+
+	/* Headings */
+	h1 {
+		@apply text-5xl font-bold tracking-tight;
+		line-height: 1.2;
+		margin-bottom: 1rem;
+	}
+
+	h2 {
+		@apply text-3xl font-bold tracking-tight;
+		line-height: 1.3;
+		margin-bottom: 0.875rem;
+	}
+
+	h3 {
+		@apply text-xl font-semibold tracking-tight;
+		line-height: 1.4;
+		margin-bottom: 0.75rem;
+	}
+
+	h4 {
+		@apply text-lg font-semibold tracking-tight;
+		line-height: 1.5;
+		margin-bottom: 0.625rem;
+	}
+
+	h5 {
+		@apply text-base font-semibold;
+		line-height: 1.5;
+		margin-bottom: 0.5rem;
+	}
+
+	h6 {
+		@apply text-sm font-semibold;
+		line-height: 1.5;
+		margin-bottom: 0.5rem;
+	}
+
+	/* Paragraph and text */
+	p {
+		@apply mb-4;
+		line-height: 1.75;
+	}
+
+	a {
+		@apply text-neutral-600 underline-offset-4 hover:underline dark:text-neutral-300;
+		transition: color 0.2s;
+	}
+
+	button {
+		@apply transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2;
+	}
+
+	/* Text selections */
+	::selection {
+		@apply bg-neutral-700 text-neutral-50 dark:bg-neutral-200 dark:text-neutral-900;
 	}
 }
 
@@ -14,31 +83,39 @@ html {
 	scroll-behavior: smooth;
 }
 
-/* Scroll bar beautify */
-
-/* width */
-
+/* Scrollbar styles */
 ::-webkit-scrollbar {
-	width: 4px;
-	height: 16px;
+	width: 8px;
+	height: 8px;
 }
-
-/* Track */
 
 ::-webkit-scrollbar-track {
-	background: #fff;
+	@apply bg-neutral-100 dark:bg-neutral-800;
 }
-
-/* Handle */
 
 ::-webkit-scrollbar-thumb {
-	background: #202225;
-	border-radius: 100vh;
-	/* border: 3px solid #edf2f7; */
+	@apply rounded-full bg-neutral-400 dark:bg-neutral-600;
+	border: 2px solid;
+	border-color: inherit;
+	background-clip: padding-box;
 }
 
-/* Handle on hover */
-
 ::-webkit-scrollbar-thumb:hover {
-	background: #a0aec0;
+	@apply bg-neutral-600 dark:bg-neutral-400;
+}
+
+/* Focus visible for better keyboard navigation */
+:focus-visible {
+	@apply outline-2 outline-offset-2 outline-neutral-600 dark:outline-neutral-300;
+}
+
+/* Smooth transitions */
+* {
+	@apply transition-colors duration-200;
+}
+
+input,
+textarea,
+select {
+	@apply transition-colors duration-200;
 }

@@ -35,42 +35,49 @@
 	});
 </script>
 
-<nav class="top-0 z-10 p-4 dark:border-gray-700 dark:bg-gray-900">
-	<div class="mx-auto max-w-7xl">
-		<ul class="flex flex-row justify-end gap-4 text-sm text-gray-600 dark:text-gray-300">
-			<li>
-				<a class="flex flex-row items-center gap-1 hover:underline" href="/">
-					<SearchSvg />
-					Search
-				</a>
-			</li>
-			<li>
-				<a class="flex flex-row items-center gap-1 hover:underline" href="/bookmarks">
-					<BookmarksSvg />
-					Bookmarks
-				</a>
-			</li>
-			{#if showInstallButton}
+<nav class="border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
+	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+		<div class="flex h-16 items-center justify-between">
+			<a
+				href="/"
+				class="flex items-center gap-2 font-semibold text-neutral-900 dark:text-neutral-50"
+			>
+				<span class="text-lg">📖</span>
+				<span class="hidden sm:inline">Ask Hadith</span>
+			</a>
+
+			<ul class="flex items-center gap-6 text-sm">
 				<li>
-					<button
-						aria-label="Install App"
-						class="flex flex-row items-center gap-1 hover:underline"
-						on:click={install}
+					<a
+						class="flex flex-row items-center gap-2 font-medium text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-50"
+						href="/"
 					>
-						<DownloadSvg />
-						Install</button
-					>
-				</li>
-			{/if}
-			<!-- <li>
-				<div class="flex flex-col">
-					<a class="flex flex-row items-center gap-1 text-gray-300 hover:underline" href="">
-						<BooksSvg />
-						Hadith Books
+						<SearchSvg />
+						<span class="hidden sm:inline">Search</span>
 					</a>
-					<p class="text-xs text-gray-300">coming soon*</p>
-				</div>
-			</li> -->
-		</ul>
+				</li>
+				<li>
+					<a
+						class="flex flex-row items-center gap-2 font-medium text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-50"
+						href="/bookmarks"
+					>
+						<BookmarksSvg />
+						<span class="hidden sm:inline">Bookmarks</span>
+					</a>
+				</li>
+				{#if showInstallButton}
+					<li>
+						<button
+							aria-label="Install App"
+							class="flex flex-row items-center gap-2 font-medium text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-50"
+							on:click={install}
+						>
+							<DownloadSvg />
+							<span class="hidden sm:inline">Install</span>
+						</button>
+					</li>
+				{/if}
+			</ul>
+		</div>
 	</div>
 </nav>

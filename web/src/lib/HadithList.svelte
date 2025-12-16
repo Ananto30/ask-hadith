@@ -11,7 +11,7 @@
 	}
 </script>
 
-<div in:slide class="flex flex-col gap-4 pb-20 md:gap-8">
+<div in:slide class="mx-auto max-w-4xl space-y-6 px-4 pb-20 pt-6">
 	{#each hadiths as hadith}
 		<Hadith bind:hadith />
 	{/each}

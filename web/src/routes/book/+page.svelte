@@ -46,24 +46,52 @@
 	<meta name="twitter:image" content="https://www.askhadith.com/api/og?hadith={hadith.base64}" />
 </svelte:head>
 
-<div in:fade class="mx-auto max-w-4xl">
+<div in:fade class="min-h-screen bg-white dark:bg-neutral-900">
 	{#if !hadith}
-		<p class="flex items-center justify-center py-20 dark:text-white">Nothing found!</p>
+		<div class="flex justify-center py-20">
+			<p class="text-lg font-medium text-neutral-600 dark:text-neutral-300">Hadith not found</p>
+		</div>
 	{:else}
-		<div class="flex flex-col">
-			<div class="mx-auto">
-				<Hadith bind:hadith />
+		<!-- Header Section -->
+		<div
+			class="border-b border-neutral-200 bg-neutral-50 py-8 dark:border-neutral-800 dark:bg-neutral-900"
+		>
+			<div class="mx-auto max-w-4xl px-4">
+				<h1 class="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
+					{hadith.collection}
+				</h1>
+				<p class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-300">
+					<span>Book <span class="font-medium">{hadith.book_no}</span></span>
+					<span>•</span>
+					<span>Hadith <span class="font-medium">{hadith.book_ref_no}</span></span>
+				</p>
 			</div>
 		</div>
-	{/if}
-	{#if $searchKey}
-		<div class="mb-20 mt-10 flex items-center justify-center underline">
-			<a
-				href="/?search={$searchKey}"
-				class="text-sm text-blue-700 hover:text-blue-500 hover:underline dark:text-blue-300 dark:hover:text-blue-200"
-			>
-				See more hadiths about "{$searchKey}"
-			</a>
+
+		<!-- Content Section -->
+		<div class="bg-white dark:bg-neutral-900">
+			<div class="mx-auto max-w-4xl px-4 py-8">
+				<div class="mb-8">
+					<Hadith bind:hadith />
+				</div>
+
+				<!-- Navigation -->
+				{#if $searchKey}
+					<div
+						class="flex flex-col items-center gap-4 rounded-lg border border-neutral-200 bg-neutral-50 p-6 dark:border-neutral-700 dark:bg-neutral-800"
+					>
+						<p class="text-sm text-neutral-600 dark:text-neutral-300">
+							Looking for related hadiths?
+						</p>
+						<a
+							href="/?search={$searchKey}"
+							class="inline-block rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
+						>
+							View all results for "{$searchKey}"
+						</a>
+					</div>
+				{/if}
+			</div>
 		</div>
 	{/if}
 </div>

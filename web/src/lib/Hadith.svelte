@@ -98,7 +98,7 @@
 
 <article
 	transition:slide
-	class="space-y-6 rounded-xl border border-neutral-200 bg-white p-4 text-neutral-900 shadow-sm hover:shadow-md dark:border-neutral-800 dark:bg-neutral-800/50 dark:text-neutral-50 md:p-6"
+	class="space-y-6 rounded-xl border border-neutral-200 bg-white p-4 text-neutral-900 shadow-sm hover:shadow-md md:p-6 dark:border-neutral-800 dark:bg-neutral-800/50 dark:text-neutral-50"
 >
 	<!-- Card Header -->
 	<div class="flex flex-col">
@@ -174,7 +174,7 @@
 	<div class="space-y-2">
 		<!-- Narrator -->
 		{#if hadith.narrator_en}
-			<div class="text-sm italic text-neutral-500 dark:text-neutral-500">
+			<div class="text-sm text-neutral-500 italic dark:text-neutral-500">
 				{hadith.narrator_en}
 			</div>
 		{/if}
@@ -214,7 +214,7 @@
 	{#if copied}
 		<div
 			transition:fade
-			class="fixed left-1/2 top-14 z-50 -translate-x-1/2 rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-lg"
+			class="fixed top-14 left-1/2 z-50 -translate-x-1/2 rounded-md bg-green-500 px-4 py-2 text-sm font-medium text-white shadow-lg"
 		>
 			Hadith copied!
 		</div>

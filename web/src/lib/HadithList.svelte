@@ -11,7 +11,7 @@
 	}
 </script>
 
-<div in:slide class="mx-auto max-w-4xl space-y-6 px-4 pb-20 pt-6">
+<div in:slide class="mx-auto max-w-4xl space-y-6 px-4 pt-6 pb-20">
 	{#each hadiths as hadith}
 		<Hadith bind:hadith />
 	{/each}

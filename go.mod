@@ -4,7 +4,7 @@ go 1.24.0
 
 toolchain go1.24.1
 
-require go.mongodb.org/mongo-driver v1.17.6
+require go.mongodb.org/mongo-driver v1.17.7
 
 require github.com/montanaflynn/stats v0.7.1 // indirect
 

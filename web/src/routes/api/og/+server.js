@@ -1,5 +1,6 @@
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
+import { render } from 'svelte/server';
 import NotoSans from '$lib/NotoSans-Regular.ttf';
 import { html as toReactNode } from 'satori-html';
 import HadithCard from '$lib/HadithCard.svelte';
@@ -12,8 +13,8 @@ export const GET = async ({ url }) => {
 	const jsonHadith = Buffer.from(base64Hadith, 'base64').toString('utf-8');
 	const parsed = JSON.parse(jsonHadith);
 
-	const result = HadithCard.render({ hadith: parsed });
-	const element = toReactNode(`${result.html}<style>${result.css.code}</style>`);
+	const result = render(HadithCard, { props: { hadith: parsed } });
+	const element = toReactNode(`${result.body}${result.head}`);
 
 	const svg = await satori(element, {
 		fonts: [
@@ -35,8 +36,9 @@ export const GET = async ({ url }) => {
 	});
 
 	const image = resvg.render();
+	const png = new Uint8Array(image.asPng());
 
-	return new Response(image.asPng(), {
+	return new Response(png, {
 		headers: {
 			'content-type': 'image/png'
 		}

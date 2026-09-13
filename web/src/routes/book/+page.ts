@@ -1,6 +1,6 @@
-import type { RequestEvent } from '@sveltejs/kit/types/internal';
+import type { PageLoad } from './$types';
 
-export async function load({ url }: RequestEvent) {
+export const load: PageLoad = async ({ url }) => {
 	const collectionId = url.searchParams.get('collection_id');
 	const book = url.searchParams.get('book');
 	const refNumber = url.searchParams.get('ref_no');
@@ -23,4 +23,4 @@ export async function load({ url }: RequestEvent) {
 			searchKey
 		};
 	}
-}
+};

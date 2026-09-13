@@ -29,7 +29,7 @@
 
 	onMount(() => {
 		window.addEventListener('beforeinstallprompt', (e) => {
-			deferredPrompt = e;
+			deferredPrompt = e as BeforeInstallPromptEvent;
 		});
 		showInstallButton = showInstall();
 	});

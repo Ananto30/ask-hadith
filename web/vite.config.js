@@ -1,10 +1,11 @@
 import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
 
 import fs from 'node:fs';
 
 /** @type {import('vite').UserConfig} */
 const config = {
-	plugins: [sveltekit(), rawFonts(['.ttf'])]
+	plugins: [tailwindcss(), sveltekit(), rawFonts(['.ttf'])]
 };
 
 /** @param {string[]} ext */

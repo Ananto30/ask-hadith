@@ -2,7 +2,7 @@ module api
 
 go 1.25.0
 
-require go.mongodb.org/mongo-driver v1.17.9
+require go.mongodb.org/mongo-driver v1.17.10
 
 require github.com/montanaflynn/stats v0.7.1 // indirect
 

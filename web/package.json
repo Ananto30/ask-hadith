@@ -32,7 +32,7 @@
 		"prettier": "^3.9.6",
 		"prettier-plugin-svelte": "^4.1.1",
 		"prettier-plugin-tailwindcss": "^0.8.1",
-		"satori": "^0.33.4",
+		"satori": "^0.33.5",
 		"satori-html": "^0.3.2",
 		"svelte": "^5.57.0",
 		"svelte-check": "^4.7.6",

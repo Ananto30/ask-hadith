@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
 	import { searchKey } from '../../store';
-	import Hadith from '$lib/Hadith.svelte';
+	import Hadith from '#lib/Hadith.svelte';
 	import type { HadithModel } from '../../models';
 
 	export let data: { hadith: HadithModel; searchKey: string };

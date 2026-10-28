@@ -1,3 +1,5 @@
+import netlify from '@sveltejs/adapter-netlify';
+import vercel from '@sveltejs/adapter-vercel';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -5,7 +7,11 @@ import fs from 'node:fs';
 
 /** @type {import('vite').UserConfig} */
 const config = {
-	plugins: [tailwindcss(), sveltekit(), rawFonts(['.ttf'])]
+	plugins: [
+		tailwindcss(),
+		sveltekit({ adapter: process.env.VERCEL ? vercel() : netlify() }),
+		rawFonts(['.ttf'])
+	]
 };
 
 /** @param {string[]} ext */

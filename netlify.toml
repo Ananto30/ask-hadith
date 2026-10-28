@@ -1,2 +1,6 @@
+# SvelteKit 3 requires Node >= 22.17
+[build.environment]
+NODE_VERSION = "24"
+
 [functions]
 included_files = ["**/node_modules/harfbuzzjs/hb.wasm"]

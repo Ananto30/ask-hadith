@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import type { BeforeInstallPromptEvent } from '../models';
 	import { theme } from '../store';
 
-	import SearchSvg from '$lib/svgs/search.svelte';
-	import BookmarksSvg from '$lib/svgs/bookmarks.svelte';
+	import SearchSvg from '#lib/svgs/search.svelte';
+	import BookmarksSvg from '#lib/svgs/bookmarks.svelte';
 	import DownloadSvg from './svgs/download.svelte';
 
 	let deferredPrompt: BeforeInstallPromptEvent | null = null;
@@ -39,7 +39,7 @@
 
 		<ul class="flex items-center gap-5 text-sm sm:gap-7">
 			<li>
-				<a class={link} href="/" aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+				<a class={link} href="/" aria-current={page.url.pathname === '/' ? 'page' : undefined}>
 					<SearchSvg />
 					<span class="hidden sm:inline">Search</span>
 				</a>
@@ -48,7 +48,7 @@
 				<a
 					class={link}
 					href="/bookmarks"
-					aria-current={$page.url.pathname === '/bookmarks' ? 'page' : undefined}
+					aria-current={page.url.pathname === '/bookmarks' ? 'page' : undefined}
 				>
 					<BookmarksSvg />
 					<span class="hidden sm:inline">Bookmarks</span>
@@ -80,17 +80,17 @@
 						aria-hidden="true"
 					>
 						{#if $theme === 'light'}
-							<circle cx="12" cy="12" r="4" /><path
+							<circle cx="12" cy="12" r="4"></circle>
+
+							<path
 								d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"
-							/>
+							></path>
 						{:else if $theme === 'dark'}
-							<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+							<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
 						{:else}
 							<!-- half-filled disc = follow system -->
-							<circle cx="12" cy="12" r="9" /><path
-								d="M12 3v18a9 9 0 0 0 0-18Z"
-								fill="currentColor"
-							/>
+							<circle cx="12" cy="12" r="9"></circle>
+							<path d="M12 3v18a9 9 0 0 0 0-18Z" fill="currentColor"></path>
 						{/if}
 					</svg>
 				</button>

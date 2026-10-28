@@ -46,52 +46,31 @@
 	<meta name="twitter:image" content="https://www.askhadith.com/api/og?hadith={hadith.base64}" />
 </svelte:head>
 
-<div in:fade class="min-h-screen bg-white dark:bg-neutral-900">
+<div in:fade class="mx-auto max-w-3xl px-5 sm:px-8">
 	{#if !hadith}
-		<div class="flex justify-center py-20">
-			<p class="text-lg font-medium text-neutral-600 dark:text-neutral-300">Hadith not found</p>
-		</div>
+		<p class="text-muted py-24 font-serif text-xl">Hadith not found.</p>
 	{:else}
-		<!-- Header Section -->
-		<div
-			class="border-b border-neutral-200 bg-neutral-50 py-8 dark:border-neutral-800 dark:bg-neutral-900"
-		>
-			<div class="mx-auto max-w-4xl px-4">
-				<h1 class="text-3xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
-					{hadith.collection}
-				</h1>
-				<p class="mt-2 flex flex-wrap gap-4 text-sm text-neutral-600 dark:text-neutral-300">
-					<span>Book <span class="font-medium">{hadith.book_no}</span></span>
-					<span>•</span>
-					<span>Hadith <span class="font-medium">{hadith.book_ref_no}</span></span>
-				</p>
-			</div>
-		</div>
+		<header class="border-line border-b pt-16 pb-8 sm:pt-20">
+			<h1 class="font-serif text-4xl font-medium tracking-[-0.02em] text-balance">
+				{hadith.collection}
+			</h1>
+			<p class="text-muted mt-3 flex gap-4 font-mono text-sm tabular-nums">
+				<span>Book {hadith.book_no}</span>
+				<span>Hadith {hadith.book_ref_no}</span>
+			</p>
+		</header>
 
-		<!-- Content Section -->
-		<div class="bg-white dark:bg-neutral-900">
-			<div class="mx-auto max-w-4xl px-4 py-8">
-				<div class="mb-8">
-					<Hadith bind:hadith />
-				</div>
+		<Hadith {hadith} />
 
-				<!-- Navigation -->
-				{#if $searchKey}
-					<div
-						class="flex flex-col items-center gap-4 rounded-lg border border-neutral-200 bg-neutral-50 p-6 dark:border-neutral-700 dark:bg-neutral-800"
-					>
-						<p class="text-sm text-neutral-600 dark:text-neutral-300">
-							Looking for related hadiths?
-						</p>
-						<a
-							href="/?search={$searchKey}"
-							class="inline-block rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
-						>
-							View all results for "{$searchKey}"
-						</a>
-					</div>
-				{/if}
+		{#if $searchKey}
+			<div class="border-line border-t py-10">
+				<a
+					href="/?search={$searchKey}"
+					class="text-ink-2 hover:text-ink text-sm underline decoration-1"
+				>
+					← All results for “{$searchKey}”
+				</a>
 			</div>
-		</div>
+		{/if}
 	{/if}
 </div>

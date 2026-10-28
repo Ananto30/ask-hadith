@@ -16,57 +16,31 @@
 	<meta name="description" content="Bookmarked Hadiths" />
 </svelte:head>
 
-<div in:fade class="min-h-screen bg-white dark:bg-neutral-900">
-	<!-- Header Section -->
-	<div
-		class="border-b border-neutral-200 bg-neutral-50 py-8 dark:border-neutral-800 dark:bg-neutral-900"
-	>
-		<div class="mx-auto max-w-4xl px-4">
-			<h1 class="text-4xl font-bold tracking-tight text-neutral-900 dark:text-neutral-50">
-				Bookmarks
-			</h1>
-			<p class="mt-2 text-base text-neutral-600 dark:text-neutral-300">
-				Your saved hadiths ({bookmarkedHadiths.length})
-			</p>
-		</div>
-	</div>
+<div in:fade class="mx-auto max-w-3xl px-5 sm:px-8">
+	<header class="border-line border-b pt-16 pb-8 sm:pt-20">
+		<h1 class="font-serif text-4xl font-medium tracking-[-0.02em]">Bookmarks</h1>
+		<p class="text-muted mt-3 max-w-[60ch] text-sm leading-relaxed">
+			<span class="font-mono tabular-nums">{bookmarkedHadiths.length}</span> saved. Bookmarks live in
+			this browser only; clearing site data removes them.
+		</p>
+	</header>
 
-	<!-- Content Section -->
-	<div class="bg-white dark:bg-neutral-900">
-		{#if bookmarkedHadiths?.length === 0}
-			<div class="flex justify-center py-16">
-				<div class="text-center">
-					<p class="mb-4 text-5xl">📚</p>
-					<p class="mb-2 text-lg font-medium text-neutral-900 dark:text-neutral-50">
-						No bookmarks yet
-					</p>
-					<p class="mb-6 text-sm text-neutral-600 dark:text-neutral-300">
-						Start bookmarking hadiths to save them for later
-					</p>
-					<a
-						href="/"
-						class="inline-block rounded-lg bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-800 dark:bg-neutral-100 dark:text-neutral-900 dark:hover:bg-neutral-200"
-					>
-						Search Hadiths
-					</a>
-				</div>
-			</div>
-		{:else}
-			<div class="mx-auto max-w-4xl px-4 py-8">
-				<div
-					class="mb-6 rounded-lg border border-neutral-200 bg-neutral-50 p-4 text-sm text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-400"
-				>
-					<div>
-						<span class="font-medium">Note:</span> Bookmarks are saved locally in your browser. Clearing
-						your cache or browser data will remove them.
-					</div>
-				</div>
-				<div class="space-y-3 pb-20">
-					{#each bookmarkedHadiths as hadith}
-						<Hadith bind:hadith />
-					{/each}
-				</div>
-			</div>
-		{/if}
-	</div>
+	{#if bookmarkedHadiths?.length === 0}
+		<div class="py-16">
+			<p class="font-serif text-xl">No bookmarks yet</p>
+			<p class="text-muted mt-2 text-sm">Tap the bookmark icon on any hadith to keep it here.</p>
+			<a
+				href="/"
+				class="bg-ink text-paper mt-6 inline-flex h-10 items-center rounded-md px-4 text-sm font-medium hover:opacity-85"
+			>
+				Search hadiths
+			</a>
+		</div>
+	{:else}
+		<div class="divide-line divide-y pb-24">
+			{#each bookmarkedHadiths as hadith}
+				<Hadith {hadith} />
+			{/each}
+		</div>
+	{/if}
 </div>

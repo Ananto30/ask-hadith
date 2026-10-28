@@ -1,83 +1,100 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 	import type { BeforeInstallPromptEvent } from '../models';
+	import { theme } from '../store';
 
 	import SearchSvg from '$lib/svgs/search.svelte';
 	import BookmarksSvg from '$lib/svgs/bookmarks.svelte';
 	import DownloadSvg from './svgs/download.svelte';
 
 	let deferredPrompt: BeforeInstallPromptEvent | null = null;
-	let showInstallButton = false;
+	let showInstall = false;
 
 	const install = async () => {
-		if (deferredPrompt) {
-			deferredPrompt.prompt();
-			const { outcome } = await deferredPrompt.userChoice;
-			if (outcome === 'accepted') {
-				deferredPrompt = null;
-			}
-		}
-	};
-
-	const showInstall = () => {
-		return deferredPrompt != null && !alreadyInstalled();
-	};
-
-	const alreadyInstalled = () => {
-		return window.matchMedia('(display-mode: standalone)').matches;
+		if (!deferredPrompt) return;
+		deferredPrompt.prompt();
+		const { outcome } = await deferredPrompt.userChoice;
+		if (outcome === 'accepted') showInstall = false;
 	};
 
 	onMount(() => {
 		window.addEventListener('beforeinstallprompt', (e) => {
 			deferredPrompt = e as BeforeInstallPromptEvent;
+			showInstall = !window.matchMedia('(display-mode: standalone)').matches;
 		});
-		showInstallButton = showInstall();
 	});
+
+	const next = { system: 'light', light: 'dark', dark: 'system' } as const;
+
+	const link =
+		'flex items-center gap-2 py-2 text-ink-2 transition-colors hover:text-ink aria-[current=page]:text-ink';
 </script>
 
-<nav class="border-b border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900">
-	<div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-		<div class="flex h-16 items-center justify-between">
-			<a
-				href="/"
-				class="flex items-center gap-2 font-semibold text-neutral-900 dark:text-neutral-50"
-			>
-				<span class="text-lg">📖</span>
-				<span class="hidden sm:inline">Ask Hadith</span>
-			</a>
+<nav class="bg-paper/90 border-line sticky top-0 z-40 border-b backdrop-blur-sm">
+	<div class="mx-auto flex h-14 max-w-3xl items-center justify-between px-5 sm:px-8">
+		<a href="/" class="font-serif text-lg font-semibold tracking-[-0.01em] no-underline">
+			Ask Hadith
+		</a>
 
-			<ul class="flex items-center gap-6 text-sm">
+		<ul class="flex items-center gap-5 text-sm sm:gap-7">
+			<li>
+				<a class={link} href="/" aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
+					<SearchSvg />
+					<span class="hidden sm:inline">Search</span>
+				</a>
+			</li>
+			<li>
+				<a
+					class={link}
+					href="/bookmarks"
+					aria-current={$page.url.pathname === '/bookmarks' ? 'page' : undefined}
+				>
+					<BookmarksSvg />
+					<span class="hidden sm:inline">Bookmarks</span>
+				</a>
+			</li>
+			{#if showInstall}
 				<li>
-					<a
-						class="flex flex-row items-center gap-2 font-medium text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-50"
-						href="/"
-					>
-						<SearchSvg />
-						<span class="hidden sm:inline">Search</span>
-					</a>
+					<button aria-label="Install App" class={link} on:click={install}>
+						<DownloadSvg />
+						<span class="hidden sm:inline">Install</span>
+					</button>
 				</li>
-				<li>
-					<a
-						class="flex flex-row items-center gap-2 font-medium text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-50"
-						href="/bookmarks"
+			{/if}
+			<li>
+				<button
+					class="{link} cursor-pointer"
+					aria-label="Theme: {$theme}. Switch to {next[$theme]}"
+					title="Theme: {$theme}"
+					on:click={() => theme.set(next[$theme])}
+				>
+					<svg
+						class="h-4 w-4"
+						viewBox="0 0 24 24"
+						fill="none"
+						stroke="currentColor"
+						stroke-width="2"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						aria-hidden="true"
 					>
-						<BookmarksSvg />
-						<span class="hidden sm:inline">Bookmarks</span>
-					</a>
-				</li>
-				{#if showInstallButton}
-					<li>
-						<button
-							aria-label="Install App"
-							class="flex flex-row items-center gap-2 font-medium text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-neutral-50"
-							on:click={install}
-						>
-							<DownloadSvg />
-							<span class="hidden sm:inline">Install</span>
-						</button>
-					</li>
-				{/if}
-			</ul>
-		</div>
+						{#if $theme === 'light'}
+							<circle cx="12" cy="12" r="4" /><path
+								d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M6.3 17.7l-1.4 1.4M19.1 4.9l-1.4 1.4"
+							/>
+						{:else if $theme === 'dark'}
+							<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+						{:else}
+							<!-- half-filled disc = follow system -->
+							<circle cx="12" cy="12" r="9" /><path
+								d="M12 3v18a9 9 0 0 0 0-18Z"
+								fill="currentColor"
+							/>
+						{/if}
+					</svg>
+				</button>
+			</li>
+		</ul>
 	</div>
 </nav>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { hadithsByCollection, selectedCollection } from '../store';
-	import Hadith from '$lib/Hadith.svelte';
+	import Hadith from '#lib/Hadith.svelte';
 
 	$: hadiths = $hadithsByCollection.get($selectedCollection) || [];
 </script>

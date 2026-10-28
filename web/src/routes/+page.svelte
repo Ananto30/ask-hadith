@@ -7,9 +7,9 @@
 		collectionsSorted,
 		firstHadithBase64
 	} from '../store';
-	import SearchBox from '$lib/SearchBox.svelte';
-	import HadithList from '$lib/HadithList.svelte';
-	import HadithFilters from '$lib/HadithFilters.svelte';
+	import SearchBox from '#lib/SearchBox.svelte';
+	import HadithList from '#lib/HadithList.svelte';
+	import HadithFilters from '#lib/HadithFilters.svelte';
 	import type { SearchResponse } from '../models';
 
 	export let data: { resp: SearchResponse; searchKey: string };

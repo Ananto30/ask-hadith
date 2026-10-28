@@ -1,9 +1,9 @@
 import satori from 'satori';
 import { Resvg } from '@resvg/resvg-js';
 import { render } from 'svelte/server';
-import NotoSans from '$lib/NotoSans-Regular.ttf';
+import NotoSans from '#lib/NotoSans-Regular.ttf';
 import { html as toReactNode } from 'satori-html';
-import HadithCard from '$lib/HadithCard.svelte';
+import HadithCard from '#lib/HadithCard.svelte';
 
 const height = 630;
 const width = 1200;

@@ -21,7 +21,7 @@
 		"@sveltejs/kit": "^3.1.0",
 		"@tailwindcss/postcss": "^4.3.3",
 		"@tailwindcss/vite": "^4.3.3",
-		"@types/node": "^22.20.5",
+		"@types/node": "^24.19.2",
 		"@typescript-eslint/eslint-plugin": "^8.72.1",
 		"@typescript-eslint/parser": "^8.72.1",
 		"autoprefixer": "^10.6.2",
@@ -44,6 +44,9 @@
 	},
 	"overrides": {
 		"fflate": "^0.8.3"
+	},
+	"engines": {
+		"node": "24.x"
 	},
 	"type": "module",
 	"imports": {

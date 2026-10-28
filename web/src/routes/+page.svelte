@@ -1,16 +1,17 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
-	import {
-		searchKey,
-		hadithsByCollection,
-		selectedCollection,
-		collectionsSorted,
-		firstHadithBase64
-	} from '../store';
-	import SearchBox from '#lib/SearchBox.svelte';
-	import HadithList from '#lib/HadithList.svelte';
 	import HadithFilters from '#lib/HadithFilters.svelte';
+	import HadithList from '#lib/HadithList.svelte';
+	import SearchBox from '#lib/SearchBox.svelte';
+	import { fade } from 'svelte/transition';
 	import type { SearchResponse } from '../models';
+	import {
+		apiVersion,
+		collectionsSorted,
+		firstHadithBase64,
+		hadithsByCollection,
+		searchKey,
+		selectedCollection
+	} from '../store';
 
 	export let data: { resp: SearchResponse; searchKey: string };
 
@@ -106,7 +107,9 @@
 		<div class="py-16" role="status">
 			<p class="font-serif text-xl">No results for “{$searchKey}”</p>
 			<p class="text-muted mt-2 text-sm">
-				Search matches exact words. Try fewer or different words.
+				{$apiVersion === 'v2'
+					? 'Try rephrasing, or use different words.'
+					: 'Search matches exact words. Try fewer or different words.'}
 			</p>
 		</div>
 	{:else}

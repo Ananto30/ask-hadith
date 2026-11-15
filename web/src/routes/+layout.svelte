@@ -4,16 +4,10 @@
 	import { theme } from '../store';
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
+	import { ORIGIN } from '#lib/site.ts';
 
-	const ORIGIN = 'https://www.askhadith.com';
-	// Hadith pages are identified by these params only; others (search, v, search_key) are noise.
-	const canonicalOf = (u: typeof page.url) =>
-		ORIGIN +
-		u.pathname +
-		(u.pathname === '/book'
-			? '?' +
-				['collection_id', 'book', 'ref_no'].map((k) => `${k}=${u.searchParams.get(k)}`).join('&')
-			: '');
+	// Query params (search, v, search_key) never change which hadith a page shows.
+	const canonicalOf = (u: typeof page.url) => ORIGIN + u.pathname;
 
 	onMount(() => {
 		const mq = window.matchMedia('(prefers-color-scheme: dark)');

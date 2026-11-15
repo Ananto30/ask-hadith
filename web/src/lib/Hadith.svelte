@@ -2,7 +2,7 @@
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import type { HadithModel } from '../models';
-	import { searchKey } from '../store';
+	import { ORIGIN, hadithPath } from '#lib/site.ts';
 
 	export let hadith: HadithModel;
 
@@ -35,9 +35,7 @@
 			text += 'Grade:' + hadith.hadith_grade + '\n';
 		}
 
-		const urlEncodedSearchKey = encodeURIComponent($searchKey);
-
-		text += `https://askhadith.com/book?collection_id=${hadith.collection_id}&book=${hadith.book_no}&ref_no=${hadith.book_ref_no}&search_key=${urlEncodedSearchKey}`;
+		text += ORIGIN + hadithPath(hadith.collection_id, hadith.book_no, hadith.book_ref_no);
 
 		navigator.clipboard.writeText(text);
 		copied = true;
@@ -101,7 +99,7 @@
 		<div class="min-w-0 text-sm">
 			<p class="font-medium">
 				<a
-					href="/book?collection_id={hadith.collection_id}&book={hadith.book_no}&ref_no={hadith.book_ref_no}"
+					href={hadithPath(hadith.collection_id, hadith.book_no, hadith.book_ref_no)}
 					class="no-underline hover:underline">{hadith.collection}</a
 				>
 				{#if hadith.hadith_no}

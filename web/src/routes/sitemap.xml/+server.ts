@@ -1,20 +1,12 @@
-const ORIGIN = 'https://www.askhadith.com';
+import { COLLECTIONS, ORIGIN } from '#lib/site.ts';
 
-type Ref = { collection_id: string; book_no: string; book_ref_no: string };
-
-export const GET = async ({ fetch }) => {
-	const res = await fetch('https://ask-hadith.vercel.app/api/refs');
-	if (!res.ok) return new Response('sitemap unavailable', { status: 502 });
-	const refs: Ref[] = await res.json();
-
-	// ~35k hadiths fits one file (limit is 50k URLs); split into an index if the corpus grows.
-	const urls = refs.map(
-		(r) =>
-			`<url><loc>${ORIGIN}/book?collection_id=${encodeURIComponent(r.collection_id)}&amp;book=${encodeURIComponent(r.book_no)}&amp;ref_no=${encodeURIComponent(r.book_ref_no)}</loc></url>`
-	);
+// One child sitemap per collection keeps every file far below the 50k URL limit as the corpus grows.
+export const GET = () => {
+	const names = ['main', ...COLLECTIONS.map((c) => c.id)];
+	const items = names.map((n) => `<sitemap><loc>${ORIGIN}/sitemap/${n}.xml</loc></sitemap>`);
 
 	return new Response(
-		`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>${ORIGIN}/</loc></url>${urls.join('')}</urlset>`,
+		`<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${items.join('')}</sitemapindex>`,
 		{
 			headers: {
 				'Content-Type': 'application/xml',

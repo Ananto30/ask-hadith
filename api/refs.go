@@ -19,6 +19,7 @@ type HadithRef struct {
 }
 
 // ListHadithRefs returns every hadith reference, used to build the sitemap.
+// An optional collection_id narrows it to one collection.
 func ListHadithRefs(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
@@ -28,9 +29,18 @@ func ListHadithRefs(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	filter := bson.M{}
+	if id := r.URL.Query().Get("collection_id"); id != "" {
+		if reason, ok := validateCollectionID(id); !ok {
+			sendBadRequestResp(w, reason)
+			return
+		}
+		filter["collection_id"] = id
+	}
+
 	cursor, err := client.Database("hadith").Collection("hadiths").Find(
 		ctx,
-		bson.M{},
+		filter,
 		options.Find().SetProjection(bson.M{"collection_id": 1, "book_no": 1, "book_ref_no": 1, "_id": 0}),
 	)
 	if err != nil {

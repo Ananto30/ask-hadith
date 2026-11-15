@@ -18,6 +18,16 @@
 	let notFound = false;
 	let searching = false;
 
+	// Stores are module-level, so on the server they outlive a request and would leak the
+	// previous visitor's results into this render.
+	if (typeof window === 'undefined') {
+		$hadithsByCollection = new Map();
+		$collectionsSorted = [];
+		$selectedCollection = '';
+		$searchKey = '';
+		$firstHadithBase64 = '';
+	}
+
 	$: if (data?.resp?.data?.length > 0 && $selectedCollection == '') {
 		$hadithsByCollection.clear();
 		$collectionsSorted = [];
@@ -77,7 +87,7 @@
 	<title>{ogTitle()}</title>
 	<meta name="description" content={ogDescription()} />
 	<!-- Search results are unbounded thin pages; hadith pages in the sitemap are the index targets. -->
-	{#if $searchKey}
+	{#if data.searchKey}
 		<meta name="robots" content="noindex, follow" />
 	{:else}
 		{@html `<script type="application/ld+json">${jsonLd}</script>`}
@@ -108,6 +118,9 @@
 			<p class="text-ink-2 mt-5 max-w-[52ch] leading-relaxed text-pretty">
 				Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami` at-Tirmidhi, Sunan an-Nasa'i and
 				Sunan Ibn Majah.
+			</p>
+			<p class="mt-3 text-sm">
+				<a href="/hadith" class="text-ink-2 hover:text-ink underline">Or browse all collections</a>
 			</p>
 			<p class="text-muted mt-3 max-w-[60ch] text-sm leading-relaxed text-pretty">
 				Ask a question, describe a topic, or look up a hadith by number, for example “best way to do

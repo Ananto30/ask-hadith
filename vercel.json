@@ -1,4 +1,12 @@
 {
+    "redirects": [
+      {
+        "source": "/(.*)",
+        "has": [{ "type": "host", "value": "askhadith.com" }],
+        "destination": "https://www.askhadith.com/$1",
+        "permanent": true
+      }
+    ],
     "headers": [
       {
         "source": "/api/(.*)",

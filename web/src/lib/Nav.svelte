@@ -47,6 +47,15 @@
 			<li>
 				<a
 					class={link}
+					href="/hadith"
+					aria-current={page.url.pathname.startsWith('/hadith') ? 'page' : undefined}
+				>
+					Browse
+				</a>
+			</li>
+			<li>
+				<a
+					class={link}
 					href="/bookmarks"
 					aria-current={page.url.pathname === '/bookmarks' ? 'page' : undefined}
 				>

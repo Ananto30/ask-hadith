@@ -13,6 +13,8 @@ export type HadithModel = {
 	narrator_en: string;
 	score: number;
 	base64?: string;
+	prev?: string;
+	next?: string;
 };
 
 export type CollectionCounter = {

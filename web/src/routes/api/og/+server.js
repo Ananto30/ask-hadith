@@ -40,7 +40,9 @@ export const GET = async ({ url }) => {
 
 	return new Response(png, {
 		headers: {
-			'content-type': 'image/png'
+			'content-type': 'image/png',
+			// The hadith is encoded in the URL, so the same URL always yields the same image.
+			'cache-control': 'public, max-age=31536000, s-maxage=31536000, immutable'
 		}
 	});
 };

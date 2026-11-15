@@ -100,7 +100,10 @@
 	<header class="flex items-start justify-between gap-4">
 		<div class="min-w-0 text-sm">
 			<p class="font-medium">
-				{hadith.collection}
+				<a
+					href="/book?collection_id={hadith.collection_id}&book={hadith.book_no}&ref_no={hadith.book_ref_no}"
+					class="no-underline hover:underline">{hadith.collection}</a
+				>
 				{#if hadith.hadith_no}
 					<span class="text-muted ml-1 font-mono text-xs tabular-nums">#{hadith.hadith_no}</span>
 				{/if}

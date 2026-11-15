@@ -6,23 +6,24 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<meta name="theme-color" content="#f7f7f5" media="(prefers-color-scheme: light)" />
 		<meta name="theme-color" content="#0c0c0c" media="(prefers-color-scheme: dark)" />
-		<meta
-			name="Ask Hadith"
-			content="Search anything from Hadiths (includes: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami` at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah)"
-		/>
-		<meta
-			name="description"
-			content="Search anything from Hadiths (includes: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami` at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah)"
-		/>
 		<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 		<link rel="manifest" href="/manifest.json" />
 		%sveltekit.head%
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<!-- Non-blocking: swap in the stylesheet after load so fonts don't delay first paint -->
 		<link
 			href="https://fonts.googleapis.com/css2?family=Geist:wght@400..600&family=Geist+Mono:wght@400..500&family=Literata:ital,opsz,wght@0,7..72,400..600;1,7..72,400&display=swap"
 			rel="stylesheet"
+			media="print"
+			onload="this.media = 'all'"
 		/>
+		<noscript>
+			<link
+				href="https://fonts.googleapis.com/css2?family=Geist:wght@400..600&family=Literata:wght@400..600&display=swap"
+				rel="stylesheet"
+			/>
+		</noscript>
 		<!-- Theme detection script to prevent flash -->
 		<script>
 			(function () {
@@ -52,16 +53,4 @@
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 	</body>
-
-	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-139880119-1"></script>
-	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag() {
-			dataLayer.push(arguments);
-		}
-		gtag('js', new Date());
-
-		gtag('config', 'UA-139880119-1');
-	</script>
 </html>

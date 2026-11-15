@@ -44,26 +44,47 @@
 				"' from " +
 				$collectionsSorted.map((col) => col.collection).join(', ')
 			);
-		return "Search anything from Hadiths (includes: Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami` at-Tirmidhi, Sunan an-Nasa'i, Sunan Ibn Majah)";
+		return "Search all six major hadith collections in English by topic, question or number: Bukhari, Muslim, Abu Dawud, Tirmidhi, Nasa'i and Ibn Majah.";
 	};
 
 	const ogTitle = () => {
 		if ($searchKey) return "Hadiths about '" + $searchKey + "'";
-		return 'AskHadith.com - Search Hadiths from Sahih Bukhari, Sahih Muslim and more';
+		return 'Ask Hadith: Search Bukhari, Muslim and 4 More Hadith Books';
 	};
+
+	const ogUrl = () =>
+		'https://www.askhadith.com/' + ($searchKey ? '?search=' + encodeURIComponent($searchKey) : '');
+
+	const jsonLd = JSON.stringify({
+		'@context': 'https://schema.org',
+		'@type': 'WebSite',
+		name: 'Ask Hadith',
+		url: 'https://www.askhadith.com/',
+		potentialAction: {
+			'@type': 'SearchAction',
+			target: 'https://www.askhadith.com/?search={search_term_string}',
+			'query-input': 'required name=search_term_string'
+		}
+	}).replace(/</g, '\\u003c');
 
 	const ogImage = () => {
 		if ($firstHadithBase64) return 'https://www.askhadith.com/api/og?hadith=' + $firstHadithBase64;
-		return 'https://www.askhadith.com/favicon.ico';
+		return 'https://www.askhadith.com/og-default.png';
 	};
 </script>
 
 <svelte:head>
 	<title>{ogTitle()}</title>
 	<meta name="description" content={ogDescription()} />
+	<!-- Search results are unbounded thin pages; hadith pages in the sitemap are the index targets. -->
+	{#if $searchKey}
+		<meta name="robots" content="noindex, follow" />
+	{:else}
+		{@html `<script type="application/ld+json">${jsonLd}</script>`}
+	{/if}
 
 	<!-- Facebook Meta Tags -->
-	<meta property="og:url" content="https://www.askhadith.com/?search={$searchKey}" />
+	<meta property="og:url" content={ogUrl()} />
 	<meta property="og:type" content="website" />
 	<meta property="og:title" content={ogTitle()} />
 	<meta property="og:description" content={ogDescription()} />
@@ -72,7 +93,7 @@
 	<!-- Twitter Meta Tags -->
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta property="twitter:domain" content="askhadith.com" />
-	<meta property="twitter:url" content="https://www.askhadith.com/?search={$searchKey}" />
+	<meta property="twitter:url" content={ogUrl()} />
 	<meta name="twitter:title" content={ogTitle()} />
 	<meta name="twitter:description" content={ogDescription()} />
 	<meta name="twitter:image" content={ogImage()} />
@@ -87,6 +108,11 @@
 			<p class="text-ink-2 mt-5 max-w-[52ch] leading-relaxed text-pretty">
 				Sahih al-Bukhari, Sahih Muslim, Sunan Abi Dawud, Jami` at-Tirmidhi, Sunan an-Nasa'i and
 				Sunan Ibn Majah.
+			</p>
+			<p class="text-muted mt-3 max-w-[60ch] text-sm leading-relaxed text-pretty">
+				Ask a question, describe a topic, or look up a hadith by number, for example “best way to do
+				wudu” or “bukhari 1”. Every result links to its own page with the narrator, book, chapter
+				and grade.
 			</p>
 		</header>
 	{/if}

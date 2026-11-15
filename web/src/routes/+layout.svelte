@@ -3,6 +3,17 @@
 	import Nav from '#lib/Nav.svelte';
 	import { theme } from '../store';
 	import { onMount } from 'svelte';
+	import { page } from '$app/state';
+
+	const ORIGIN = 'https://www.askhadith.com';
+	// Hadith pages are identified by these params only; others (search, v, search_key) are noise.
+	const canonicalOf = (u: typeof page.url) =>
+		ORIGIN +
+		u.pathname +
+		(u.pathname === '/book'
+			? '?' +
+				['collection_id', 'book', 'ref_no'].map((k) => `${k}=${u.searchParams.get(k)}`).join('&')
+			: '');
 
 	onMount(() => {
 		const mq = window.matchMedia('(prefers-color-scheme: dark)');
@@ -29,6 +40,12 @@
 	});
 </script>
 
+<svelte:head>
+	{#if page.status < 400 && !page.url.searchParams.has('search')}
+		<link rel="canonical" href={canonicalOf(page.url)} />
+	{/if}
+</svelte:head>
+
 <div class="flex min-h-dvh flex-col">
 	<Nav />
 
@@ -40,7 +57,7 @@
 		<div
 			class="text-muted mx-auto flex max-w-3xl items-center justify-between px-5 py-8 text-xs sm:px-8"
 		>
-			<span>© 2024 Ask Hadith</span>
+			<span>© {new Date().getFullYear()} Ask Hadith</span>
 			<a href="https://github.com/Ananto30/ask-hadith" class="hover:text-ink hover:underline">
 				Source on GitHub
 			</a>

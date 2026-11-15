@@ -5,11 +5,13 @@ This file contains the handler for the /book endpoint.
 package handler
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // GetHadithByBookRefNo returns a hadith by its collection ID, book number and
@@ -42,6 +44,10 @@ func GetHadithByBookRefNo(w http.ResponseWriter, r *http.Request) {
 		},
 	).
 		Decode(&resp); err != nil {
+		if errors.Is(err, mongo.ErrNoDocuments) {
+			http.Error(w, "hadith not found", http.StatusNotFound)
+			return
+		}
 		sendServerErrorResp(w, err)
 		return
 	}

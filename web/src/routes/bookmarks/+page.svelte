@@ -14,6 +14,7 @@
 <svelte:head>
 	<title>Ask Hadith: Bookmarks</title>
 	<meta name="description" content="Bookmarked Hadiths" />
+	<meta name="robots" content="noindex" />
 </svelte:head>
 
 <div in:fade class="mx-auto max-w-3xl px-5 sm:px-8">

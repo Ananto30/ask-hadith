@@ -4,6 +4,7 @@
 	import type { BeforeInstallPromptEvent } from '../models';
 	import { theme } from '../store';
 
+	import Logo from './Logo.svelte';
 	import SearchSvg from '#lib/svgs/search.svelte';
 	import BookmarksSvg from '#lib/svgs/bookmarks.svelte';
 	import DownloadSvg from './svgs/download.svelte';
@@ -33,7 +34,11 @@
 
 <nav class="bg-paper/90 border-line sticky top-0 z-40 border-b backdrop-blur-sm">
 	<div class="mx-auto flex h-14 max-w-3xl items-center justify-between px-5 sm:px-8">
-		<a href="/" class="font-serif text-lg font-semibold tracking-[-0.01em] no-underline">
+		<a
+			href="/"
+			class="flex items-center gap-2 font-serif text-lg font-semibold tracking-[-0.01em] no-underline"
+		>
+			<Logo class="h-7 w-7 shrink-0" />
 			Ask Hadith
 		</a>
 

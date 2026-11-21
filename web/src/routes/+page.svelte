@@ -13,10 +13,19 @@
 		selectedCollection
 	} from '../store';
 
-	export let data: { resp: SearchResponse; searchKey: string };
+	export let data: {
+		resp: SearchResponse;
+		searchKey: string;
+		fellBackToV1: boolean;
+	};
 
 	let notFound = false;
 	let searching = false;
+
+	if (typeof window !== 'undefined' && data.fellBackToV1) {
+		$apiVersion = 'v1';
+		localStorage.setItem('apiVersion', 'v1');
+	}
 
 	// Stores are module-level, so on the server they outlive a request and would leak the
 	// previous visitor's results into this render.

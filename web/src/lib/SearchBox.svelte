@@ -4,10 +4,10 @@
 	import {
 		apiVersion,
 		collectionsSorted,
+		fetchSearch,
 		firstHadithBase64,
 		hadithsByCollection,
 		searchKey,
-		searchUrl,
 		selectedCollection
 	} from '../store';
 	import SearchSvg from './svgs/search.svelte';
@@ -26,7 +26,11 @@
 		$collectionsSorted = [];
 
 		try {
-			const response = await fetch(searchUrl($searchKey, $apiVersion));
+			const response = await fetchSearch(fetch, $searchKey, $apiVersion, () => {
+				$apiVersion = 'v1';
+				localStorage.setItem('apiVersion', 'v1');
+			});
+			if (!response.ok) throw new Error(`Search failed with status ${response.status}`);
 
 			const resp: SearchResponse = await response.json();
 			if (resp == null || resp.data.length == 0) {

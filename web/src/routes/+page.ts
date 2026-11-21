@@ -1,21 +1,38 @@
-import { searchUrl } from '../store';
+import { fetchSearch, preferredApiVersion } from '../store';
 
 export async function load({ fetch, url }) {
 	const searchKey = url.searchParams.get('search');
+	const requestedVersion = preferredApiVersion(url.search);
+	let fellBackToV1 = false;
+
 	if (!searchKey) {
 		return {
 			resp: {},
-			searchKey
+			searchKey,
+			fellBackToV1
 		};
 	}
-	// SSR can't read localStorage, so the version travels in the URL (?v=v1)
-	const res = await fetch(searchUrl(searchKey, url.searchParams.get('v') === 'v1' ? 'v1' : 'v2'));
 
-	if (res.ok) {
-		const data = await res.json();
-		return {
-			resp: data || {},
-			searchKey
-		};
+	try {
+		// SSR can't read localStorage, so the version travels in the URL (?v=v1)
+		const res = await fetchSearch(fetch, searchKey, requestedVersion, () => {
+			fellBackToV1 = true;
+		});
+
+		if (res.ok) {
+			return {
+				resp: (await res.json()) || {},
+				searchKey,
+				fellBackToV1
+			};
+		}
+	} catch {
+		// Keep SSR responses usable when both search services are unavailable.
 	}
+
+	return {
+		resp: {},
+		searchKey,
+		fellBackToV1
+	};
 }

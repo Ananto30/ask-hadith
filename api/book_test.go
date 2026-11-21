@@ -52,8 +52,12 @@ func TestValidateBook(t *testing.T) {
 		expectedOk bool
 	}{
 		{"1", true},
+		{"0", true},
+		{"35b", true},
 		{"", false},
 		{"invalid", false},
+		{"35B", false},
+		{"35-b", false},
 	}
 
 	for _, test := range tests {

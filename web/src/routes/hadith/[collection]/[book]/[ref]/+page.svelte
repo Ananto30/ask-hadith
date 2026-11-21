@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
 	import Hadith from '#lib/Hadith.svelte';
 	import { ORIGIN, clip, hadithPath } from '#lib/site.ts';
+	import { fade } from 'svelte/transition';
 	import type { HadithModel } from '../../../../../models';
 
 	export let data: { hadith: HadithModel; searchKey: string | null };
@@ -10,9 +10,11 @@
 	$: path = hadithPath(hadith.collection_id, hadith.book_no, hadith.book_ref_no);
 	$: ref = `${hadith.collection} ${hadith.book_no}:${hadith.book_ref_no}`;
 	// Searchers type the content, not "Bukhari 1:3", so lead title and h1 with the text.
-	$: title = `${clip(hadith.body_en, 55)} | ${ref}`;
-	$: heading = clip(hadith.body_en, 90);
-	$: description = clip(`${hadith.narrator_en ?? ''} ${hadith.body_en}`.trim(), 155);
+	const noTranslation = 'English translation is not available for this narration.';
+	$: bodyText = hadith.body_en?.trim() || noTranslation;
+	$: title = `${clip(bodyText, 55)} | ${ref}`;
+	$: heading = clip(bodyText, 90);
+	$: description = clip(`${hadith.narrator_en ?? ''} ${bodyText}`.trim(), 155);
 	$: ogImage = `${ORIGIN}/api/og?hadith=${hadith.base64}`;
 
 	$: jsonLd = JSON.stringify({
@@ -23,7 +25,7 @@
 				'@id': ORIGIN + path,
 				url: ORIGIN + path,
 				name: ref,
-				text: hadith.body_en,
+				text: bodyText,
 				inLanguage: 'en',
 				isPartOf: { '@type': 'Book', name: hadith.collection }
 			},

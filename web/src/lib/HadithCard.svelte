@@ -6,8 +6,8 @@
 	export let hadith: HadithModel;
 
 	let pbuh = 'ﷺ';
-	let narrator = hadith.narrator_en.replaceAll(pbuh, 'PBUH');
-	let body = hadith.body_en.replaceAll(pbuh, 'PBUH');
+	let narrator = (hadith.narrator_en || '').replaceAll(pbuh, 'PBUH');
+	let body = (hadith.body_en || 'English translation is not available.').replaceAll(pbuh, 'PBUH');
 </script>
 
 <div class="flex h-screen">

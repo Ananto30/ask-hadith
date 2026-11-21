@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { fade } from 'svelte/transition';
 	import { clip } from '#lib/site.ts';
+	import { fade } from 'svelte/transition';
 
 	export let data: {
 		id: string;
@@ -54,7 +54,10 @@
 					class="block no-underline hover:underline"
 				>
 					<span class="text-muted mr-2 font-mono text-xs tabular-nums">{h.book_ref_no}</span>
-					<span class="font-serif">{h.narrator_en} {h.snippet}</span>
+					<span class="font-serif"
+						>{h.narrator_en}
+						{h.snippet || 'English translation is not available.'}</span
+					>
 				</a>
 			</li>
 		{/each}

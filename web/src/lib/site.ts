@@ -1,7 +1,9 @@
 import { error } from '@sveltejs/kit';
 
 export const ORIGIN = 'https://www.askhadith.com';
-export const BOOK_API = 'https://ask-hadith.vercel.app';
+export const BOOK_API =
+	(import.meta.env.VITE_BOOK_API as string | undefined)?.replace(/\/$/, '') ||
+	'https://ask-hadith.vercel.app';
 
 export const COLLECTIONS = [
 	{ id: 'bukhari', name: 'Sahih al-Bukhari' },
@@ -20,11 +22,12 @@ export const clip = (s: string, n: number) =>
 		? s.slice(0, Math.max(s.lastIndexOf(' ', n), 0) || n).replace(/[\s,;:.]+$/, '') + '…'
 		: s;
 
-// The corpus is static, so the CDN can keep rendered pages for a long time.
+// The corpus changes when a scrape is imported. Keep edge caching useful, but
+// short enough that a data update propagates without a manual cache purge.
 // Netlify-CDN-Cache-Control is for Netlify; Vercel and others read Cache-Control.
 export const cacheHeaders = {
-	'Cache-Control': 'public, max-age=3600, s-maxage=31536000, stale-while-revalidate=86400',
-	'Netlify-CDN-Cache-Control': 'public, s-maxage=31536000, stale-while-revalidate=86400, durable'
+	'Cache-Control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
+	'Netlify-CDN-Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
 };
 
 // 400/404 mean "no such page"; anything else is an upstream failure crawlers should retry.

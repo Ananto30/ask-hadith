@@ -16,6 +16,17 @@ func TestNumLess(t *testing.T) {
 	}
 }
 
+func TestNumLessBookKeys(t *testing.T) {
+	got := []string{"36", "35b", "35", "0", "1"}
+	sort.Slice(got, func(i, j int) bool { return numLess(got[i], got[j]) })
+	want := []string{"0", "1", "35", "35b", "36"}
+	for i := range want {
+		if got[i] != want[i] {
+			t.Fatalf("got %v, want %v", got, want)
+		}
+	}
+}
+
 func TestClipWords(t *testing.T) {
 	tests := []struct {
 		in   string

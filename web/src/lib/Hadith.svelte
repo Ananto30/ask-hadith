@@ -1,13 +1,14 @@
 <script lang="ts">
+	import { ORIGIN, hadithPath } from '#lib/site.ts';
 	import { onMount } from 'svelte';
 	import { fade } from 'svelte/transition';
 	import type { HadithModel } from '../models';
-	import { ORIGIN, hadithPath } from '#lib/site.ts';
 
 	export let hadith: HadithModel;
 
 	let copied = false;
 	let bookmarked = false;
+	const noTranslation = 'English translation is not available for this narration.';
 
 	const copyText = () => {
 		let text = '';
@@ -15,7 +16,7 @@
 			text += hadith.narrator_en + '\n';
 		}
 		text +=
-			hadith.body_en +
+			(hadith.body_en || noTranslation) +
 			'\n' +
 			'\n' +
 			hadith.collection +
@@ -161,16 +162,20 @@
 		{#if hadith.narrator_en}
 			<p class="text-ink-2 mb-3 italic">{hadith.narrator_en}</p>
 		{/if}
-		<p class="text-[1.0625rem] leading-[1.8] text-pretty sm:text-lg">
-			{#each hadith.body_en.split(' ') as word}
-				{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
-					<mark>{word}</mark>
-				{:else}
-					{word}
-				{/if}
-				{' '}
-			{/each}
-		</p>
+		{#if hadith.body_en}
+			<p class="text-[1.0625rem] leading-[1.8] text-pretty sm:text-lg">
+				{#each hadith.body_en.split(' ') as word}
+					{#if hadith.highlights && hadith.highlights.includes(word.replace(/[.,/#!$%^&*;:{}=\-_`~()"']/g, ''))}
+						<mark>{word}</mark>
+					{:else}
+						{word}
+					{/if}
+					{' '}
+				{/each}
+			</p>
+		{:else}
+			<p class="text-muted text-base leading-relaxed italic">{noTranslation}</p>
+		{/if}
 	</div>
 
 	{#if hadith.chapter_en || hadith.hadith_grade}

@@ -49,6 +49,10 @@
     npm install
     npm run dev
 
+Point the web app at a local Go API with `VITE_BOOK_API`:
+
+    VITE_BOOK_API=http://127.0.0.1:8099 npm run dev
+
 *   Serverless functions (Go)
 
 <!---->

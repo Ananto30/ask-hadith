@@ -9,6 +9,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"regexp"
 	"sort"
 	"strings"
 
@@ -89,12 +90,14 @@ func validateCollectionID(collectionID string) (string, bool) {
 	return "", true
 }
 
+var bookKeyRegex = regexp.MustCompile(`^[0-9]+[a-z]?$`)
+
 func validateBook(book string) (string, bool) {
 	if book == "" {
 		return "book is required", false
 	}
-	if !isNumber(book) {
-		return "book must be a number", false
+	if !bookKeyRegex.MatchString(book) {
+		return "book must be a number or a numeric book key (e.g. 35b)", false
 	}
 
 	return "", true

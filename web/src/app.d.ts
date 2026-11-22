@@ -7,3 +7,8 @@ declare namespace App {
 	// interface PageData {}
 	// interface Platform {}
 }
+
+declare module '*.woff' {
+	const content: Uint8Array<ArrayBuffer>;
+	export default content;
+}

@@ -28,7 +28,7 @@
 *   **Vercel**: For serverless functions (in Go) to search and get hadiths.
 *   **MongoDB Atlas**: Database and search engine.
 *   **Svelte**: Web app (Frontend).
-*   **Netlify**: Web deployment.
+*   **Cloudflare Pages**: Web deployment.
 *   **TailwindCSS**: Styling.
 
 ## Features ⭐

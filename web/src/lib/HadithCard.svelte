@@ -29,7 +29,7 @@
 
 <style>
 	div {
-		font-family: 'Noto Sans', sans-serif;
+		font-family: 'Geist', sans-serif;
 		display: flex;
 		flex-direction: column;
 	}

@@ -1,5 +1,4 @@
-import netlify from '@sveltejs/adapter-netlify';
-import vercel from '@sveltejs/adapter-vercel';
+import cloudflare from '@sveltejs/adapter-cloudflare';
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
 
@@ -9,9 +8,12 @@ import fs from 'node:fs';
 const config = {
 	plugins: [
 		tailwindcss(),
-		sveltekit({ adapter: process.env.VERCEL ? vercel() : netlify() }),
-		rawFonts(['.ttf'])
-	]
+		sveltekit({ adapter: cloudflare() }),
+		rawFonts(['.woff'])
+	],
+	ssr: {
+		external: ['@cf-wasm/satori/workerd', '@cf-wasm/resvg/workerd']
+	}
 };
 
 /** @param {string[]} ext */
@@ -21,7 +23,7 @@ function rawFonts(ext) {
 		transform(/** @type {string} */ code, /** @type {string} */ id) {
 			if (ext.some((e) => id.endsWith(e))) {
 				const buffer = fs.readFileSync(id);
-				return { code: `export default ${JSON.stringify(buffer)}`, map: null };
+				return { code: `export default new Uint8Array(${JSON.stringify([...buffer])})`, map: null };
 			}
 		}
 	};

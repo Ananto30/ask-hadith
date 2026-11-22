@@ -1,26 +1,83 @@
-import satori from 'satori';
-import { Resvg } from '@resvg/resvg-js';
-import { render } from 'svelte/server';
-import NotoSans from '#lib/NotoSans-Regular.ttf';
-import { html as toReactNode } from 'satori-html';
-import HadithCard from '#lib/HadithCard.svelte';
+import Geist from '@fontsource/geist/files/geist-latin-400-normal.woff';
+import GeistSemibold from '@fontsource/geist/files/geist-latin-600-normal.woff';
+import Literata from '@fontsource/literata/files/literata-latin-400-normal.woff';
 
 const height = 630;
 const width = 1200;
+let satori;
+let Resvg;
 
 export const GET = async ({ url }) => {
 	const base64Hadith = url.searchParams.get('hadith') ?? '';
-	const jsonHadith = Buffer.from(base64Hadith, 'base64').toString('utf-8');
+	const base64 = base64Hadith.replaceAll('-', '+').replaceAll('_', '/');
+	const jsonHadith = new TextDecoder().decode(
+		Uint8Array.from(atob(base64), (character) => character.charCodeAt(0))
+	);
 	const parsed = JSON.parse(jsonHadith);
+	/** @param {unknown} value */
+	const text = (value) => String(value || '').replaceAll('ﷺ', 'PBUH');
+	const element = {
+		type: 'div',
+		props: {
+			style: {
+				display: 'flex',
+				flexDirection: 'column',
+				height: '100%',
+				justifyContent: 'center',
+				padding: 32,
+				fontFamily: 'Geist'
+			},
+			children: [
+				parsed.narrator_en && {
+					type: 'div',
+					props: {
+						style: { display: 'flex', color: '#4b5563', paddingBottom: 32 },
+						children: text(parsed.narrator_en)
+					}
+				},
+				{
+					type: 'div',
+					props: {
+						style: {
+							display: 'flex',
+							fontFamily: 'Literata',
+							fontSize: 24,
+							fontWeight: 400,
+							textAlign: 'center'
+						},
+						children: text(parsed.body_en) || 'English translation is not available.'
+					}
+				},
+				{
+					type: 'div',
+					props: {
+						style: { display: 'flex', color: '#374151', fontWeight: 600, paddingTop: 32 },
+						children: `${parsed.collection} Book: ${parsed.book_no}, Hadith: ${parsed.book_ref_no} (Hadith No: ${parsed.hadith_no ?? 'Unknown'})`
+					}
+				}
+			].filter(Boolean)
+		}
+	};
 
-	const result = render(HadithCard, { props: { hadith: parsed } });
-	const element = toReactNode(`${result.body}${result.head}`);
-
+	satori ??= (await import('@cf-wasm/satori/workerd')).default;
 	const svg = await satori(element, {
 		fonts: [
 			{
-				name: 'Noto Sans',
-				data: Buffer.from(NotoSans),
+				name: 'Geist',
+				data: Geist.buffer,
+				weight: 400,
+				style: 'normal'
+			},
+			{
+				name: 'Geist',
+				data: GeistSemibold.buffer,
+				weight: 600,
+				style: 'normal'
+			},
+			{
+				name: 'Literata',
+				data: Literata.buffer,
+				weight: 400,
 				style: 'normal'
 			}
 		],
@@ -28,7 +85,8 @@ export const GET = async ({ url }) => {
 		width
 	});
 
-	const resvg = new Resvg(svg, {
+	Resvg ??= (await import('@cf-wasm/resvg/workerd')).Resvg;
+	const resvg = await Resvg.async(svg, {
 		fitTo: {
 			mode: 'width',
 			value: width

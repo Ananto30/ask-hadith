@@ -28,7 +28,7 @@
 *   **Vercel**: For serverless functions (in Go) to search and get hadiths.
 *   **MongoDB Atlas**: Database and search engine.
 *   **Svelte**: Web app (Frontend).
-*   **Cloudflare Pages**: Web deployment.
+*   **Cloudflare Workers with Static Assets**: Web deployment.
 *   **TailwindCSS**: Styling.
 
 ## Features ⭐
@@ -53,18 +53,19 @@ Point the web app at a local Go API with `VITE_BOOK_API`:
 
     VITE_BOOK_API=http://127.0.0.1:8099 npm run dev
 
-### Cloudflare Pages deployment
+### Cloudflare Workers deployment
 
-Use Cloudflare Pages Git integration, not Workers Builds. Configure the project with:
+From `web/`:
 
-*   Production branch: `cloudflare`
-*   Root directory: `web`
-*   Build command: `npm run build`
-*   Build output directory: `.svelte-kit/cloudflare`
-*   Node version: `24`
-*   Deploy command: none (Pages handles deployment)
+    npm run cf-typegen
+    npm run build
+    npm run preview
 
-Do not use `npx wrangler deploy`; that is for Workers and triggers Wrangler's incompatible auto-configuration.
+Deploy after verifying locally:
+
+    npm run deploy
+
+Set Cloudflare secrets, when required, with `npx wrangler secret put <NAME>`.
 
 *   Serverless functions (Go)
 

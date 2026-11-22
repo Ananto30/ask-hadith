@@ -24,7 +24,7 @@ export const clip = (s: string, n: number) =>
 
 // The corpus changes when a scrape is imported. Keep edge caching useful, but
 // short enough that a data update propagates without a manual cache purge.
-// Netlify-CDN-Cache-Control is for Netlify; Vercel and others read Cache-Control.
+// Netlify uses its vendor-specific header; other CDNs use Cache-Control.
 export const cacheHeaders = {
 	'Cache-Control': 'public, max-age=300, s-maxage=3600, stale-while-revalidate=86400',
 	'Netlify-CDN-Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400'
